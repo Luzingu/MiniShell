@@ -10,7 +10,6 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 NAME = push_swap
