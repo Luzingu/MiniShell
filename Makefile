@@ -3,25 +3,28 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/08 16:43:35 by aluzingu          #+#    #+#              #
-#    Updated: 2024/07/08 16:43:36 by aluzingu         ###   ########.fr        #
+#    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
+#    Updated: 2024/08/30 15:58:54 by mcaquart         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-NAME = push_swap
-RM = rm -drf
-SRC_PATH = src/
-OBJ_PATH = obj/
-INC = ./includes
-DIR = ./src/
+CC		= cc
+CFLAGS	= -Wall -Wextra -Werror
+SRC		= source/*.c
+OBJ		= $(SRC:.c=.o)
 
-SRCS = main.c utils.c utils2.c utils3.c utils4.c utils5.c utils6.c initialization.c push.c rev_rotate.c rotate.c swap.c ft_split.c
+all: $(NAME)
 
-OBJS = $(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
+clean:
+	@rm -rt $(OBJ)
 
+fclean: clean
+	@rm -rt $(NAME)
+
+re: fclean all
