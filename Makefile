@@ -23,22 +23,4 @@ SRCS = main.c utils.c utils2.c utils3.c utils4.c utils5.c utils6.c initializatio
 
 OBJS = $(addprefix $(OBJ_PATH), $(SRCS:.c=.o))
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(INC)
-
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
-
-clean:
-	$(RM) $(OBJ_PATH)
-
-fclean: clean
-	$(RM) $(NAME)
-
-re: fclean all
-
-$(OBJS): | $(OBJ_PATH)
-
-$(OBJ_PATH):
-	mkdir -p $(OBJ_PATH)
 
