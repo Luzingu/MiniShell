@@ -6,25 +6,31 @@
 #    By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
-#    Updated: 2024/08/30 15:58:54 by mcaquart         ###   ########.fr        #
+#    Updated: 2024/08/30 17:40:32 by mcaquart         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
-SRC		= source/*.c
+LIBFT	= ./libft
+SRC		= *.c
 OBJ		= $(SRC:.c=.o)
+
+MAKEFLAGS	+= -silent
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+	@make -C $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a -o $(NAME)
 
 clean:
-	@rm -rt $(OBJ)
+	@make clean -C $(LIBFT)
+	@rm -rf $(OBJ)
 
 fclean: clean
-	@rm -rt $(NAME)
+	@make fclean -C $(LIBFT)
+	@rm -rf $(NAME)
 
 re: fclean all
