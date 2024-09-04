@@ -6,7 +6,7 @@
 #    By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
-#    Updated: 2024/09/02 11:09:52 by aluzingu         ###   ########.fr        #
+#    Updated: 2024/09/04 10:04:58 by aluzingu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LDFLAGS) $(LIBFT)/libft.a -o $(NAME)
+	$(CC) $(OBJ) $(LDFLAGS) $(LIBFT)/libft.a -o $(NAME)
 
 clean:
 	@make clean -C $(LIBFT)
