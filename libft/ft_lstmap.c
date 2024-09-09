@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aluzingu <aluzingu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/18 02:22:19 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/08/30 16:55:30 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/05/18 11:58:36 by aluzingu          #+#    #+#             */
+/*   Updated: 2024/05/18 11:58:37 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	t_list	*begin;
 	void	*content;
 
-	if (!lst || !f)
+	if (lst == NULL || f == NULL)
 		return (NULL);
 	begin = NULL;
 	while (lst)

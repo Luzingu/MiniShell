@@ -3,18 +3,20 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
-#    Updated: 2024/08/30 17:40:32 by mcaquart         ###   ########.fr        #
+#    Updated: 2024/09/04 10:04:58 by aluzingu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= minishell
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
+LDFLAGS = -lreadline
 LIBFT	= ./libft
-SRC		= *.c
+SRC		=	main.c\
+			utils.c
 OBJ		= $(SRC:.c=.o)
 
 MAKEFLAGS	+= -silent
@@ -23,7 +25,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT)/libft.a -o $(NAME)
+	$(CC) $(OBJ) $(LDFLAGS) $(LIBFT)/libft.a -o $(NAME)
 
 clean:
 	@make clean -C $(LIBFT)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aluzingu <aluzingu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/17 07:10:46 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/08/24 18:46:31 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/05/18 11:59:48 by aluzingu          #+#    #+#             */
+/*   Updated: 2024/05/18 11:59:48 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,26 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*s3;
+	char	*result;
 	int		i;
 	int		j;
+	size_t	total_len;
 
-	i = -1;
-	j = -1;
 	if (!s1 || !s2)
 		return (NULL);
-	s3 = malloc((ft_strlen(s1) + ft_strlen(s2)) + 1);
-	if (!s3)
+	i = 0;
+	total_len = ft_strlen(s1) + ft_strlen(s2);
+	result = (char *)malloc((total_len * sizeof(char)) + 1);
+	if (result == NULL)
 		return (NULL);
-	while (s1[++i])
-		s3[i] = ((unsigned char *)s1)[i];
-	while (s2[++j])
-		s3[i++] = ((unsigned char *)s2)[j];
-	s3[i] = '\0';
-	return (s3);
+	while (s1[i] != '\0')
+	{
+		result[i] = ((unsigned char *)s1)[i];
+		i++;
+	}
+	j = 0;
+	while (s2[j] != '\0')
+		result[i++] = ((unsigned char *)s2)[j++];
+	result[i] = '\0';
+	return (result);
 }

@@ -3,27 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: aluzingu <aluzingu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 14:44:10 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/05/17 03:23:56 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/05/18 11:59:50 by aluzingu          #+#    #+#             */
+/*   Updated: 2024/05/18 11:59:51 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
-	size_t	column;
+	size_t	d;
+	size_t	s;
 
+	d = ft_strlen(dst);
+	s = ft_strlen((char *)src);
 	i = 0;
-	column = -1;
-	while (dst[i] && size > i)
+	if (dstsize <= d)
+	{
+		return (dstsize + s);
+	}
+	while (src[i] != '\0' && d + i + 1 < dstsize)
+	{
+		dst[d + i] = src[i];
 		i++;
-	while (src[++column] && size > (i + column + 1))
-		dst[i + column] = src[column];
-	if (size > i)
-		dst[i + column] = '\0';
-	return (i + ft_strlen(src));
+	}
+	dst[d + i] = '\0';
+	return (d + s);
 }
