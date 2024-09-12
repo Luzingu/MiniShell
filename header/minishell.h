@@ -6,7 +6,7 @@
 /*   By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 07:34:46 by aluzingu          #+#    #+#             */
-/*   Updated: 2024/09/04 10:01:46 by aluzingu         ###   ########.fr       */
+/*   Updated: 2024/09/11 08:08:13 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,20 @@
     # include <stdio.h>
     # include <stdlib.h>
     # include <string.h>
+    # include <fcntl.h>
+    # include <errno.h>
     # include <sys/wait.h>
     # include <readline/readline.h>
     # include <readline/history.h>
-    # include "libft/libft.h"
+    # include "../libft/libft.h"
 	
-	void	ft_echo(char *argument);
+	void	ft_echo(char *argument, int fd);
 	void	ft_exit(char **matrix);
 	void	ft_cat(char **argument);
-    void    execute_ve(char *bin, char *argument, char **var_ambiente);
+    void    execute_ve(char *bin, char *argument, char **var_ambiente, int input_fd, int output_fd);
     void    ft_free_mtrs(char **matrix);
     void    get_command(char *str, char **command, char **argument);
     char    *ft_strcat(char *str1, char *str2);
+    char **ft_split_advanced(const char *s, const char *delimiter);
 
 #endif

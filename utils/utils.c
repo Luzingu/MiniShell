@@ -6,15 +6,13 @@
 /*   By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:40:40 by aluzingu          #+#    #+#             */
-/*   Updated: 2024/09/04 10:12:27 by aluzingu         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:41:51 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../header/minishell.h"
 
-
-
-void	ft_echo(char *argument)
+void	ft_echo(char *argument, int fd)
 {
 	int	i;
 
@@ -25,10 +23,10 @@ void	ft_echo(char *argument)
 	{
 		if (argument[i] == 34 || argument[i] == 39)
 			break ;
-		ft_putchar_fd(argument[i], 1);
+		ft_putchar_fd(argument[i], fd);
 		i++;
 	}
-	ft_putchar_fd('\n', 1);
+	ft_putchar_fd('\n', fd);
 }
 
 void	ft_exit(char **matrix)
@@ -124,16 +122,105 @@ void get_command(char *str, char **command, char **argument)
     ft_free_mtrs(matrix);
 }
 
-
-void    execute_ve(char *bin, char *argument, char **var_ambiente)
+char **ft_split_advanced(const char *s, const char *delimiter)
 {
-    pid_t	pid_f;
+    size_t len = strlen(s);
+    size_t delimiter_len = strlen(delimiter);
+    size_t i = 0, start = 0, count = 0;
+    char **result;
+    char in_single_quotes = 0;
+    char in_double_quotes = 0;
+
+    while (i < len) {
+        if (s[i] == '\'')
+        {
+            in_single_quotes = !in_single_quotes;
+        }
+        else if (s[i] == '\"')
+        {
+            in_double_quotes = !in_double_quotes;
+        }
+        else if (!in_single_quotes && !in_double_quotes)
+        {
+            if (i + delimiter_len <= len && ft_strncmp(s + i, delimiter, delimiter_len) == 0)
+            {
+                ++count;
+                i += delimiter_len - 1;
+            }
+        }
+        ++i;
+    }
+    ++count;
+    
+    result = (char **)malloc((count + 1) * sizeof(char *));
+    if (!result) return NULL;
+
+    count = 0;
+    i = 0;
+    in_single_quotes = 0;
+    in_double_quotes = 0;
+    while (i < len) {
+        if (s[i] == '\'') {
+            in_single_quotes = !in_single_quotes;
+        } else if (s[i] == '\"') {
+            in_double_quotes = !in_double_quotes;
+        } else if (!in_single_quotes && !in_double_quotes) {
+            if (i + delimiter_len <= len && ft_strncmp(s + i, delimiter, delimiter_len) == 0)
+            {
+                result[count] = ft_strdup(s + start);
+                if (!result[count])
+                {
+                    while (count > 0) {
+                        free(result[--count]);
+                    }
+                    free(result);
+                    return NULL;
+                }
+                result[count][i - start] = '\0';
+                ++count;
+                start = i + delimiter_len;
+                i += delimiter_len - 1;
+            }
+        }
+        ++i;
+    }
+    result[count] = ft_strdup(s + start);
+    if (!result[count])
+    {
+        while (count > 0) {
+            free(result[--count]);
+        }
+        free(result);
+        return NULL;
+    }
+    result[count + 1] = NULL;
+    return result;
+}
+
+
+void    execute_ve(char *bin, char *argument, char **var_ambiente, int input_fd, int output_fd)
+{
     int		total_arguments;
     int		i;
-    int		status;
     char	**args;
     char	**str_tmp;
-
+    
+    if (input_fd != STDIN_FILENO)
+    {
+        if (dup2(input_fd, STDIN_FILENO) == -1) {
+            perror("dup2 input_fd");
+            exit(EXIT_FAILURE);
+        }
+        close(input_fd);
+    }
+    if (output_fd != STDOUT_FILENO)
+    {
+        if (dup2(output_fd, STDOUT_FILENO) == -1) {
+            perror("dup2 output_fd");
+            exit(EXIT_FAILURE);
+        }
+        close(output_fd);
+    }
     total_arguments = 0;
     str_tmp = ft_split(argument, ' ');
     while (str_tmp[total_arguments])
@@ -144,11 +231,8 @@ void    execute_ve(char *bin, char *argument, char **var_ambiente)
     while(++i < total_arguments)
         args[(i + 1)] = ft_strdup((const char *)str_tmp[i]);
     args[(i + 1)] = NULL;
-    pid_f = fork();
-    if (pid_f == 0)
-        execve(args[0], args, var_ambiente);
-    else
-        waitpid(pid_f, &status, 0);
+    execve(args[0], args, var_ambiente);
+    
     ft_free_mtrs(str_tmp);
     ft_free_mtrs(args);
     ft_free_mtrs(var_ambiente);
