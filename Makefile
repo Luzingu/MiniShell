@@ -6,7 +6,7 @@
 #    By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
-#    Updated: 2024/09/04 10:04:58 by aluzingu         ###   ########.fr        #
+#    Updated: 2024/09/14 00:39:42 by aluzingu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,14 @@ CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 LIBFT	= ./libft
-SRC		=	main.c\
-			utils.c
+SRC		=	source/main.c\
+			source/execute.c\
+			source/builtins/echo.c\
+			source/builtins/exit.c\
+			source/pipe/pipe.c\
+			source/pipe/utils.c\
+			source/utils/util1.c\
+			source/utils/split_advenced.c
 OBJ		= $(SRC:.c=.o)
 
 MAKEFLAGS	+= -silent
