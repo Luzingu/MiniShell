@@ -6,7 +6,7 @@
 /*   By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 06:31:44 by aluzingu          #+#    #+#             */
-/*   Updated: 2024/09/14 01:03:14 by aluzingu         ###   ########.fr       */
+/*   Updated: 2024/09/16 09:03:54 by aluzingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,41 @@ void process_command(char *cmd, int i, int num_comandos, int *prev_pipe_fd)
     }
 }
 
+
+char *expand_variables(const char *input)
+{
+    char *expanded = malloc(BUFFER_SIZE);
+    if (!expanded) {
+        perror("Erro de memória");
+        exit(EXIT_FAILURE);
+    }
+    expanded[0] = '\0'; 
+    const char *ptr = input;
+    while (*ptr) {
+        if (*ptr == '$')
+        {
+            char var_name[BUFFER_SIZE] = {0};
+            int i = 0;
+            ptr++;
+            while (*ptr && (isalnum(*ptr) || *ptr == '_')) {
+                var_name[i++] = *ptr++;
+            }
+            var_name[i] = '\0';
+            char *var_value = getenv(var_name);
+            if (var_value)
+            {
+                strcat(expanded, var_value);
+            }
+        }
+        else
+        {
+            strncat(expanded, ptr, 1);
+            ptr++;
+        }
+    }
+    return (expanded);
+}
+
 int main(void)
 {
     char *readed;
@@ -162,6 +197,10 @@ int main(void)
         add_history(readed);
         mtx_comandos = ft_split_advanced(readed, "|");
         num_comandos = numb_split(mtx_comandos);
+
+        //readed = expand_variables(readed);
+        
+       // printf("Readed: %s \n", readed);
         i = 0;
         while (i < num_comandos)
         {

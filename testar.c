@@ -82,38 +82,39 @@ void unset_env_var(const char *name) {
 }
 
 // Função para expandir variáveis de ambiente no comando
-char* expand_variables(const char *input) {
+
+char* expand_variables(const char *input)
+{
     char *expanded = malloc(BUFFER_SIZE);
     if (!expanded) {
         perror("Erro de memória");
         exit(EXIT_FAILURE);
     }
-    expanded[0] = '\0'; // Iniciar string vazia
-
+    expanded[0] = '\0'; 
     const char *ptr = input;
     while (*ptr) {
-        if (*ptr == '$') {
-            // Encontrar nome da variável de ambiente
+        if (*ptr == '$')
+        {
             char var_name[BUFFER_SIZE] = {0};
             int i = 0;
-            ptr++; // Pular o '$'
+            ptr++;
             while (*ptr && (isalnum(*ptr) || *ptr == '_')) {
                 var_name[i++] = *ptr++;
             }
             var_name[i] = '\0';
-
-            // Obter valor da variável de ambiente
             char *var_value = getenv(var_name);
-            if (var_value) {
+            if (var_value)
+            {
                 strcat(expanded, var_value);
             }
-        } else {
-            strncat(expanded, ptr, 1); // Adicionar caractere normal
+        }
+        else
+        {
+            strncat(expanded, ptr, 1);
             ptr++;
         }
     }
-
-    return expanded;
+    return (expanded);
 }
 
 // Função para lidar com o comando `echo`
