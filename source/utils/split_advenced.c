@@ -14,8 +14,8 @@
 
 static size_t count_substrings(const char *s, const char *delimiter)
 {
-    size_t len = strlen(s);
-    size_t delimiter_len = strlen(delimiter);
+    size_t len = ft_strlen(s);
+    size_t delimiter_len = ft_strlen(delimiter);
     size_t count = 0;
     char in_single_quotes = 0;
     char in_double_quotes = 0;
@@ -50,8 +50,8 @@ static int add_substring(char **result, size_t index, const char *start, size_t 
 
 static int process_substrings(char **result, const char *s, const char *delimiter)
 {
-    size_t len = strlen(s);
-    size_t delimiter_len = strlen(delimiter);
+    size_t len = ft_strlen(s);
+    size_t delimiter_len = ft_strlen(delimiter);
     size_t i = 0, start = 0, current = 0;
     char in_single_quotes = 0;
     char in_double_quotes = 0;
@@ -74,6 +74,7 @@ static int process_substrings(char **result, const char *s, const char *delimite
     }
     return add_substring(result, current, s + start, i - start) ? 1 : 0;
 }
+
 char **ft_split_advanced(const char *s, const char *delimiter) {
     size_t count = count_substrings(s, delimiter);
     char **result = allocate_result(count);
@@ -83,6 +84,5 @@ char **ft_split_advanced(const char *s, const char *delimiter) {
         free(result);
         return NULL;
     }
-    
     return result;
 }

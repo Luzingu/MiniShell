@@ -12,39 +12,38 @@
 
 #include "../../header/minishell.h"
 
-int numb_split (char **mtx)
+int	numb_split(char **matrix)
 {
-    int num;
+	int	i;
 
-    num = 0;
-    while (mtx[num])
-        num++;
-    return (num);
+	i = 0;
+	while (matrix[i])
+		i++;
+	return (i);
 }
 
-void ft_free_mtrs(char **matriz)
+void	ft_free_matrix(char **matrix)
 {
-    int i;
+    int	i;
 
-    if (!matriz)
+    if (!matrix)
         return ;
     i = 0;
-    while (matriz[i])
+    while (matrix[i])
     {
-        free(matriz[i]);
+        free(matrix[i]);
         i++;
     }
-    free(matriz);
+    free(matrix);
 }
 
-char    *ft_strcat(char *str1, char *str2)
+char	*ft_strcat(char *str1, char *str2)
 {
-    int i;
-    int n;
-    char    *str;
+    int		i;
+    int		n;
+    char	*str;
 
-    i = ft_strlen(str1) + ft_strlen(str1);
-    str = (char *)malloc(sizeof(char) * (i + 1));
+    str = malloc(sizeof(char) * ((ft_strlen(str1) + ft_strlen(str1)) + 1));
     i = 0;
     n = 0;
     while (str1[n])
@@ -55,4 +54,3 @@ char    *ft_strcat(char *str1, char *str2)
     str[i] = '\0';
     return (str);
 }
-
