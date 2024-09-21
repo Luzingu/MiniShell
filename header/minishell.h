@@ -24,6 +24,7 @@
     # include <readline/history.h>
     # include <signal.h>
     # include <termios.h>
+    #include <sys/stat.h>
     # include "../libft/libft.h"
 	
 	void	ft_echo(char *argument, int fd);
