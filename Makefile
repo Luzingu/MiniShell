@@ -16,12 +16,15 @@ CFLAGS	= -Wall -Wextra -Werror
 LDFLAGS = -lreadline
 LIBFT	= ./libft
 SRC		=	source/main.c\
+			source/read.c\
 			source/execute.c\
-			source/builtins/echo.c\
-			source/builtins/exit.c\
-			source/pipe/pipe.c\
-			source/pipe/utils.c\
-			source/utils/util1.c\
+			source/builtins/ft_cd.c\
+			source/builtins/ft_exit.c\
+			source/environment/executable.c\
+			source/environment/expand_variable.c\
+			source/environment/export.c\
+			source/environment/unset.c\
+			source/utils/util.c\
 			source/utils/split_advenced.c
 OBJ		= $(SRC:.c=.o)
 

@@ -37,22 +37,42 @@ void ft_free_mtrs(char **matriz)
     free(matriz);
 }
 
-char    *ft_strcat(char *str1, char *str2)
+int whereis(const char *str, const char *needle)
 {
-    int i;
-    int n;
-    char    *str;
+    size_t i = 0;
+    size_t j;
 
-    i = ft_strlen(str1) + ft_strlen(str1);
-    str = (char *)malloc(sizeof(char) * (i + 1));
-    i = 0;
-    n = 0;
-    while (str1[n])
-        str[i++] = str1[n++];
-    n = 0;
-    while (str2[n])
-        str[i++] = str2[n++];
-    str[i] = '\0';
-    return (str);
+    while (i <= (ft_strlen(str) - ft_strlen(needle)))
+    {
+        j = 0;
+        while ((j < ft_strlen(needle)) && (str[i + j] == needle[j]))
+            j++;
+        if (j == ft_strlen(needle))
+            return (int)i;
+        i++;
+    }
+    return (-1);
 }
+
+char *my_strndup(const char *s, size_t n)
+{
+    char *dup;
+    size_t i;
+
+    if (!s)
+        return (NULL);
+    dup = (char *)malloc(n + 1);
+    if (!dup)
+        return (NULL);
+    i = 0;
+    while (i < n && s[i] != '\0')
+    {
+        dup[i] = s[i];
+        i++;
+    }
+    dup[i] = '\0';
+    return (dup);
+}
+
+
 

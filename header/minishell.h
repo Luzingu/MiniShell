@@ -27,17 +27,22 @@
     #include <sys/stat.h>
     # include "../libft/libft.h"
 	
-	void	ft_echo(char *argument, int fd);
-	void	ft_exit(char **matrix);
-	void	ft_cat(char **argument);
-    void    execute_ve(char *bin, char *argument, char **var_ambiente);
     void    ft_free_mtrs(char **matrix);
-    void    get_command(char *str, char **command, char **argument);
-    char    *ft_strcat(char *str1, char *str2);
     char **ft_split_advanced(const char *s, const char *delimiter);
     int numb_split (char **mtx);
     void    get_input_fd(int *prev_pipe_fd, int i, char **comando);
     void    get_output_fd(int *pipe_fd, int i, int num_comandos, char **comando);
     int whereis(const char *str, const char *needle);
+    char *read_input(void);
+    int read_heredoc(const char *delimiter);
+    char *execute_commands(char **commands, char ***env);
+    char *find_executable(char *cmd, char **env);
+    void handle_unset(char **tmp, char ***env);
+    void handle_export(char **tmp, char ***env);
+    char *my_strndup(const char *s, size_t n);
+    void    ft_exit(char **matrix);
+    void    ft_cd(char ***env, char **argument);
+    char *my_getenv(char **env, const char *name);
+    char **ft_export(char *args, char **env);
 
 #endif

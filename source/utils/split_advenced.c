@@ -26,7 +26,7 @@ static size_t count_substrings(const char *s, const char *delimiter)
         } else if (s[i] == '\"') {
             in_double_quotes = !in_double_quotes;
         } else if (!in_single_quotes && !in_double_quotes) {
-            if (i + delimiter_len <= len && strncmp(s + i, delimiter, delimiter_len) == 0) {
+            if (i + delimiter_len <= len && ft_strncmp(s + i, delimiter, delimiter_len) == 0) {
                 ++count;
                 i += delimiter_len - 1;
             }
@@ -36,7 +36,8 @@ static size_t count_substrings(const char *s, const char *delimiter)
     return count;
 }
 
-static char **allocate_result(size_t count) {
+static char **allocate_result(size_t count)
+{
     char **result = (char **)malloc((count + 1) * sizeof(char *));
     if (!result) return NULL;
     result[count] = NULL; // Null-terminate the array
@@ -44,7 +45,7 @@ static char **allocate_result(size_t count) {
 }
 
 static int add_substring(char **result, size_t index, const char *start, size_t length) {
-    result[index] = strndup(start, length);
+    result[index] = my_strndup(start, length);
     return result[index] != NULL;
 }
 
@@ -62,7 +63,7 @@ static int process_substrings(char **result, const char *s, const char *delimite
         } else if (s[i] == '\"') {
             in_double_quotes = !in_double_quotes;
         } else if (!in_single_quotes && !in_double_quotes) {
-            if (i + delimiter_len <= len && strncmp(s + i, delimiter, delimiter_len) == 0) {
+            if (i + delimiter_len <= len && ft_strncmp(s + i, delimiter, delimiter_len) == 0) {
                 if (!add_substring(result, current++, s + start, i - start)) {
                     return 0; // Failed to allocate memory
                 }
