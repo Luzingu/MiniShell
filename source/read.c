@@ -1,48 +1,12 @@
 #include "../header/minishell.h"
 
-int has_unclosed_quotes(char *str, char *quote_type)
-{
-    int double_quotes;
-    int single_quotes;
-    int i;
-
-    double_quotes = 0;
-    single_quotes = 0;
-    i = 0;
-    while (str[i] != '\0')
-    {
-        if (str[i] == '"' && single_quotes % 2 == 0)
-            double_quotes++;
-        else if (str[i] == '\'' && double_quotes % 2 == 0)
-            single_quotes++;
-        i++;
-    }
-    if (double_quotes % 2 != 0)
-        *quote_type = '"';
-    else if (single_quotes % 2 != 0)
-        *quote_type = '\'';
-    return (double_quotes % 2 != 0 || single_quotes % 2 != 0);
-}
 char *read_input(void)
 {
     char *readed;
-    char quote_type = '\0';
-    char *continuation;
 
     readed = readline("minishell> ");
     if (!readed)
         return NULL;
-    while (has_unclosed_quotes(readed, &quote_type))
-    {
-    	if (quote_type == '"')
-        	continuation = readline("dquote> ");
-    	else
-    		continuation = readline("squote> ");
-        readed = ft_strjoin(readed, continuation);
-        if (!has_unclosed_quotes(readed, &quote_type))
-            break;
-        readed = ft_strjoin(readed, "\n");
-    }
     return (readed);
 }
 

@@ -15,6 +15,7 @@
     
     # include <unistd.h>
     # include <stdio.h>
+    # include <limits.h>
     # include <stdlib.h>
     # include <string.h>
     # include <fcntl.h>
@@ -44,5 +45,7 @@
     void    ft_cd(char ***env, char **argument);
     char *my_getenv(char **env, const char *name);
     char **ft_export(char *args, char **env);
+    char *ft_get_pwd();
+    void    ft_echo(char **argument, int fd);
 
 #endif

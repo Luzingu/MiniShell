@@ -60,88 +60,94 @@ int exec_command(char *command, int fd_in, int pipefd[2], char **env)
 }
 
 // Função principal para executar comandos
-char *execute_commands(char **commands, char ***env)
-{
+char *execute_commands(char **commands, char ***env) {
     int fd_in = 0;
     int pipefd[2];
     char **tmp;
     int i = 0;
 
-    while (commands[i])
-    {
+    while (commands[i]) {
         commands[i] = ft_strtrim(commands[i], " ");
         tmp = ft_split_advanced(commands[i], "<<");
-        if (tmp[1]) // Heredoc
-        {
+
+        if (tmp[1]) { // Heredoc
             fd_in = read_heredoc(tmp[1]);
             ft_free_mtrs(tmp);
             i++;
             continue;
         }
+
         ft_free_mtrs(tmp);
         tmp = ft_split_advanced(commands[i], " ");
 
-        if (ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0)
-        {
-            ft_exit(tmp);
-            i++;
-            continue;
-        }
-        
-        if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0)
-        {
-            ft_cd(env, tmp);
+        if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0) {
+            ft_echo(tmp, 0);
+            ft_free_mtrs(tmp); // Libere a memória aqui
             i++;
             continue;
         }
 
-        if (ft_strncmp(tmp[0], "unset", 5) == 0)
-        {
-            if (tmp[1])
-                handle_unset(tmp, env);
+        if (ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0) {
+            ft_exit(tmp);
+            ft_free_mtrs(tmp);
             i++;
             continue;
         }
-        if (ft_strncmp(tmp[0], "export", 6) == 0 && tmp[1])
-        {
+
+        if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0) {
+            ft_cd(env, tmp);
+            ft_free_mtrs(tmp);
+            i++;
+            continue;
+        }
+
+        if (ft_strncmp(tmp[0], "unset", 5) == 0) {
+            if (tmp[1])
+                handle_unset(tmp, env);
+            ft_free_mtrs(tmp);
+            i++;
+            continue;
+        }
+
+        if (ft_strncmp(tmp[0], "export", 6) == 0 && tmp[1]) {
             handle_export(tmp, env);
             ft_free_mtrs(tmp);
             i++;
             continue;
         }
-        if (!find_executable(tmp[0], *env))
-        {
-            printf("Nao existe nenhum executavel encontrado. \n");
-            i++;
-            continue;
-        }
-        else if (ft_strncmp(tmp[0], "env", 3) == 0 && tmp[1])
-        {
+
+        if (!find_executable(tmp[0], *env)) {
+            printf("Nao existe nenhum executavel encontrado.\n");
+            ft_free_mtrs(tmp);
             i++;
             continue;
         }
 
-        if (commands[i + 1])
-        {
+        if (ft_strncmp(tmp[0], "env", 3) == 0 && tmp[1]) {
+            ft_free_mtrs(tmp);
+            i++;
+            continue;
+        }
+
+        // Criação do pipe se houver próximo comando
+        if (commands[i + 1]) {
             if (pipe(pipefd) == -1) {
                 perror("pipe");
                 ft_free_mtrs(tmp);
                 return NULL;
             }
-        } 
-        else
-        {
+        } else {
             pipefd[0] = -1;
             pipefd[1] = -1;
         }
 
         fd_in = exec_command(commands[i], fd_in, pipefd, *env);
         if (fd_in == -1) {
-            //ft_free_mtrs(tmp);
+            ft_free_mtrs(tmp); // Libere a memória em caso de erro
             return NULL;
         }
 
-        //ft_free_mtrs(tmp);
+        ft_free_mtrs(tmp); // Libere a memória após usar `tmp`
         i++;
     }
 

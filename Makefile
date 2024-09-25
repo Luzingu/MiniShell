@@ -20,6 +20,8 @@ SRC		=	source/main.c\
 			source/execute.c\
 			source/builtins/ft_cd.c\
 			source/builtins/ft_exit.c\
+			source/builtins/ft_pwd.c\
+			source/builtins/ft_echo.c\
 			source/environment/executable.c\
 			source/environment/expand_variable.c\
 			source/environment/export.c\

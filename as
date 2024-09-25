@@ -1,9 +1,0 @@
-a.out
-as
-es.subject.pdf
-header
-libft
-Makefile
-minishell
-MiniShell
-source
