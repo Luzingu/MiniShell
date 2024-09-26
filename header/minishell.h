@@ -47,5 +47,4 @@
     char **ft_export(char *args, char **env);
     char *ft_get_pwd();
     void    ft_echo(char **argument, int fd);
-
 #endif
