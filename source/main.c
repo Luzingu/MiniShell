@@ -1,71 +1,76 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 06:31:44 by aluzingu          #+#    #+#             */
-/*   Updated: 2024/09/16 09:03:54 by aluzingu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../header/minishell.h"
 
-
-void sigint_handler(int sig)
+void	ft_close(int fd)
 {
-    (void)sig;
-    write(1, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
+	if (fd > 0)
+		close(fd);
 }
 
-
-
-void handle_signals(void)
+void	reset_std(t_mini *mini)
 {
-    signal(SIGINT, sigint_handler);
-    signal(SIGQUIT, SIG_IGN);
+	dup2(mini->in, STDIN);
+	dup2(mini->out, STDOUT);
 }
 
-
-
-int main(int argc, char **argv, char **env)
+void	close_fds(t_mini *mini)
 {
-    (void)argc;
+	ft_close(mini->fdin);
+	ft_close(mini->fdout);
+	ft_close(mini->pipin);
+	ft_close(mini->pipout);
+}
+
+void	reset_fds(t_mini *mini)
+{
+	mini->fdin = -1;
+	mini->fdout = -1;
+	mini->pipin = -1;
+	mini->pipout = -1;
+	mini->pid = -1;
+}
+
+t_token	*next_run(t_token *token)
+{
+	while (token && !ft_is_type(token, "cmd"))
+	{
+		token = token->next;
+		if (token && ft_is_type(token, "pipe") && token->prev != NULL)
+			token = token->next;
+	}
+	return (token);
+}
+
+int main(int ac, char **argv, char **env)
+{
+    t_mini mini;
+    t_token	*token;
+    (void)ac;
     (void)argv;
-    char *readed;
-    char **mtx_comandos;
-    char **my_env;
-
-    int i  = 0;
-    while (env[i])
-        i++;
-    my_env = (char **)malloc(sizeof(char *) * (i+1));
-    i = 0;
-    while (env[i])
-    {
-        my_env[i] = strdup(env[i]);
-        i++;
-    }
-    my_env[i] = NULL;
-
-    handle_signals();
+    int status;
+    char *line = NULL;
+	
+    reset_fds(&mini);
+    mini.env = str_dup_env(env);
     while (1)
     {
-        readed = read_input();
-        if (!readed)
-            break ;
-        add_history(readed);
-        mtx_comandos = ft_split_advanced(readed, "|");
-        execute_commands(mtx_comandos, &my_env);
-        free(readed);
-        ft_free_mtrs(mtx_comandos);
+        line = readline("minishell>");
+        if (!line)
+            break;
+        mini.in = dup(STDIN);
+        mini.out = dup(STDOUT);
+        mini.exit = 0;
+        mini.ret = 0;
+        mini.no_exec = 0;
+
+        mini.start = get_tokens(line);
+        token = next_run(mini.start);
+        mini.charge = 1; 
+        redir_and_exec(&mini, token);
+        reset_std(&mini);
+        close_fds(&mini);
+        reset_fds(&mini);
+        waitpid(-1, &status, 0);
+        mini.no_exec = 0;
     }
-
-
-    return 0;
+    return (0);
 }
-

@@ -12,39 +12,78 @@
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-    
-    # include <unistd.h>
-    # include <stdio.h>
-    # include <limits.h>
-    # include <stdlib.h>
-    # include <string.h>
-    # include <fcntl.h>
-    # include <errno.h>
-    # include <sys/wait.h>
-    # include <readline/readline.h>
-    # include <readline/history.h>
-    # include <signal.h>
-    # include <termios.h>
-    #include <sys/stat.h>
-    # include "../libft/libft.h"
-	
-    void    ft_free_mtrs(char **matrix);
-    char **ft_split_advanced(const char *s, const char *delimiter);
-    int numb_split (char **mtx);
-    void    get_input_fd(int *prev_pipe_fd, int i, char **comando);
-    void    get_output_fd(int *pipe_fd, int i, int num_comandos, char **comando);
-    int whereis(const char *str, const char *needle);
-    char *read_input(void);
-    int read_heredoc(const char *delimiter);
-    char *execute_commands(char **commands, char ***env);
-    char *find_executable(char *cmd, char **env);
-    void handle_unset(char **tmp, char ***env);
-    void handle_export(char **tmp, char ***env);
-    char *my_strndup(const char *s, size_t n);
-    void    ft_exit(char **matrix);
-    void    ft_cd(char ***env, char **argument);
-    char *my_getenv(char **env, const char *name);
-    char **ft_export(char *args, char **env);
-    char *ft_get_pwd();
-    void    ft_echo(char **argument, int fd);
+
+# include <unistd.h>
+# include <stdio.h>
+# include <limits.h>
+# include <stdlib.h>
+# include <string.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/wait.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
+# include <termios.h>
+#include <sys/stat.h>
+# include "../libft/libft.h"
+
+# define STDIN 0
+# define STDOUT 1
+# define STDERR 2
+
+typedef struct s_token
+{
+    char *str;
+    char *type;
+    struct s_token *prev;
+    struct s_token *next;
+} t_token;
+
+typedef struct	s_mini
+{
+    t_token			*start;
+    char			**env;
+    int				in;
+    int				out;
+    int				fdin;
+    int				fdout;
+    int				pipin;
+    int				pipout;
+    int				pid;
+    int				charge;
+    int				parent;
+    int				last;
+    int				ret;
+    int				exit;
+    int				no_exec;
+}				t_mini;
+
+int		get_next_line2(int fd, char **line);
+t_token *get_tokens(char *line);
+int	 is_types(t_token *token, char *types);
+void	redir_and_exec(t_mini *mini, t_token *token);
+void	redir(t_mini *mini, t_token *token, char *type);
+void	input(t_mini *mini, t_token *token);
+int		minipipe(t_mini *mini);
+void	free_tab(char **tab);
+void	ft_close(int fd);
+int ignore_sep(char *line, int i);
+int	ft_is_type(t_token *token, char *type);
+int	ft_strisnum(const char *str);
+char **str_dup_env(char **env);
+char *my_getenv(char **env, char *name);
+char *find_executable(char *cmd, char **env);
+int	ft_cd(char ***env, char **argument);
+int	ft_exit(char **matrix);
+int	 is_builtin(char *command);
+int	exec_builtin(char **args, t_mini *mini);
+char *ft_get_pwd(void);
+int	ft_echo(char **args);
+void handle_export(char **tmp, char ***env);
+void ft_unset(char **args, char ***env);
+char **ft_export(char *args, char **env);
+int		nb_args(char **args);
+void ft_free_mtrs(char **matriz);
+int whereis(const char *str, const char *needle);
 #endif

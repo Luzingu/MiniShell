@@ -1,155 +1,128 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 00:12:39 by aluzingu          #+#    #+#             */
-/*   Updated: 2024/09/14 00:57:36 by aluzingu         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../header/minishell.h"
 
-int exec_command(char *command, int fd_in, int pipefd[2], char **env)
+
+t_token	*next_sep(t_token *token, int skip)
 {
-    pid_t pid;
-    char **args;
-
-    pid = fork();
-    if (pid == -1) {
-        perror("fork");
-        return -1;
-    }
-
-    if (pid == 0) // Processo filho
-    {
-        if (fd_in != 0) {
-            dup2(fd_in, 0); // Redireciona a entrada para o comando
-            close(fd_in); // Fechar o descritor após duplicar
-        }
-        if (pipefd[1] != -1) {
-            dup2(pipefd[1], 1); // Redireciona a saída para o próximo pipe
-            close(pipefd[1]);   // Fecha o descritor após duplicar
-        }
-        
-        close(pipefd[0]); // Fecha o lado de leitura do pipe
-
-        args = (char **)malloc(sizeof(char *) * 4);
-        args[0] = "/bin/sh";
-        args[1] = "-c";
-        args[2] = command;
-        args[3] = NULL;
-        execve("/bin/sh", args, env); // Executa o comando
-        perror("execve");
-        exit(EXIT_FAILURE);
-    }
-
-    // Processo pai fecha os pipes e espera o filho
-    if (fd_in != 0) {
-        close(fd_in); // Fecha o descritor de leitura anterior
-    }
-    if (pipefd[1] != -1) {
-        close(pipefd[1]); // Fecha o descritor de escrita do pipe
-    }
-
-    wait(NULL); // Aguarda o processo filho
-
-    return pipefd[0]; // Retorna o descritor para leitura do próximo comando
+	if (token && skip)
+		token = token->next;
+	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+		token = token->next;
+	return (token);
 }
 
-// Função principal para executar comandos
-char *execute_commands(char **commands, char ***env) {
-    int fd_in = 0;
-    int pipefd[2];
-    char **tmp;
-    int i = 0;
-
-    while (commands[i]) {
-        commands[i] = ft_strtrim(commands[i], " ");
-        tmp = ft_split_advanced(commands[i], "<<");
-
-        if (tmp[1]) { // Heredoc
-            fd_in = read_heredoc(tmp[1]);
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        ft_free_mtrs(tmp);
-        tmp = ft_split_advanced(commands[i], " ");
-
-        if (ft_strncmp(tmp[0], "echo", ft_strlen(tmp[0])) == 0) {
-            ft_echo(tmp, 0);
-            ft_free_mtrs(tmp); // Libere a memória aqui
-            i++;
-            continue;
-        }
-
-        if (ft_strncmp(tmp[0], "exit", ft_strlen(tmp[0])) == 0) {
-            ft_exit(tmp);
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        if (ft_strncmp(tmp[0], "cd", ft_strlen(tmp[0])) == 0) {
-            ft_cd(env, tmp);
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        if (ft_strncmp(tmp[0], "unset", 5) == 0) {
-            if (tmp[1])
-                handle_unset(tmp, env);
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        if (ft_strncmp(tmp[0], "export", 6) == 0 && tmp[1]) {
-            handle_export(tmp, env);
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        if (!find_executable(tmp[0], *env)) {
-            printf("Nao existe nenhum executavel encontrado.\n");
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        if (ft_strncmp(tmp[0], "env", 3) == 0 && tmp[1]) {
-            ft_free_mtrs(tmp);
-            i++;
-            continue;
-        }
-
-        // Criação do pipe se houver próximo comando
-        if (commands[i + 1]) {
-            if (pipe(pipefd) == -1) {
-                perror("pipe");
-                ft_free_mtrs(tmp);
-                return NULL;
-            }
-        } else {
-            pipefd[0] = -1;
-            pipefd[1] = -1;
-        }
-
-        fd_in = exec_command(commands[i], fd_in, pipefd, *env);
-        if (fd_in == -1) {
-            ft_free_mtrs(tmp); // Libere a memória em caso de erro
-            return NULL;
-        }
-
-        ft_free_mtrs(tmp); // Libere a memória após usar `tmp`
-        i++;
-    }
-
-    return NULL;
+t_token	*prev_sep(t_token *token, int skip)
+{
+	if (token && skip)
+		token = token->prev;
+	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+		token = token->prev;
+	return (token);
 }
+
+char	**cmd_tab(t_token *start)
+{
+	t_token	*token;
+	char	**tab;
+	int		i;
+
+	if (!start)
+		return (NULL);
+	token = start->next;
+	i = 2;
+	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+	{
+		token = token->next;
+		i++;
+	}
+	if (!(tab = malloc(sizeof(char *) * i)))
+		return (NULL);
+	token = start->next;
+	tab[0] = start->str;
+	i = 1;
+	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+	{
+		tab[i++] = token->str;
+		token = token->next;
+	}
+	tab[i] = NULL;
+	return (tab);
+}
+
+
+
+void	exec_cmd(t_mini *mini, char **cmd)
+{
+	pid_t pid;
+	int	status;
+
+	if (mini->charge == 0)
+		return ;
+	pid = fork();
+	if (pid == 0)
+	{
+		char *cmd_path = ft_strjoin("/bin/", cmd[0]);
+		execve(cmd_path, cmd, mini->env);
+	}
+	else
+		waitpid(pid, &status, 0);
+	mini->charge = 0;
+}
+
+void	mini_exit(t_mini *mini, char **cmd)
+{
+	mini->exit = 1;
+	ft_putstr_fd("exit ", STDERR);
+	cmd[1] ? ft_putendl_fd("❤️", STDERR) : ft_putendl_fd("💚", STDERR);
+	if (cmd[1] && cmd[2])
+	{
+		mini->ret = 1;
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR);
+	}
+	else if (cmd[1] && ft_strisnum(cmd[1]) == 0)
+	{
+		mini->ret = 255;
+		ft_putstr_fd("minishell: exit: ", STDERR);
+		ft_putstr_fd(cmd[1], STDERR);
+		ft_putendl_fd(": numeric argument required", STDERR);
+	}
+	else if (cmd[1])
+		mini->ret = ft_atoi(cmd[1]);
+	else
+		mini->ret = 0;
+}
+
+void	redir_and_exec(t_mini *mini, t_token *token)
+{
+	t_token	*prev;
+	t_token	*next;
+	int		pipe;
+	char	**cmd;
+
+	prev = prev_sep(token, 0);
+	next = next_sep(token, 0);
+	pipe = 0;
+	if (prev && ft_strncmp(prev->type, "trunc", ft_strlen(prev->type)) == 0)
+		redir(mini, token, "trunc");
+	else if (prev && ft_strncmp(prev->type, "append", ft_strlen(prev->type)) == 0)
+		redir(mini, token, "append");
+	else if (ft_is_type(prev, "input"))
+		input(mini, token);
+	else if (ft_is_type(prev, "pipe"))
+		pipe = minipipe(mini);
+	if (next && pipe != 1)
+		redir_and_exec(mini, next->next);
+	if (( !prev || ft_is_type(prev, "pipe"))
+		&& pipe != 1 && mini->no_exec == 0)
+	{
+		cmd = cmd_tab(token);
+		if(is_builtin(cmd[0]))
+		{
+			
+			exec_builtin(cmd, mini);
+		}
+		else
+			exec_cmd(mini, cmd);
+		free_tab(cmd);
+	}
+}
+

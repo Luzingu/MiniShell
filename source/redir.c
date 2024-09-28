@@ -1,9 +1,9 @@
 #include "../header/minishell.h"
 
-void	redir(t_mini *mini, t_token *token, int type)
+void	redir(t_mini *mini, t_token *token, char *type)
 {
 	ft_close(mini->fdout);
-	if (type == TRUNC)
+	if (ft_strncmp(type, "trunc", ft_strlen(type)) == 0)
 		mini->fdout = open(token->str, O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
 	else
 		mini->fdout = open(token->str, O_CREAT | O_WRONLY | O_APPEND, S_IRWXU);
@@ -47,8 +47,6 @@ int		minipipe(t_mini *mini)
 		ft_close(pipefd[1]);
 		dup2(pipefd[0], STDIN);
 		mini->pipin = pipefd[0];
-		mini->pid = -1;
-		mini->parent = 0;
 		mini->no_exec = 0;
 		return (2);
 	}

@@ -31,18 +31,16 @@ void    go_pwd(char *path, char ***env)
     }
 }   
 
-void	ft_cd(char ***env, char **argument)
+int	ft_cd(char ***env, char **argument)
 {
-   // char *home = getenv("HOME");
     char *path = NULL;
     int total_of_arguments;
 
-    total_of_arguments = numb_split(argument);
+    total_of_arguments = nb_args(argument);
     if (total_of_arguments > 2)
     {
         printf("bash: cd: too many arguments\n");
-        ft_free_mtrs(argument);
-        return ;
+        return (1);
     }
 
     if (argument[1])
@@ -61,10 +59,11 @@ void	ft_cd(char ***env, char **argument)
             path = ft_strdup(argument[1]);
             go_pwd(path, env);
             free(path);
-            return ;
+            return (1);
         }
     }
     else
         path = my_getenv(*env, "HOME");
-    go_pwd(path, env);       
+    go_pwd(path, env);
+    return (1);    
 }

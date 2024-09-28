@@ -19,7 +19,7 @@ static void	ft_displaying_error(char **matrix, int flag)
 		printf("too many arguments\n");
 	else
 		printf("%s: %s\n", matrix[1], "numeric argument required");
-	ft_free_mtrs(matrix);
+	//ft_free_mtrs(matrix);
 	return ;
 }
 
@@ -47,11 +47,11 @@ static void	ft_isvalid(char **matrix)
 	}
 }
 
-void	ft_exit(char **matrix)
+int	ft_exit(char **matrix)
 {
 	int	total_of_arguments;
 
-	total_of_arguments = numb_split(matrix);
+	total_of_arguments = nb_args(matrix);
 	if (total_of_arguments > 2)
 	{
 		ft_isvalid(matrix);
@@ -67,4 +67,5 @@ void	ft_exit(char **matrix)
 	}
 	else
 		ft_closing_shell(0);
+	return (1);
 }
