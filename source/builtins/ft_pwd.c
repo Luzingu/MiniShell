@@ -1,6 +1,6 @@
 #include "../../header/minishell.h"
 
-char *ft_get_pwd(void)
+char *ft_pwd(void)
 {
     char *cwd = malloc(PATH_MAX);
     if (cwd == NULL)
@@ -11,7 +11,7 @@ char *ft_get_pwd(void)
 
     if (getcwd(cwd, PATH_MAX) != NULL)
     {
-        return cwd;
+        return (cwd);
     }
     else
     {

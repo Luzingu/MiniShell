@@ -117,7 +117,6 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 		cmd = cmd_tab(token);
 		if(is_builtin(cmd[0]))
 		{
-			
 			exec_builtin(cmd, mini);
 		}
 		else

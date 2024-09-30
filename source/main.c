@@ -50,14 +50,21 @@ int main(int ac, char **argv, char **env)
     char *line = NULL;
 	
     reset_fds(&mini);
+    mini.in = dup(STDIN);
+    mini.out = dup(STDOUT);
     mini.env = str_dup_env(env);
+    mini.env_copy = str_dup_env(env);
     while (1)
     {
-        line = readline("minishell>");
+        line = readline("minishell> ");
         if (!line)
             break;
-        mini.in = dup(STDIN);
-        mini.out = dup(STDOUT);
+        line = ft_verifying_line(line);
+        if (!line)
+        {
+            printf("minishell: error quotes\n");
+            continue;
+        }
         mini.exit = 0;
         mini.ret = 0;
         mini.no_exec = 0;

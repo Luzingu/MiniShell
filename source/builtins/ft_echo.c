@@ -1,28 +1,28 @@
 #include "../../header/minishell.h"
 
-int	ft_echo(char **args)
+int	ft_echo(char **argument)
 {
 	int	i;
-	int		n_option;
+	int	put_break;
+	int n;
 
 	i = 1;
-	n_option = 0;
-	if (nb_args(args) > 1)
+	if(argument[1] && ft_strncmp("-n", argument[1], ft_strlen(argument[1])) == 0)
+		i = 2;
+	put_break = i;
+	while (i < numb_split(argument))
 	{
-		while (args[i] && ft_strncmp(args[i], "-n", 2) == 0)
+		n = 0;
+		while (argument[i][n])
 		{
-			n_option = 1;
-			i++;
+			ft_putchar_fd(argument[i][n], STDOUT_FILENO);
+			n++;
 		}
-		while (args[i])
-		{
-			ft_putstr_fd(args[i], 1);
-			if (args[i + 1] && args[i][0] != '\0')
-				write(1, " ", 1);
-			i++;
-		}
+		if (argument[i + 1])
+			ft_putchar_fd(' ', 1);
+		i++;
 	}
-	if (n_option == 0)
-		write(1, "\n", 1);
+	if(put_break == 1)
+		ft_putchar_fd('\n', 1);
 	return (1);
 }

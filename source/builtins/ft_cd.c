@@ -18,12 +18,12 @@ void    go_pwd(char *path, char ***env)
     char *current_pwd;
     char *past_pwd;
 
-    past_pwd = ft_get_pwd();
+    past_pwd = ft_pwd();
     if (chdir(path))
         perror("cd");
     else
     {
-        current_pwd = ft_get_pwd();
+        current_pwd = ft_pwd();
         past_pwd = ft_strjoin("OLDPWD=", past_pwd);
         *env = ft_export(past_pwd, *env);
         current_pwd = ft_strjoin("PWD=", current_pwd);

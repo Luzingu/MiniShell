@@ -44,6 +44,7 @@ typedef struct	s_mini
 {
     t_token			*start;
     char			**env;
+    char			**env_copy;
     int				in;
     int				out;
     int				fdin;
@@ -74,16 +75,18 @@ int	ft_strisnum(const char *str);
 char **str_dup_env(char **env);
 char *my_getenv(char **env, char *name);
 char *find_executable(char *cmd, char **env);
-int	ft_cd(char ***env, char **argument);
-int	ft_exit(char **matrix);
 int	 is_builtin(char *command);
 int	exec_builtin(char **args, t_mini *mini);
-char *ft_get_pwd(void);
 int	ft_echo(char **args);
 void handle_export(char **tmp, char ***env);
-void ft_unset(char **args, char ***env);
-char **ft_export(char *args, char **env);
+char **ft_unset(char *args, char ***env);
 int		nb_args(char **args);
 void ft_free_mtrs(char **matriz);
 int whereis(const char *str, const char *needle);
+int numb_split (char **mtx);
+char *ft_verifying_line(char *line);
+char **ft_export(char *args, char **env);
+int	ft_cd(char ***env, char **argument);
+int	ft_exit(char **matrix);
+char *ft_pwd(void);
 #endif

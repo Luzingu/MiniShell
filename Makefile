@@ -29,7 +29,8 @@ SRC				=	source/main.c\
 					source/environment/executable.c\
 					source/environment/expand_variable.c\
 					source/environment/export.c\
-					source/environment/unset.c
+					source/environment/unset.c\
+					source/ft_verifying_line.c
 
 
 OBJ		= $(SRC:.c=.o)
