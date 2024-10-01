@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/23 12:07:10 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/01 00:47:07 by mcaquart         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../../header/minishell.h"
 
 char **ft_export(char *args, char **env)
@@ -46,7 +57,7 @@ char **ft_export(char *args, char **env)
     if (!exist)
         new_env[i++] = ft_strdup(str);
     new_env[i] = NULL;
-    ft_free_mtrs(env);
+    ft_free_matrix(env);
     free(name_v);
     free(value);
     free(str);
@@ -58,7 +69,7 @@ void handle_export(char **tmp, char ***env)
     int n = 1;
     while (tmp[n])
     {
-        *env = ft_export(tmp[n], *env); // Supomos que ft_export é segura
+        *env = ft_export(tmp[n], *env);
         n++;
     }
 }

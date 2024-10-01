@@ -29,7 +29,7 @@ char **ft_unset(char *args, char ***env)
         i++;
     }
     new_env[j] = NULL;
-    ft_free_mtrs(*env); // Libera a memória do ambiente antigo
+    ft_free_matrix(*env); // Libera a memória do ambiente antigo
     free(to_remove); // Libera a memória da string temporária
     return new_env; // Retorna o novo ambiente
 }

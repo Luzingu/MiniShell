@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_verifying_line.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/01 00:50:52 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/01 00:51:34 by mcaquart         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../header/minishell.h"
 
 int ft_check_quotes(char *str)
@@ -92,7 +103,7 @@ char *ft_verifying_line(char *line)
         i++;
     }
     new_line[line_length] = '\0';
-    ft_free_mtrs(matrix);
+    ft_free_matrix(matrix);
     free(line);
     return (new_line);
 }

@@ -1,5 +1,16 @@
-#include "../header/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/01 00:17:11 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/01 00:16:37 by mcaquart         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../header/minishell.h"
 
 t_token	*next_sep(t_token *token, int skip)
 {
@@ -47,8 +58,6 @@ char	**cmd_tab(t_token *start)
 	tab[i] = NULL;
 	return (tab);
 }
-
-
 
 void	exec_cmd(t_mini *mini, char **cmd)
 {
@@ -116,9 +125,7 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 	{
 		cmd = cmd_tab(token);
 		if(is_builtin(cmd[0]))
-		{
 			exec_builtin(cmd, mini);
-		}
 		else
 			exec_cmd(mini, cmd);
 		free_tab(cmd);

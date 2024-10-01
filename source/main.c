@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/30 23:31:31 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/01 00:20:31 by mcaquart         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "../header/minishell.h"
 
 void	ft_close(int fd)
@@ -68,7 +79,6 @@ int main(int ac, char **argv, char **env)
         mini.exit = 0;
         mini.ret = 0;
         mini.no_exec = 0;
-
         mini.start = get_tokens(line);
         token = next_run(mini.start);
         mini.charge = 1; 

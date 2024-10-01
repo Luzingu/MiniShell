@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aluzingu <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/08/30 15:58:50 by mcaquart          #+#    #+#              #
-#    Updated: 2024/09/14 00:39:42 by aluzingu         ###   ########.fr        #
+#    Updated: 2024/10/01 00:44:22 by mcaquart         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ LDFLAGS			= 	-lreadline
 LIBFT			= 	./libft
 SRC				=	source/main.c\
 					source/token.c\
-					source/check_line.c\
 					source/utils.c\
 					source/execute.c\
 					source/redir.c\
@@ -31,7 +30,6 @@ SRC				=	source/main.c\
 					source/environment/export.c\
 					source/environment/unset.c\
 					source/ft_verifying_line.c
-
 
 OBJ		= $(SRC:.c=.o)
 
