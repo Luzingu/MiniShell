@@ -58,48 +58,6 @@ char	**cmd_tab(t_token *start)
 	tab[i] = NULL;
 	return (tab);
 }
-
-void	exec_cmd(t_mini *mini, char **cmd)
-{
-	pid_t pid;
-	int	status;
-
-	if (mini->charge == 0)
-		return ;
-	pid = fork();
-	if (pid == 0)
-	{
-		char *cmd_path = ft_strjoin("/bin/", cmd[0]);
-		execve(cmd_path, cmd, mini->env);
-	}
-	else
-		waitpid(pid, &status, 0);
-	mini->charge = 0;
-}
-
-void	mini_exit(t_mini *mini, char **cmd)
-{
-	mini->exit = 1;
-	ft_putstr_fd("exit ", STDERR);
-	cmd[1] ? ft_putendl_fd("❤️", STDERR) : ft_putendl_fd("💚", STDERR);
-	if (cmd[1] && cmd[2])
-	{
-		mini->ret = 1;
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR);
-	}
-	else if (cmd[1] && ft_strisnum(cmd[1]) == 0)
-	{
-		mini->ret = 255;
-		ft_putstr_fd("minishell: exit: ", STDERR);
-		ft_putstr_fd(cmd[1], STDERR);
-		ft_putendl_fd(": numeric argument required", STDERR);
-	}
-	else if (cmd[1])
-		mini->ret = ft_atoi(cmd[1]);
-	else
-		mini->ret = 0;
-}
-
 void	redir_and_exec(t_mini *mini, t_token *token)
 {
 	t_token	*prev;
@@ -127,7 +85,7 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 		if(is_builtin(cmd[0]))
 			exec_builtin(cmd, mini);
 		else
-			exec_cmd(mini, cmd);
+			execute_cmd(mini, cmd);
 		free_tab(cmd);
 	}
 }

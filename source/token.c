@@ -34,6 +34,8 @@ void    type_arg(t_token *token)
         token->type = "trunc";
     else if (!ft_strncmp(token->str, ">>", len_str))
         token->type = "append";
+    else if (!ft_strncmp(token->str, "<<", len_str))
+        token->type = "heredoc";
     else if (!ft_strncmp(token->str, "<", len_str))
         token->type = "input";
     else if (!ft_strncmp(token->str, "|", len_str))
@@ -81,6 +83,8 @@ char *get_separator(char *line, int *i)
 
     tot_str = 1;
     if (line[*i] == '>' && line[*i + 1] == '>')
+        tot_str = 2;
+    else if (line[*i] == '<' && line[*i + 1] == '<')
         tot_str = 2;
     str = (char *)malloc(sizeof(char) * (tot_str + 1));
     if (!str)

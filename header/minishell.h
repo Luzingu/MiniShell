@@ -16,6 +16,7 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
+# define BUFFER_SIZE 1000000000
 
 # include <unistd.h>
 # include <stdio.h>
@@ -68,13 +69,13 @@ void	input(t_mini *mini, t_token *token);
 void	free_tab(char **tab);
 void	ft_close(int fd);
 void	handle_export(char **tmp, char ***env);
+int		handle_unset(char **tmp, char ***env);
 void	ft_free_matrix(char **matrix);
-
+void	ft_env(char **env);
 char	**str_dup_env(char **env);
 char	*my_getenv(char **env, char *name);
 char	*find_executable(char *cmd, char **env);
 char	*ft_verifying_line(char *line);
-char	**ft_unset(char *args, char ***env);
 char	**ft_export(char *args, char **env);
 char	*ft_pwd(void);
 
@@ -92,5 +93,7 @@ int		ft_exit(char **matrix);
 int		nb_args(char **args);
 int		whereis(const char *str, const char *needle);
 int		numb_split(char **matrix);
-
+char	*expand_variables(t_mini *mini, char *input);
+char	*ft_getenv(char **env, char *var);
+void execute_cmd(t_mini *mini, char **cmd);
 #endif

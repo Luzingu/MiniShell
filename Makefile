@@ -15,21 +15,23 @@ CC				= 	cc
 CFLAGS			= 	-Wall -Wextra -Werror
 LDFLAGS			= 	-lreadline
 LIBFT			= 	./libft
-SRC				=	source/main.c\
-					source/token.c\
-					source/utils.c\
-					source/execute.c\
-					source/redir.c\
-					source/execute_builtin.c\
-					source/builtins/ft_echo.c\
-					source/builtins/ft_cd.c\
-					source/builtins/ft_pwd.c\
-					source/builtins/ft_exit.c\
-					source/environment/executable.c\
-					source/environment/expand_variable.c\
-					source/environment/export.c\
-					source/environment/unset.c\
-					source/ft_verifying_line.c
+SRC				=	source/main.c							\
+					source/token.c							\
+					source/utils.c							\
+					source/execute.c						\
+					source/redir.c							\
+					source/execute_builtin.c				\
+					source/builtins/ft_echo.c				\
+					source/builtins/ft_cd.c					\
+					source/builtins/ft_pwd.c				\
+					source/builtins/ft_exit.c				\
+					source/environment/executable.c			\
+					source/environment/expand_variable.c	\
+					source/environment/ft_export.c				\
+					source/environment/ft_unset.c				\
+					source/environment/ft_env.c				\
+					source/ft_verifying_line.c				\
+					source/execute_cmd.c
 
 OBJ		= $(SRC:.c=.o)
 

@@ -1,6 +1,6 @@
 #include "../../header/minishell.h"
 
-char **ft_unset(char *args, char ***env)
+static char **ft_unset(char *args, char ***env)
 {
     int i = 0;
     int j = 0;
@@ -34,12 +34,13 @@ char **ft_unset(char *args, char ***env)
     return new_env; // Retorna o novo ambiente
 }
 
-void handle_unset(char **tmp, char ***env)
+int handle_unset(char **tmp, char ***env)
 {
     int n = 1;
     while (tmp[n])
     {
-        *env = ft_unset(tmp[n], env); // Supomos que ft_export é segura
+        *env = ft_unset(tmp[n], env);
         n++;
     }
+    return (0);
 }

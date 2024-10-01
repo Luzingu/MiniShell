@@ -13,31 +13,3 @@ char *my_getenv(char **env, char *name)
     }
     return (NULL);
 }
-
-char *find_executable(char *cmd, char **env)
-{
-    struct stat buffer;
-
-    if (stat(cmd, &buffer) == 0)
-    {
-        return strdup(cmd);
-    }
-
-    char *path_env = my_getenv(env, "PATH");
-    if (!path_env)
-        return (NULL);
-
-    char **path_dirs = ft_split(path_env, ':');
-    for (int i = 0; path_dirs[i]; i++)
-    {
-        char *full_path = ft_strjoin(ft_strjoin(path_dirs[i], "/"), cmd);
-        if (full_path && stat(full_path, &buffer) == 0)
-        {
-            //ft_free_mtrs(path_dirs);
-            return full_path;
-        }
-        free(full_path);
-    }
-    //ft_free_mtrs(path_dirs);
-    return NULL;
-}
