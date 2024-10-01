@@ -37,12 +37,12 @@ int		exec_builtin(char **args, t_mini *mini)
 
 	result = 1;
 	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
-		result = ft_echo(args);
+		ft_echo(args, mini);
 	if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
-		result = ft_cd(&mini->env_copy, args);
+		ft_cd(&mini->env_copy, args, mini);
 	if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
 	{
-		if ((pwd = ft_pwd()))
+		if ((pwd = ft_pwd(mini)))
 		{
 			ft_putstr_fd(pwd, 1);
 			ft_putchar_fd('\n', 1);
@@ -51,17 +51,23 @@ int		exec_builtin(char **args, t_mini *mini)
 		}
 	}
 	if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
-		result = ft_exit(args);
+		ft_exit(args, mini);
 	if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
-    {
-        ft_env(mini->env);
-    }
+	{
+		if (args[1])
+		{
+			ft_putstr_fd("too many arguments\n", 2);
+			mini->last_return = 1;
+		}
+		else
+			ft_env(mini->env, mini);
+	}
 	if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
 	{
 		if (args[1])
 			handle_export(args, &mini->env);
 		else
-			ft_env(mini->env);
+			ft_env(mini->env, mini);
 	}
 	if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
 		handle_unset(args, &mini->env);

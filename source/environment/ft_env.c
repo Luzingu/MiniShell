@@ -1,10 +1,11 @@
 #include "../../header/minishell.h"
 
-void ft_env(char **env)
+void ft_env(char **env, t_mini *mini)
 {
     int i = -1;
     while (env[++i])
         ft_putendl_fd(env[i], 1);
+    mini->last_return = 0;
 }
 
 char *ft_getenv(char **env, char *var)

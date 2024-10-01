@@ -19,53 +19,53 @@ static void	ft_displaying_error(char **matrix, int flag)
 		printf("too many arguments\n");
 	else
 		printf("%s: %s\n", matrix[1], "numeric argument required");
-	//ft_free_matrix(matrix);
-	return ;
 }
 
-static void	ft_closing_shell(int argument)
+static void	ft_closing_shell(int exit_status, t_mini *mini)
 {
 	ft_putendl_fd("exit", 2);
-	exit(argument);
+	mini->last_return = exit_status;
+	exit(exit_status);
 }
 
-static void	ft_isvalid(char **matrix)
+static int	ft_isvalid_argument(char *arg)
 {
 	int	i;
 
-	i = -1;
-	while (ft_isalpha(matrix[1][++i]))
-		ft_displaying_error(matrix, 0);
 	i = 0;
-	if (matrix[1][i] == '-' || matrix[1][i] == '+')
+	if (arg[i] == '-' || arg[i] == '+')
 		i++;
-	while (matrix[1][i])
+	while (arg[i])
 	{
-		if (!ft_isdigit(matrix[1][i]))
-			ft_displaying_error(matrix, 0);
+		if (!ft_isdigit(arg[i]))
+			return (0);
 		i++;
 	}
+	return (1);
 }
 
-int	ft_exit(char **matrix)
+void	ft_exit(char **matrix, t_mini *mini)
 {
 	int	total_of_arguments;
 
-	total_of_arguments = nb_args(matrix);
+	total_of_arguments = numb_split(matrix);
+
 	if (total_of_arguments > 2)
 	{
-		ft_isvalid(matrix);
 		ft_displaying_error(matrix, 1);
+		mini->last_return = 1;
+		return ;
 	}
 	else if (total_of_arguments == 2)
 	{
-		ft_isvalid(matrix);
-		if (ft_atoi(matrix[1]) >= 1)
-			ft_closing_shell(1);
-		else
-			ft_closing_shell(0);
+		if (!ft_isvalid_argument(matrix[1]))
+		{
+			ft_displaying_error(matrix, 0);
+			ft_closing_shell(255, mini);
+		}
+		ft_closing_shell(ft_atoi(matrix[1]), mini);
 	}
 	else
-		ft_closing_shell(0);
-	return (1);
+		ft_closing_shell(0, mini);
 }
+

@@ -11,13 +11,9 @@
 /* ************************************************************************** */
 #include "../../header/minishell.h"
 
-char **ft_export(char *args, char **env)
+static char *create_export_string(char *args, char **name_v, char **value)
 {
-    char *name_v;
-    char *value;
     int i;
-    char **new_env;
-    int exist = 0;
     char *str;
 
     i = whereis(args, "=");
@@ -26,23 +22,17 @@ char **ft_export(char *args, char **env)
         printf("Erro: '=' não encontrado no argumento.\n");
         return (NULL);
     }
-    name_v = ft_substr(args, 0, i);
-    value = ft_substr(args, i + 1, ft_strlen(args) - i - 1);
-    str = ft_strdup(name_v);
-    str = ft_strjoin(str, "=");
-    str = ft_strjoin(str, value);
-    i = 0;
-    while (env[i])
-        i++;
-    new_env = (char **)malloc(sizeof(char *) * (i + 2));
-    if (!new_env)
-    {
-        printf("Erro ao alocar memória.\n");
-        return (NULL);
-    }
+    *name_v = ft_substr(args, 0, i);
+    *value = ft_substr(args, i + 1, ft_strlen(args) - i - 1);
+    str = ft_strjoin(ft_strjoin(ft_strdup(*name_v), "="), *value);
+    return (str);
+}
 
-    i = 0;
-    exist = 0;
+static int update_env(char **env, char **new_env, char *str, char *name_v)
+{
+    int i = 0;
+    int exist = 0;
+
     while (env[i])
     {
         if (ft_strncmp(name_v, env[i], ft_strlen(name_v)) == 0 && env[i][ft_strlen(name_v)] == '=')
@@ -54,9 +44,34 @@ char **ft_export(char *args, char **env)
             new_env[i] = ft_strdup(env[i]);
         i++;
     }
+    return (exist);
+}
+
+char **ft_export(char *args, char **env)
+{
+    char *name_v;
+    char *value;
+    char *str;
+    char **new_env;
+    int i;
+    int exist;
+
+    str = create_export_string(args, &name_v, &value);
+    if (!str)
+        return (NULL);
+
+    i = 0;
+    while (env[i])
+        i++;
+    new_env = (char **)malloc(sizeof(char *) * (i + 2));
+    if (!new_env)
+        return (NULL);
+
+    exist = update_env(env, new_env, str, name_v);
     if (!exist)
         new_env[i++] = ft_strdup(str);
     new_env[i] = NULL;
+
     ft_free_matrix(env);
     free(name_v);
     free(value);

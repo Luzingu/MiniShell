@@ -16,8 +16,8 @@ CFLAGS			= 	-Wall -Wextra -Werror
 LDFLAGS			= 	-lreadline
 LIBFT			= 	./libft
 SRC				=	source/main.c							\
-					source/token.c							\
-					source/utils.c							\
+					source/token/token.c					\
+					source/token/utils.c					\
 					source/execute.c						\
 					source/redir.c							\
 					source/execute_builtin.c				\
@@ -25,14 +25,19 @@ SRC				=	source/main.c							\
 					source/builtins/ft_cd.c					\
 					source/builtins/ft_pwd.c				\
 					source/builtins/ft_exit.c				\
-					source/environment/executable.c			\
 					source/environment/expand_variable.c	\
 					source/environment/ft_export.c				\
 					source/environment/ft_unset.c				\
 					source/environment/ft_env.c				\
 					source/ft_verifying_line.c				\
-					source/execute_cmd.c
-
+					source/ft_verifying_argument.c			\
+					source/execute_cmd.c\
+					source/shell_lavel.c\
+					source/ft_free.c\
+					source/heredoc.c\
+					source/signal.c \
+					source/utils_token.c\
+					source/utils.c
 OBJ		= $(SRC:.c=.o)
 
 MAKEFLAGS	+= -silent

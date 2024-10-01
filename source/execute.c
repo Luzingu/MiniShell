@@ -12,24 +12,6 @@
 
 #include "../header/minishell.h"
 
-t_token	*next_sep(t_token *token, int skip)
-{
-	if (token && skip)
-		token = token->next;
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
-		token = token->next;
-	return (token);
-}
-
-t_token	*prev_sep(t_token *token, int skip)
-{
-	if (token && skip)
-		token = token->prev;
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
-		token = token->prev;
-	return (token);
-}
-
 char	**cmd_tab(t_token *start)
 {
 	t_token	*token;
@@ -58,6 +40,7 @@ char	**cmd_tab(t_token *start)
 	tab[i] = NULL;
 	return (tab);
 }
+
 void	redir_and_exec(t_mini *mini, t_token *token)
 {
 	t_token	*prev;
@@ -68,9 +51,9 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 	prev = prev_sep(token, 0);
 	next = next_sep(token, 0);
 	pipe = 0;
-	if (prev && ft_strncmp(prev->type, "trunc", ft_strlen(prev->type)) == 0)
+	if (prev && ft_is_type(prev, "trunc"))
 		redir(mini, token, "trunc");
-	else if (prev && ft_strncmp(prev->type, "append", ft_strlen(prev->type)) == 0)
+	else if (prev && ft_is_type(prev, "append"))
 		redir(mini, token, "append");
 	else if (ft_is_type(prev, "input"))
 		input(mini, token);
@@ -86,7 +69,7 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 			exec_builtin(cmd, mini);
 		else
 			execute_cmd(mini, cmd);
-		free_tab(cmd);
+		ft_free_matrix(cmd);
 	}
 }
 

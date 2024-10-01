@@ -11,176 +11,74 @@
 /* ************************************************************************** */
 #include "../header/minishell.h"
 
-
-char **heredoc(const char *delimiter) 
+static void process_line(t_mini *mini, char *line)
 {
-    char **lines;
-    int count;
-    char *line;
+    t_token *token;
 
-    lines = malloc(BUFFER_SIZE * sizeof(char *));
-    if (!lines)
+    if (handle_heredoc(line))
     {
-        perror("malloc");
-        exit(EXIT_FAILURE);
+        free(line);
+        return;
     }
-    count = 0;
+    line = ft_verifying_line(line);
+    if (!line)
+    {
+        printf("minishell: error quotes\n");
+        return;
+    }
+    line = expand_variables(mini, line);
+    mini->start = get_tokens(line);
+    token = next_run(mini->start);
+    if (!verifying_argument(mini, token))
+    {
+        free(line);
+        return;
+    }
+    mini->charge = 1;
+    redir_and_exec(mini, token);
+}
+
+void init_mini(t_mini *mini)
+{
+    char *line;
+    int status;
+
     while (1)
     {
-        line = readline("> ");
+        mini->in = dup(STDIN_FILENO);
+        mini->out = dup(STDOUT_FILENO);
+        line = readline("minishell> ");
         if (!line)
         {
-            ft_free_matrix(lines);
-            return (NULL);
-        }
-        if (strcmp(line, delimiter) == 0)
-        {
-            free(line);
+            printf("exit\n");
             break;
         }
-        lines[count++] = line;
+        if (*line)
+            add_history(line);
+        process_line(mini, line);
+        reset_std(mini);
+        close_fds(mini);
+        reset_fds(mini);
+        waitpid(-1, &status, 0);
+        mini->no_exec = 0;
+        free(line);
     }
-    lines[count] = NULL;
-    return lines;
-}
-
-void process_heredoc(const char *delimiter) {
-    char **lines;
-    int i;
-
-    i = 0;
-    lines = heredoc(delimiter);
-    
-    if (lines)
-    {
-        while (lines[i])
-        {
-            ft_putstr_fd(lines[i], 1);
-            write(1, "\n", 1);
-            i++;
-        }
-        ft_free_matrix(lines);
-    }
-}
-
-void handle_heredoc(char *line)
-{
-    int i = 0;
-    char **tokens;
-    char *delimiter;
-
-    tokens = ft_split(line, ' '); 
-    while (tokens[i])
-    {
-        if (strcmp(tokens[i], "<<") == 0 && tokens[i + 1] != NULL) {
-            delimiter = tokens[i + 1];
-            process_heredoc(delimiter);
-            break;
-        }
-        i++;
-    }
-    ft_free_matrix(tokens);
-}
-
-void sigint_handler(int sig)
-{
-    (void)sig;
-    write(1, "\n", 1);
-    rl_on_new_line();
-    rl_replace_line("", 0);
-    rl_redisplay();
-}
-
-
-
-void handle_signals(void)
-{
-    signal(SIGINT, sigint_handler);
-    signal(SIGQUIT, SIG_IGN);
-}
-
-void	ft_close(int fd)
-{
-	if (fd > 0)
-		close(fd);
-}
-
-void	reset_std(t_mini *mini)
-{
-	dup2(mini->in, STDIN);
-	dup2(mini->out, STDOUT);
-}
-
-void	close_fds(t_mini *mini)
-{
-	ft_close(mini->fdin);
-	ft_close(mini->fdout);
-	ft_close(mini->pipin);
-	ft_close(mini->pipout);
-}
-
-void	reset_fds(t_mini *mini)
-{
-	mini->fdin = -1;
-	mini->fdout = -1;
-	mini->pipin = -1;
-	mini->pipout = -1;
-	mini->pid = -1;
-}
-
-t_token	*next_run(t_token *token)
-{
-	while (token && !ft_is_type(token, "cmd"))
-	{
-		token = token->next;
-		if (token && ft_is_type(token, "pipe") && token->prev != NULL)
-			token = token->next;
-	}
-	return (token);
 }
 
 int main(int ac, char **argv, char **env)
 {
     t_mini mini;
-    t_token	*token;
+    int shell_level;
+
     (void)ac;
     (void)argv;
-    int status;
-    char *line = NULL;
     reset_fds(&mini);
-   
     mini.env = str_dup_env(env);
     mini.env_copy = str_dup_env(env);
+    shell_level = increment_shell_level(mini.env);
+    mini.env = ft_export(ft_strjoin("SHLVL=", ft_itoa(shell_level)), mini.env);
+    mini.last_return = 0;
     handle_signals();
-    while (1)
-    {
-        mini.in = dup(STDIN);
-        mini.out = dup(STDOUT);
-        line = readline("minishell> ");
-        add_history(line);
-        if (!line)
-            break;
-        handle_heredoc(line);
-        line = ft_verifying_line(line);
-        if (!line)
-        {
-            printf("minishell: error quotes\n");
-            continue;
-        }
-        line = expand_variables(&mini, line);
-        mini.exit = 0;
-        mini.ret = 0;
-        mini.no_exec = 0;
-        mini.start = get_tokens(line);
-        token = next_run(mini.start); 
-        mini.charge = 1; 
-        redir_and_exec(&mini, token);
-        
-        reset_std(&mini);
-        close_fds(&mini);
-        reset_fds(&mini);
-        waitpid(-1, &status, 0);
-        mini.no_exec = 0;
-    }
+    init_mini(&mini);
     return (0);
 }

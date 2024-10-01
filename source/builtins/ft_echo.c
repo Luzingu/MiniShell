@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "../../header/minishell.h"
 
-int	ft_echo(char **argument)
+void	ft_echo(char **argument, t_mini *mini)
 {
 	int	i;
 	int	put_break;
@@ -35,5 +35,5 @@ int	ft_echo(char **argument)
 	}
 	if(put_break == 1)
 		ft_putchar_fd('\n', 1);
-	return (1);
+	mini->last_return = 0;
 }

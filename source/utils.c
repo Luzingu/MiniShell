@@ -11,17 +11,7 @@ int numb_split (char **matrix)
     return (num);
 }
 
-void ft_free_matrix(char **matrix)
-{
-    int i;
 
-    if (!matrix)
-        return ;
-    i = -1;
-    while (matrix[++i])
-        free(matrix[i]);
-    free(matrix);
-}
 
 int whereis(const char *str, const char *needle)
 {
@@ -59,28 +49,6 @@ char **str_dup_env(char **env)
     return (my_env);
 }
 
-int	ft_is_type(t_token *token, char *type)
-{
-	if (token && ft_strncmp(token->type, type, ft_strlen(type)) == 0)
-		return (1);
-	return (0);
-}
-
-void	free_tab(char **tab)
-{
-	int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		if (tab[i])
-			free(tab[i]);
-		i++;
-	}
-	if (tab)
-		free(tab);
-}
-
 int	ft_strisnum(const char *str)
 {
 	int	i;
@@ -97,15 +65,5 @@ int	ft_strisnum(const char *str)
 		i++;
 	}
 	return (1);
-}
-
-int		nb_args(char **args)
-{
-	int		size;
-
-	size = 0;
-	while (args[size])
-		size++;
-	return (size);
 }
 
