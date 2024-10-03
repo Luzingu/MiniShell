@@ -12,7 +12,7 @@
 
 #include "../../header/minishell.h"
 
-void	go_pwd(char *path, char ***env, t_mini *mini)
+void	go_pwd(char *path, t_mini *mini)
 {
 	char	*current_pwd;
 	char	*past_pwd;
@@ -27,14 +27,14 @@ void	go_pwd(char *path, char ***env, t_mini *mini)
 	{
 		current_pwd = ft_pwd(mini);
 		past_pwd = ft_strjoin("OLDPWD=", past_pwd);
-		*env = ft_export(past_pwd, *env);
+		ft_export(past_pwd, &mini->env);
 		current_pwd = ft_strjoin("PWD=", current_pwd);
-		*env = ft_export(current_pwd, *env);
+		ft_export(current_pwd, &mini->env);
 		mini->last_return = 0;
 	}
 }
 
-void	ft_cd(char ***env, char **argument, t_mini *mini)
+void	ft_cd(t_mini *mini, char **argument)
 {
 	char	*path;
 	int		total_of_arguments;
@@ -45,25 +45,26 @@ void	ft_cd(char ***env, char **argument, t_mini *mini)
 	{
 		printf("bash: cd: too many arguments\n");
 		mini->last_return = 1;
+		ft_free_matrix(argument);
 		return ;
 	}
 	if (argument[1])
 	{
 		if (ft_strncmp("-", argument[1], ft_strlen(argument[1])) == 0)
-			path = ft_getenv(*env, "OLDPWD");
+			path = ft_getenv(mini->env_copy, "OLDPWD");
 		else if (argument[1][0] == '~')
 		{
-			path = ft_getenv(*env, "HOME");
+			path = ft_getenv(mini->env_copy, "HOME");
 			path = ft_strjoin(path, &(argument[1][1]));
 		}
 		else
 		{
 			path = ft_strdup(argument[1]);
-			go_pwd(path, env, mini);
+			go_pwd(path, mini);
 			return ;
 		}
 	}
 	else
-		path = ft_getenv(*env, "HOME");
-	go_pwd(path, env, mini); 
+		path = ft_getenv(mini->env_copy, "HOME");
+	go_pwd(path, mini); 
 }

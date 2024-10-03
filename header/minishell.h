@@ -31,6 +31,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <sys/stat.h>
+#include <dirent.h>
 # include "../libft/libft.h"
 
 typedef struct s_token
@@ -41,11 +42,18 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct s_env *next;
+}	t_env;
+
 typedef struct s_mini
 {
 	t_token		*start;
-	char		**env;
-	char		**env_copy;
+	t_env		*env;
+	t_env		*env_copy;
 	int			in;
 	int			out;
 	int			fdin;
@@ -57,6 +65,7 @@ typedef struct s_mini
 	int			parent;
 	int			last_return;
 	int			no_exec;
+	int			exit_status;
 }	t_mini;
 
 t_token	*get_tokens(char *line);
@@ -64,19 +73,15 @@ t_token	*get_tokens(char *line);
 void	redir_and_exec(t_mini *mini, t_token *token);
 void	redir(t_mini *mini, t_token *token, char *type);
 void	input(t_mini *mini, t_token *token);
-void	free_tab(char **tab);
 void	ft_close(int fd);
-void	handle_export(char **tmp, char ***env);
-int		handle_unset(char **tmp, char ***env);
+void	handle_export(char **tmp, t_env **env, t_mini *mini);
+int		handle_unset(char **tmp, t_env **env);
 void	ft_free_matrix(char **matrix);
-void	ft_env(char **env, t_mini *mini);
-char	**str_dup_env(char **env);
-char	*find_executable(char *cmd, char **env);
+void	ft_env(t_env *env);
+void	str_dup_env(char **env, t_mini *mini); 
 char	*ft_verifying_line(char *line);
-char	**ft_export(char *args, char **env);
+void	ft_export(char *args, t_env **env);
 char	*ft_pwd(t_mini *mini);
-
-int		get_next_line2(int fd, char **line);
 int		is_types(t_token *token, char *types);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
@@ -85,26 +90,31 @@ int		ft_strisnum(const char *str);
 int		is_builtin(char *command);
 int		exec_builtin(char **args, t_mini *mini);
 void	ft_echo(char **args, t_mini *mini);
-void	ft_cd(char ***env, char **argument, t_mini *mini);
+void	ft_cd(t_mini *mini, char **argument);
 void	ft_exit(char **matrix, t_mini *mini);
 int		nb_args(char **args);
 int		whereis(const char *str, const char *needle);
 int		numb_split(char **matrix);
 char	*expand_variables(t_mini *mini, char *input);
-char	*ft_getenv(char **env, char *var);
-void execute_cmd(t_mini *mini, char **cmd);
+char	*ft_getenv(t_env *env, char *var);
+void execute_cmd(t_mini *mini, char **cmd, char *type);
 int		verifying_argument(t_mini *mini, t_token *token);
-int	increment_shell_level(char **env);
+void	increment_shell_level(t_mini *mini);
 void	reset_std(t_mini *mini);
 void	close_fds(t_mini *mini);
 void	reset_fds(t_mini *mini);
 int	handle_heredoc(char *line);
 void handle_signals(void);
-t_token	*next_sep(t_token *token, int skip);
-t_token	*prev_sep(t_token *token, int skip);
+t_token	*next_sep(t_token *token);
+t_token	*prev_sep(t_token *start, t_token *current);
 t_token	*next_run(t_token *token);
 char	*get_separator(char *line, int *i);
 int is_separator(char c);
-void    type_arg(t_token *token);
+void    type_arg(t_token *start, t_token *token);
 char	*return_str(char *ptr, int *i);
+t_env *add_envirenoment(char *env_name, char *env_value);
+t_env *sort_env_list(t_env *head);
+char **env_to_matrix(t_env *env);
+char **ft_split_advanced(const char *s, const char *delimiter);
+char *my_strndup(const char *s, size_t n);
 #endif

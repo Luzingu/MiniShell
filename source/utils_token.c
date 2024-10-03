@@ -1,21 +1,25 @@
 #include "../header/minishell.h"
 
-t_token	*next_sep(t_token *token, int skip)
+t_token	*next_sep(t_token *token)
 {
-	if (token && skip)
-		token = token->next;
 	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
 		token = token->next;
 	return (token);
 }
 
-t_token	*prev_sep(t_token *token, int skip)
+t_token	*prev_sep(t_token *start, t_token *current)
 {
-	if (token && skip)
-		token = token->prev;
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
-		token = token->prev;
-	return (token);
+	t_token *tmp;
+	t_token *prev;
+
+	tmp = start;
+	prev = NULL;
+	while (tmp != NULL && tmp != current)
+    {
+        prev = tmp;
+        tmp = tmp->next;
+    }
+	return (prev);
 }
 
 t_token	*next_run(t_token *token)
@@ -23,7 +27,7 @@ t_token	*next_run(t_token *token)
 	while (token && !ft_is_type(token, "cmd"))
 	{
 		token = token->next;
-		if (token && ft_is_type(token, "pipe") && token->prev != NULL)
+		if (token && ft_is_type(token, "pipe")) // && token->prev != NULL
 			token = token->next;
 	}
 	return (token);

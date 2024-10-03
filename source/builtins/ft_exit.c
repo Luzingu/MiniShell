@@ -14,7 +14,7 @@
 
 static void	ft_displaying_error(char **matrix, int flag)
 {
-	printf("exit\nbash: exit: ");
+	printf("exit\nbash: exit1: ");
 	if (flag)
 		printf("too many arguments\n");
 	else

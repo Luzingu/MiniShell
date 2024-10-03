@@ -58,7 +58,7 @@ char *ft_verifying_line(char *line)
     int j = 0;
     int line_length = 0;
 
-    matrix = ft_split(line, ' ');
+    matrix = ft_split_advanced(line, " ");
     while (matrix[i])
     {
         if (!ft_check_quotes(matrix[i]))

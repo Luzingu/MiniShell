@@ -37,7 +37,9 @@ SRC				=	source/main.c							\
 					source/heredoc.c\
 					source/signal.c \
 					source/utils_token.c\
-					source/utils.c
+					source/utils.c\
+					source/environment/sort_env.c\
+					source/split_advenced.c
 OBJ		= $(SRC:.c=.o)
 
 MAKEFLAGS	+= -silent

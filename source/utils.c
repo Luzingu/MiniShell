@@ -11,42 +11,41 @@ int numb_split (char **matrix)
     return (num);
 }
 
-
-
-int whereis(const char *str, const char *needle)
+t_env *add_envirenoment(char *env_name, char *env_value)
 {
-    size_t i = 0;
-    size_t j;
-
-    while (i <= (ft_strlen(str) - ft_strlen(needle)))
-    {
-        j = 0;
-        while ((j < ft_strlen(needle)) && (str[i + j] == needle[j]))
-            j++;
-        if (j == ft_strlen(needle))
-            return (int)i;
-        i++;
-    }
-    return (-1);
+    t_env *new;
+    
+    new = (t_env *)malloc(sizeof(t_env));
+    new->key = ft_strdup(env_name);
+    new->value = ft_strdup(env_value);
+    new->next = NULL;
+    return (new);
 }
 
-char **str_dup_env(char **env)
+void str_dup_env(char **env, t_mini *mini)
 {
+    t_env *new;
+    char **my_env;
     int i;
-	char **my_env;
 
-	i = 0;
-    while (env[i])
-        i++;
-    my_env = (char **)malloc(sizeof(char *) * (i+1));
     i = 0;
+    new = NULL;
     while (env[i])
     {
-        my_env[i] = ft_strdup(env[i]);
+        my_env = ft_split(env[i], '=');
+        if(!new)
+        {
+            new = add_envirenoment(my_env[0], my_env[1]);
+            mini->env = new;
+            mini->env_copy = new;
+        }
+        else
+        {
+            new->next = add_envirenoment(my_env[0], my_env[1]);
+            new = new->next;
+        }
         i++;
     }
-    my_env[i] = NULL;
-    return (my_env);
 }
 
 int	ft_strisnum(const char *str)
@@ -67,3 +66,56 @@ int	ft_strisnum(const char *str)
 	return (1);
 }
 
+
+char **env_to_matrix(t_env *env)
+{
+    t_env *env_tmp;
+    char **matrix;
+    char *tmp;
+    int i;
+
+    env_tmp = env;
+    i = 0;
+    while (env_tmp)
+    {
+        i++;
+        env_tmp = env_tmp->next;
+    }
+    matrix = (char **)malloc(sizeof(char *) * (i + 1));
+    env_tmp = env;
+    i = 0;
+    while (env_tmp)
+    {
+        tmp = ft_strdup(env_tmp->key);
+        tmp = ft_strjoin(tmp, "=");
+        tmp = ft_strjoin(tmp, env_tmp->value);
+        if (tmp)
+        {
+            matrix[i] = tmp;
+            i++;
+        }
+        env_tmp = env_tmp->next;
+    }
+    matrix[i] = NULL;
+    return (matrix);
+}
+
+char *my_strndup(const char *s, size_t n)
+{
+    char *dup;
+    size_t i;
+
+    if (!s)
+        return (NULL);
+    dup = (char *)malloc(n + 1);
+    if (!dup)
+        return (NULL);
+    i = 0;
+    while (i < n && s[i] != '\0')
+    {
+        dup[i] = s[i];
+        i++;
+    }
+    dup[i] = '\0';
+    return (dup);
+}

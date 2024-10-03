@@ -2,6 +2,7 @@
 
 int		verifying_argument(t_mini *mini, t_token *token)
 {
+	t_token	*prev;
 	while (token)
 	{
 		if (ft_is_type(token, "trunc") || ft_is_type(token, "append") || ft_is_type(token, "input"))
@@ -20,7 +21,8 @@ int		verifying_argument(t_mini *mini, t_token *token)
 		}
 		if (ft_is_type(token, "pipe"))
 		{
-			if (!token->next || !token->prev || ft_is_type(token->prev, "trunc") || ft_is_type(token->prev, "append") || ft_is_type(token->prev, "input") || ft_is_type(token->prev, "pipe"))
+			prev = prev_sep(mini->start, token);
+			if (!token->next || !prev || ft_is_type(prev, "trunc") || ft_is_type(prev, "append") || ft_is_type(prev, "input") || ft_is_type(prev, "pipe"))
 			{
 				ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 				ft_putstr_fd(token->str, 2);

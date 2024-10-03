@@ -11,80 +11,69 @@
 /* ************************************************************************** */
 #include "../../header/minishell.h"
 
-static char *create_export_string(char *args, char **name_v, char **value)
+char *get_env_values(char **args_split)
 {
     int i;
-    char *str;
+    char *env_value;
 
-    i = whereis(args, "=");
-    if (i == -1)
+    i = 1;
+    env_value = NULL;
+    while (args_split[i])
     {
-        printf("Erro: '=' não encontrado no argumento.\n");
-        return (NULL);
-    }
-    *name_v = ft_substr(args, 0, i);
-    *value = ft_substr(args, i + 1, ft_strlen(args) - i - 1);
-    str = ft_strjoin(ft_strjoin(ft_strdup(*name_v), "="), *value);
-    return (str);
-}
-
-static int update_env(char **env, char **new_env, char *str, char *name_v)
-{
-    int i = 0;
-    int exist = 0;
-
-    while (env[i])
-    {
-        if (ft_strncmp(name_v, env[i], ft_strlen(name_v)) == 0 && env[i][ft_strlen(name_v)] == '=')
-        {
-            new_env[i] = ft_strdup(str);
-            exist = 1;
-        }
+        if (i == 1)
+            env_value = ft_strdup(args_split[i]);
         else
-            new_env[i] = ft_strdup(env[i]);
+            env_value = ft_strjoin(env_value, args_split[i]);
+        if (args_split[i + 1])
+            env_value = ft_strjoin(env_value, "=");
         i++;
     }
-    return (exist);
+    return (env_value);
 }
 
-char **ft_export(char *args, char **env)
+int ft_modify_env(t_env *env, char *env_name, char *env_value)
 {
-    char *name_v;
-    char *value;
-    char *str;
-    char **new_env;
-    int i;
-    int exist;
+    if (ft_strncmp(env->key, env_name, ft_strlen(env_name)) == 0)
+    {
+        env->value = ft_strdup(env_value);
+        return (0);
+    }
+    return (1);
+}
+void ft_export(char *args, t_env **env)
+{
+    t_env *env_tmp;
+    char *env_name;
+    char *env_value;
+    char **args_split;
+    int new_env;
 
-    str = create_export_string(args, &name_v, &value);
-    if (!str)
-        return (NULL);
-
-    i = 0;
-    while (env[i])
-        i++;
-    new_env = (char **)malloc(sizeof(char *) * (i + 2));
-    if (!new_env)
-        return (NULL);
-
-    exist = update_env(env, new_env, str, name_v);
-    if (!exist)
-        new_env[i++] = ft_strdup(str);
-    new_env[i] = NULL;
-
-    ft_free_matrix(env);
-    free(name_v);
-    free(value);
-    free(str);
-    return (new_env);
+    env_tmp = *env;
+    args_split = ft_split(args, '=');
+    env_name = args_split[0];
+    env_value = get_env_values(args_split);
+    new_env = 1;
+    while (env_tmp && env_tmp->next)
+    {
+        new_env = ft_modify_env(env_tmp, env_name, env_value);
+        if (new_env == 0)
+            break;
+        env_tmp = env_tmp->next;
+    }
+    if (new_env == 1)
+        new_env = ft_modify_env(env_tmp, env_name, env_value);
+    if (new_env == 1)
+        env_tmp->next = add_envirenoment(env_name, env_value);
+    ft_free_matrix(args_split);
 }
 
-void handle_export(char **tmp, char ***env)
+void handle_export(char **tmp, t_env **env, t_mini *mini)
 {
     int n = 1;
     while (tmp[n])
     {
-        *env = ft_export(tmp[n], *env);
+        ft_export(tmp[n], env);
         n++;
     }
+    mini->env = sort_env_list(*env);
 }

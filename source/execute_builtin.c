@@ -39,7 +39,7 @@ int		exec_builtin(char **args, t_mini *mini)
 	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
 		ft_echo(args, mini);
 	if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
-		ft_cd(&mini->env_copy, args, mini);
+		ft_cd(mini, args);
 	if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
 	{
 		if ((pwd = ft_pwd(mini)))
@@ -60,14 +60,27 @@ int		exec_builtin(char **args, t_mini *mini)
 			mini->last_return = 1;
 		}
 		else
-			ft_env(mini->env, mini);
+			ft_env(mini->env);
 	}
 	if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
 	{
 		if (args[1])
-			handle_export(args, &mini->env);
+		{
+			result = 1;
+			while (args[result])
+			{
+				if(ft_strncmp(args[result], "=", ft_strlen(args[result])) == 0 || ft_strncmp(args[result], "=", 1) == 0)
+				{
+					ft_putstr_fd("not a valid identifier\n", 2);
+					mini->last_return = 1;
+					break;
+				}
+				result++;
+			}
+			handle_export(args, &mini->env, mini);
+		}
 		else
-			ft_env(mini->env, mini);
+			ft_env(mini->env);
 	}
 	if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
 		handle_unset(args, &mini->env);

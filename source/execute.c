@@ -48,8 +48,8 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 	int		pipe;
 	char	**cmd;
 
-	prev = prev_sep(token, 0);
-	next = next_sep(token, 0);
+	prev = prev_sep(mini->start, token);
+	next = next_sep(token);
 	pipe = 0;
 	if (prev && ft_is_type(prev, "trunc"))
 		redir(mini, token, "trunc");
@@ -68,7 +68,7 @@ void	redir_and_exec(t_mini *mini, t_token *token)
 		if(is_builtin(cmd[0]))
 			exec_builtin(cmd, mini);
 		else
-			execute_cmd(mini, cmd);
+			execute_cmd(mini, cmd, token->type);
 		ft_free_matrix(cmd);
 	}
 }

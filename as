@@ -1,0 +1,12 @@
+as
+header
+jung
+libft
+luzil
+luzl
+Makefile
+minishell
+MiniShell
+saida
+source
+trunc

@@ -21,7 +21,8 @@ char **heredoc(const char *delimiter)
             ft_free_matrix(lines);
             return (NULL);
         }
-        if (strcmp(line, delimiter) == 0)
+        line = ft_strtrim(line, " ");
+        if (ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
         {
             free(line);
             break;
@@ -54,20 +55,20 @@ void process_heredoc(const char *delimiter)
 
 int handle_heredoc(char *line)
 {
-    int i = 0;
     char **tokens;
+    char **tokens2;
     char *delimiter;
 
-    tokens = ft_split(line, ' '); 
-    while (tokens[i])
+    tokens = ft_split_advanced(line, "<<");
+    if (tokens[1])
     {
-        if (strcmp(tokens[i], "<<") == 0 && tokens[i + 1] != NULL)
-        {
-            delimiter = tokens[i + 1];
-            process_heredoc(delimiter);
-            return (1);
-        }
-        i++;
+        tokens2 = ft_split(tokens[1], ' ');
+        delimiter = tokens2[0];
+        if (ft_strncmp(delimiter, ">", 1) == 0 || ft_strncmp(delimiter, "<", 1) == 0 || ft_strncmp(delimiter, ">>", 2) == 0 || ft_strncmp(delimiter, "<<", 2) == 0 || ft_strncmp(delimiter, "|", 1) == 0)
+            return (2);
+        process_heredoc(delimiter);
+        ft_free_matrix(tokens);
+        return (1);
     }
     ft_free_matrix(tokens);
     return (0);

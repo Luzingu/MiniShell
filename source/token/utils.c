@@ -7,10 +7,13 @@ int is_separator(char c)
     return (0);
 }
 
-void    type_arg(t_token *token)
+void    type_arg(t_token *start, t_token *token)
 {
    
     size_t len_str;
+    t_token *prev;
+
+    prev = prev_sep(start, token);
 
     len_str = 0;
     if(token->str)
@@ -25,7 +28,7 @@ void    type_arg(t_token *token)
         token->type = "input";
     else if (!ft_strncmp(token->str, "|", len_str))
         token->type = "pipe";
-    else if (token->prev == NULL || ft_is_type(token->prev, "end") || ft_is_type(token->prev, "append") || ft_is_type(token->prev, "input") || ft_is_type(token->prev, "pipe"))
+    else if (prev == NULL || ft_is_type(prev, "end") || ft_is_type(prev, "append") || ft_is_type(prev, "input") || ft_is_type(prev, "pipe"))
         token->type = "cmd";
     else
         token->type = "arg";
