@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:46:47 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/01 00:20:41 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/05 08:38:41 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,23 @@
 
 static void	ft_displaying_error(char **matrix, int flag)
 {
-	printf("exit\nbash: exit1: ");
+	ft_putstr_fd("exit\nminishell: exit: ", 1);
 	if (flag)
-		printf("too many arguments\n");
+		ft_putendl_fd("too many arguments", 1);
 	else
-		printf("%s: %s\n", matrix[1], "numeric argument required");
+	{
+		ft_putstr_fd(matrix[1], 1);
+		ft_putendl_fd(": numeric argument required", 1);
+	}
+	return ;
 }
 
 static void	ft_closing_shell(int exit_status, t_mini *mini)
 {
-	ft_putendl_fd("exit", 2);
+	ft_putendl_fd("exit", 1);
 	mini->last_return = exit_status;
 	exit(exit_status);
+	return ;
 }
 
 static int	ft_isvalid_argument(char *arg)
@@ -49,7 +54,6 @@ void	ft_exit(char **matrix, t_mini *mini)
 	int	total_of_arguments;
 
 	total_of_arguments = numb_split(matrix);
-
 	if (total_of_arguments > 2)
 	{
 		ft_displaying_error(matrix, 1);
@@ -59,13 +63,10 @@ void	ft_exit(char **matrix, t_mini *mini)
 	else if (total_of_arguments == 2)
 	{
 		if (!ft_isvalid_argument(matrix[1]))
-		{
 			ft_displaying_error(matrix, 0);
-			ft_closing_shell(255, mini);
-		}
 		ft_closing_shell(ft_atoi(matrix[1]), mini);
 	}
 	else
 		ft_closing_shell(0, mini);
+	return ;
 }
-

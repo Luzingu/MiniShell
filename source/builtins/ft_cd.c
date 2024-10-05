@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:46:37 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/01 00:12:02 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/05 08:19:55 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,20 +34,26 @@ void	go_pwd(char *path, t_mini *mini)
 	}
 }
 
-void	ft_cd(t_mini *mini, char **argument)
+static void	verifying_total_of_arguments(t_mini *mini, char **argument)
 {
-	char	*path;
-	int		total_of_arguments;
+	int	total_of_arguments;
 
-	path = NULL;
 	total_of_arguments = numb_split(argument);
 	if (total_of_arguments > 2)
 	{
-		printf("bash: cd: too many arguments\n");
+		ft_putendl_fd("minishell: cd: too many arguments", 1);
 		mini->last_return = 1;
 		ft_free_matrix(argument);
 		return ;
 	}
+}
+
+void	ft_cd(t_mini *mini, char **argument)
+{
+	char	*path;
+
+	path = NULL;
+	verifying_total_of_arguments(mini, argument);
 	if (argument[1])
 	{
 		if (ft_strncmp("-", argument[1], ft_strlen(argument[1])) == 0)
@@ -66,5 +72,5 @@ void	ft_cd(t_mini *mini, char **argument)
 	}
 	else
 		path = ft_getenv(mini->env_copy, "HOME");
-	go_pwd(path, mini); 
+	go_pwd(path, mini);
 }

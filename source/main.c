@@ -11,7 +11,18 @@
 /* ************************************************************************** */
 #include "../header/minishell.h"
 
-static void process_line(t_mini *mini, char *line)
+static t_token	*next_run(t_token *token)
+{
+	while (token && !ft_is_type(token, "cmd"))
+	{
+		token = token->next;
+		if (token && ft_is_type(token, "pipe"))
+			token = token->next;
+	}
+	return (token);
+}
+
+static void	process_line(t_mini *mini, char *line)
 {
     t_token *token;
     int heredoc;
