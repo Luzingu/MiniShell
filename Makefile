@@ -35,6 +35,13 @@ SRC				=	source/main.c							\
 					source/get_tokens.c						\
 					source/minipipe.c						\
 					source/input.c							\
+					source/str_dup_env.c					\
+					source/numb_split.c						\
+					source/ft_strisnum.c					\
+					source/env_to_matrix.c					\
+					source/add_envirenoment.c				\
+					source/type_arg.c						\
+					source/my_strndup.c						\
 					source/builtins/ft_echo.c				\
 					source/builtins/ft_cd.c					\
 					source/builtins/ft_pwd.c				\
