@@ -30,6 +30,7 @@ SRC				=	source/main.c							\
 					source/ft_is_type.c						\
 					source/return_str.c						\
 					source/split_advenced.c					\
+					source/split_advenced2.c				\
 					source/is_separator.c					\
 					source/get_separator.c					\
 					source/get_tokens.c						\
@@ -42,7 +43,6 @@ SRC				=	source/main.c							\
 					source/add_envirenoment.c				\
 					source/type_arg.c						\
 					source/my_strndup.c						\
-					source/split_advenced_utils.c			\
 					source/builtins/ft_echo.c				\
 					source/builtins/ft_cd.c					\
 					source/builtins/ft_pwd.c				\

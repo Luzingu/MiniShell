@@ -105,8 +105,6 @@ char	**ft_split_advanced(const char *s, const char *delimiter);
 char	*my_strndup(const char *s, size_t n);
 char	**cmd_tab(t_token *start, int i);
 char	*get_env_value(t_mini *mini, char *input, int *n);
-char	**allocate_result(size_t count);
-
 int		handle_unset(char **tmp, t_env **env);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
@@ -119,10 +117,9 @@ int		numb_split(char **matrix);
 int		verifying_argument(t_mini *mini, t_token *token);
 int		handle_heredoc(char *line);
 int		is_separator(char c);
-int		process_substrings(char **result, const char *s, const char *delimiter,
-			size_t start);
-
-size_t	count_substrings(const char *s, const char *delimiter,
-			size_t i, size_t count);
+void	toggle_quotes(char c, char *in_single_quotes, char *in_double_quotes);
+int		check_delimiter(const char *s, const char *delimiter, size_t len, size_t delimiter_len, size_t *i);
+size_t	count_loop(const char *s, const char *delimiter, size_t len, size_t delimiter_len);
+size_t	count_substrings(const char *s, const char *delimiter);
 
 #endif

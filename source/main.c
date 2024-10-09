@@ -101,6 +101,7 @@ int	main(int ac, char **argv, char **env)
 	increment_shell_level(&mini);
 	mini.last_return = 0;
 	mini.exit_status = 0;
+	mini.no_exec = 0;
 	handle_signals();
 	init_mini(&mini);
 	return (0);

@@ -12,30 +12,30 @@
 
 #include "../header/minishell.h"
 
-static char **allocate_result(size_t count)
+void toggle_quotes(char c, char *in_single_quotes, char *in_double_quotes)
 {
-    char **result;
-    
-    result = (char **)malloc((count + 1) * sizeof(char *));
-    if (!result)
-        return (NULL);
-    result[count] = NULL;
-    return (result);
+    if (c == 39)
+        *in_single_quotes = !*in_single_quotes;
+    else if (c == 34)
+        *in_double_quotes = !*in_double_quotes;
 }
 
-static int add_substring(char **result, size_t index, const char *start, size_t length)
+int check_delimiter(const char *s, const char *delimiter, size_t len, size_t delimiter_len, size_t *i)
 {
-    result[index] = my_strndup(start, length);
-    return (result[index] != NULL);
+    if (*i + delimiter_len <= len && ft_strncmp(s + *i, delimiter, delimiter_len) == 0)
+    {
+        *i += delimiter_len - 1;
+        return (1);
+    }
+    return (0);
 }
 
-static int process_loop(char **result, const char *s, const char *delimiter, size_t len, size_t delimiter_len)
+size_t count_loop(const char *s, const char *delimiter, size_t len, size_t delimiter_len)
 {
     char in_single_quotes = 0;
     char in_double_quotes = 0;
     size_t i = 0;
-    size_t start = 0;
-    size_t current = 0;
+    size_t count = 0;
 
     while (i < len)
     {
@@ -43,37 +43,18 @@ static int process_loop(char **result, const char *s, const char *delimiter, siz
         if (!in_single_quotes && !in_double_quotes)
         {
             if (check_delimiter(s, delimiter, len, delimiter_len, &i))
-            {
-                if (!add_substring(result, current++, s + start, i - start))
-                    return 0;
-                start = i + delimiter_len;
-            }
+                count++;
         }
         i++;
     }
-    return (add_substring(result, current, s + start, i - start));
+    return (count);
 }
 
-static int process_substrings(char **result, const char *s, const char *delimiter)
+size_t count_substrings(const char *s, const char *delimiter)
 {
     size_t len = strlen(s);
     size_t delimiter_len = strlen(delimiter);
-    return (process_loop(result, s, delimiter, len, delimiter_len));
-}
-
-char **ft_split_advanced(const char *s, const char *delimiter)
-{
-    size_t count;
-    char **result;
-
-    count = count_substrings(s, delimiter);
-    result = allocate_result(count);
-    if (!result)
-        return (NULL);
-    if (!process_substrings(result, s, delimiter))
-    {
-        free(result);
-        return (NULL);
-    }
-    return (result);
+    size_t count = 0;
+    count += count_loop(s, delimiter, len, delimiter_len);
+    return (count + 1);
 }
