@@ -39,20 +39,20 @@ static char	*error_message(char *path, t_mini *mini)
 	return (NULL);
 }
 
-static char	*find_executable(char *cmd, t_mini *mini)
+static char	*find_executable(char *cmd, t_mini *mini, int i)
 {
 	struct stat	buffer;
 	char		**path_dirs;
 	char		*path_env;
 	char		*full_path;
-	int			i;
 
 	if (cmd[0] == '/' || cmd[0] == '.')
 		if (stat(cmd, &buffer) == 0)
 			return (ft_strdup(cmd));
 	path_env = ft_getenv(mini->env, "PATH");
+	if (!path_env)
+		return (NULL);
 	path_dirs = ft_split(path_env, ':');
-	i = -1;
 	while (path_dirs[++i])
 	{
 		full_path = ft_strjoin(ft_strjoin(path_dirs[i], "/"), cmd);
@@ -79,7 +79,7 @@ void	execute_cmd(t_mini *mini, char **cmd)
 	pid = fork();
 	if (pid == 0)
 	{
-		cmd_path = find_executable(cmd[0], mini);
+		cmd_path = find_executable(cmd[0], mini, -1);
 		if (cmd_path)
 		{
 			env_matrix = env_to_matrix(mini->env, 0);

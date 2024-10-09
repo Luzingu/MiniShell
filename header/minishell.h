@@ -32,6 +32,7 @@
 # include <termios.h>
 # include <sys/stat.h>
 # include <dirent.h>
+# include <stdbool.h>
 # include "../libft/libft.h"
 
 typedef struct s_token
@@ -78,7 +79,7 @@ typedef struct s_state
 	size_t	len;
 }	t_state;
 
-t_token	*get_tokens(char *line);
+t_token	*get_tokens(t_mini *mini, char *line);
 t_token	*prev_sep(t_token *start, t_token *current);
 t_env	*add_envirenoment(char *env_name, char *env_value);
 t_env	*sort_env_list(t_env *head);
@@ -104,7 +105,6 @@ void	handle_signals(void);
 void	type_arg(t_token *start, t_token *token);
 void	ft_unset(char *args, t_env **env);
 
-char	*ft_verifying_line(char *line);
 char	*ft_pwd(t_mini *mini);
 char	*expand_variables(t_mini *mini, char *input);
 char	*ft_getenv(t_env *env, char *var);
@@ -116,6 +116,7 @@ char	*my_strndup(const char *s, size_t n);
 char	**cmd_tab(t_token *start, int i);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 int		handle_unset(char **tmp, t_env **env);
+int		ft_verifying_line(char *line);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
 int		ft_is_type(t_token *token, char *type);
@@ -134,4 +135,5 @@ size_t	count_loop(const char *s, const char *delimiter,
 			t_state *state, size_t delimiter_len);
 size_t	count_substrings(const char *s, const char *delimiter);
 char	**allocate_result(size_t count);
+int	ft_strcmp(const char *s1, const char *s2);
 #endif

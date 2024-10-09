@@ -1,14 +1,2 @@
-total 60
--rwx------ 1 aluzingu 2023_luanda     0 Oct  9  2024 file
-drwxr-xr-x 2 aluzingu 2023_luanda  4096 Oct  9 12:55 header
-drwxr-xr-x 3 aluzingu 2023_luanda  4096 Oct  9 12:12 libft
--rw-r--r-- 1 aluzingu 2023_luanda  2695 Oct  9 12:12 Makefile
--rwxr-xr-x 1 aluzingu 2023_luanda 43936 Oct  9 13:02 minishell
-drwxr-xr-x 4 aluzingu 2023_luanda  4096 Oct  9 13:09 source
-total 64
--rwx------ 1 aluzingu 2023_luanda   371 Oct  9 13:12 file
-drwxr-xr-x 2 aluzingu 2023_luanda  4096 Oct  9 12:55 header
-drwxr-xr-x 3 aluzingu 2023_luanda  4096 Oct  9 12:12 libft
--rw-r--r-- 1 aluzingu 2023_luanda  2695 Oct  9 12:12 Makefile
--rwxr-xr-x 1 aluzingu 2023_luanda 43936 Oct  9 13:02 minishell
-drwxr-xr-x 4 aluzingu 2023_luanda  4096 Oct  9 13:09 source
+teste
+13

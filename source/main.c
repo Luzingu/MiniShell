@@ -42,15 +42,13 @@ static void	process_line(t_mini *mini, char *line)
 	t_token	*token;
 
 	verifying_heredoc(mini, line);
-	line = ft_verifying_line(line);
-	if (!line)
+	if (!ft_verifying_line(line))
 	{
 		mini->last_return = 258;
 		printf("minishell: error quotes\n");
 		return ;
 	}
-	line = expand_variables(mini, line);
-	mini->start = get_tokens(line);
+	mini->start = get_tokens(mini, line);
 	token = next_run(mini->start);
 	if (!verifying_argument(mini, token))
 	{

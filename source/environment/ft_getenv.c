@@ -19,7 +19,7 @@ char	*ft_getenv(t_env *env, char *var)
 	env_tmp = env;
 	while (env_tmp)
 	{
-		if (ft_strncmp(env_tmp->key, var, ft_strlen(var)) == 0)
+		if (ft_strcmp(env_tmp->key, var) == 0)
 			return (env_tmp->value);
 		env_tmp = env_tmp->next;
 	}
