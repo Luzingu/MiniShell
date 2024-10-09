@@ -12,68 +12,68 @@
 
 #include "../header/minishell.h"
 
-static char **allocate_result(size_t count)
+#include <stdlib.h>
+#include <string.h>
+
+static int	add_substring(char **result, size_t index
+		, const char *start, size_t length)
 {
-    char **result;
-    
-    result = (char **)malloc((count + 1) * sizeof(char *));
-    if (!result)
-        return (NULL);
-    result[count] = NULL;
-    return (result);
+	result[index] = my_strndup(start, length);
+	return (result[index] != NULL);
 }
 
-static int add_substring(char **result, size_t index, const char *start, size_t length)
+static int	process_loop(char **result, const char *s
+	, const char *delimiter, t_state *state)
 {
-    result[index] = my_strndup(start, length);
-    return (result[index] != NULL);
+	size_t	current;
+
+	current = 0;
+	while (state->i < state->len)
+	{
+		toggle_quotes(s[state->i], state);
+		if (!state->in_single_quotes && !state->in_double_quotes)
+		{
+			if (check_delimiter(s, delimiter, state, state->delimiter_len))
+			{
+				if (!add_substring(result, current++, s
+						+ state->start, state->i - state->start))
+					return (0);
+				state->start = state->i + state->delimiter_len;
+			}
+		}
+		state->i++;
+	}
+	return (add_substring(result, current, s
+			+ state->start, state->i - state->start));
 }
 
-static int process_loop(char **result, const char *s, const char *delimiter, size_t len, size_t delimiter_len)
+static int	process_substrings(char **result, const char *s,
+		const char *delimiter)
 {
-    char in_single_quotes = 0;
-    char in_double_quotes = 0;
-    size_t i = 0;
-    size_t start = 0;
-    size_t current = 0;
+	t_state	state;
 
-    while (i < len)
-    {
-        toggle_quotes(s[i], &in_single_quotes, &in_double_quotes);
-        if (!in_single_quotes && !in_double_quotes)
-        {
-            if (check_delimiter(s, delimiter, len, delimiter_len, &i))
-            {
-                if (!add_substring(result, current++, s + start, i - start))
-                    return 0;
-                start = i + delimiter_len;
-            }
-        }
-        i++;
-    }
-    return (add_substring(result, current, s + start, i - start));
+	state.i = 0;
+	state.start = 0;
+	state.len = strlen(s);
+	state.in_single_quotes = 0;
+	state.in_double_quotes = 0;
+	state.delimiter_len = strlen(delimiter);
+	return (process_loop(result, s, delimiter, &state));
 }
 
-static int process_substrings(char **result, const char *s, const char *delimiter)
+char	**ft_split_advanced(const char *s, const char *delimiter)
 {
-    size_t len = strlen(s);
-    size_t delimiter_len = strlen(delimiter);
-    return (process_loop(result, s, delimiter, len, delimiter_len));
-}
+	size_t		count;
+	char		**result;
 
-char **ft_split_advanced(const char *s, const char *delimiter)
-{
-    size_t count;
-    char **result;
-
-    count = count_substrings(s, delimiter);
-    result = allocate_result(count);
-    if (!result)
-        return (NULL);
-    if (!process_substrings(result, s, delimiter))
-    {
-        free(result);
-        return (NULL);
-    }
-    return (result);
+	count = count_substrings(s, delimiter);
+	result = allocate_result(count);
+	if (!result)
+		return (NULL);
+	if (!process_substrings(result, s, delimiter))
+	{
+		free(result);
+		return (NULL);
+	}
+	return (result);
 }

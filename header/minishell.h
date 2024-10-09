@@ -68,6 +68,16 @@ typedef struct s_mini
 	int		exit_status;
 }	t_mini;
 
+typedef struct s_state
+{
+	char	in_single_quotes;
+	char	in_double_quotes;
+	size_t	delimiter_len;
+	size_t	i;
+	size_t	start;
+	size_t	len;
+}	t_state;
+
 t_token	*get_tokens(char *line);
 t_token	*prev_sep(t_token *start, t_token *current);
 t_env	*add_envirenoment(char *env_name, char *env_value);
@@ -117,9 +127,11 @@ int		numb_split(char **matrix);
 int		verifying_argument(t_mini *mini, t_token *token);
 int		handle_heredoc(char *line);
 int		is_separator(char c);
-void	toggle_quotes(char c, char *in_single_quotes, char *in_double_quotes);
-int		check_delimiter(const char *s, const char *delimiter, size_t len, size_t delimiter_len, size_t *i);
-size_t	count_loop(const char *s, const char *delimiter, size_t len, size_t delimiter_len);
+void	toggle_quotes(char c, t_state *state);
+int		check_delimiter(const char *s, const char *delimiter,
+			t_state *state, size_t delimiter_len);
+size_t	count_loop(const char *s, const char *delimiter,
+			t_state *state, size_t delimiter_len);
 size_t	count_substrings(const char *s, const char *delimiter);
-
+char	**allocate_result(size_t count);
 #endif

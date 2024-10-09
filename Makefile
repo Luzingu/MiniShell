@@ -64,7 +64,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(LIBFT)
-	$(CC) $(OBJ) -lreadline $(LIBFT)/libft.a -o $(NAME)
+	$(CC) $(FLAGS) $(OBJ) -lreadline $(LIBFT)/libft.a -o $(NAME)
 
 clean:
 	@make clean -C $(LIBFT)
