@@ -12,7 +12,7 @@
 
 #include "../../header/minishell.h"
 
-void	go_pwd(char *path, t_mini *mini)
+static void	go_pwd(char *path, t_mini *mini)
 {
 	char	*current_pwd;
 	char	*past_pwd;

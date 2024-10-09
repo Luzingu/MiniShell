@@ -1,13 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 05:10:04 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/09 07:03:33 by mcaquart         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../header/minishell.h"
 
-void ft_free_matrix(char **matrix)
+void	ft_free_matrix(char **matrix)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (matrix[i])
-        free(matrix[i++]);
-    free(matrix);
+	i = 0;
+	while (matrix[i])
+		free(matrix[i++]);
+	free(matrix);
 }
 
 void	ft_close(int fd)
@@ -38,4 +50,3 @@ void	reset_fds(t_mini *mini)
 	mini->pipout = -1;
 	mini->pid = -1;
 }
-

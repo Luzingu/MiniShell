@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prev_sep.c                                         :+:      :+:    :+:   */
+/*   increment_shell_level.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/07 15:42:04 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/07 15:42:05 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/10/07 15:48:44 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/10/07 15:48:45 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minishell.h"
 
-t_token	*prev_sep(t_token *start, t_token *current)
+void	increment_shell_level(t_mini *mini)
 {
-	t_token	*tmp;
-	t_token	*prev;
+	char	*str_shell_level;
+	int		shell_level;
 
-	tmp = start;
-	prev = NULL;
-	while (tmp != NULL && tmp != current)
+	str_shell_level = ft_getenv(mini->env, "SHLVL");
+	if (!str_shell_level)
+		return ;
+	else
 	{
-		prev = tmp;
-		tmp = tmp->next;
+		shell_level = ft_atoi(str_shell_level);
+		shell_level++;
 	}
-	return (prev);
+	ft_export(ft_strjoin("SHLVL=", ft_itoa(shell_level)), &mini->env);
 }

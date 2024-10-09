@@ -11,18 +11,20 @@
 /* ************************************************************************** */
 #include "../header/minishell.h"
 
-int ft_check_quotes(char *str)
+static int	ft_check_quotes(char *str)
 {
-	int i = -1;
-	int n_quote = 0;
-	char quote_check;
+	int		i;
+	int		n_quote;
+	char	quote_check;
 
+	i = -1;
+	n_quote = 0;
 	while (str[++i])
 	{
 		if (str[i] == 34 || str[i] == 39)
 		{
 			quote_check = str[i];
-			break;
+			break ;
 		}
 	}
 	i = -1;
@@ -32,78 +34,71 @@ int ft_check_quotes(char *str)
 	return (n_quote % 2 == 0);
 }
 
-char get_quote_check(char *str)
+static char	get_quote_check(char *str)
 {
-	int i = 0;
-	char quote_check;
+	int		i;
+	char	quote_check;
 
-	while (str[i])
+	i = -1;
+	while (str[++i])
 	{
 		if (str[i] == 34 || str[i] == 39)
 		{
 			quote_check = str[i];
 			return (quote_check);
 		}
-		i++;
 	}
 	return (0);
 }
 
-char *ft_verifying_line(char *line)
+static char	*verified_line(char *line, char **matrix, char quote,
+	int *line_length)
 {
-    char **matrix;
-    char *new_line;
-    char quote_check;
-    int i = 0;
-    int j = 0;
-    int line_length = 0;
+	char	*new_line;
+	int		i;
+	int		j;
 
-    matrix = ft_split_advanced(line, " ");
-    while (matrix[i])
-    {
-        if (!ft_check_quotes(matrix[i]))
-            return (NULL);
-        i++;
-    }
-    i = 0;
-    line_length = 0;
-    while (matrix[i])
-    {
-        quote_check = get_quote_check(matrix[i]);
-        j = 0;
-        while (matrix[i][j])
-        {
-            if (matrix[i][j] != quote_check)
-                line_length++;
-            j++;
-        }
-        i++;
-    }
-    new_line = malloc(sizeof(char) * line_length + numb_split(matrix));
-    i = 0;
-    line_length = 0;
-    while (matrix[i])
-    {
-        quote_check = get_quote_check(matrix[i]);
-        j = 0;
-        while (matrix[i][j])
-        {
-            if (matrix[i][j] != quote_check)
-            {
-                new_line[line_length] = matrix[i][j];
-                line_length++;
-            }
-            j++;
-        }
-        if (matrix[i + 1])
-        {
-            new_line[line_length] = ' ';
-            line_length++;
-        }
-        i++;
-    }
-    new_line[line_length] = '\0';
-    ft_free_matrix(matrix);
-    free(line);
-    return (new_line);
+	new_line = malloc(sizeof(char) * ((*line_length) + numb_split(matrix)));
+	*line_length = 0;
+	i = -1;
+	while (matrix[++i])
+	{
+		quote = get_quote_check(matrix[i]);
+		j = -1;
+		while (matrix[i][++j])
+			if (matrix[i][j] != quote)
+				new_line[(*line_length)++] = matrix[i][j];
+		if (matrix[i + 1])
+			new_line[(*line_length)++] = ' ';
+	}
+	new_line[(*line_length)] = '\0';
+	ft_free_matrix(matrix);
+	free(line);
+	return (new_line);
+}
+
+char	*ft_verifying_line(char *line)
+{
+	char	**matrix;
+	char	quote_check;
+	int		line_length;
+	int		i;
+	int		j;
+
+	i = -1;
+	matrix = ft_split_advanced(line, " ");
+	while (matrix[++i])
+		if (!ft_check_quotes(matrix[i]))
+			return (NULL);
+	i = -1;
+	line_length = 0;
+	while (matrix[++i])
+	{
+		quote_check = get_quote_check(matrix[i]);
+		j = -1;
+		while (matrix[i][++j])
+			if (matrix[i][j] != quote_check)
+				line_length++;
+	}
+	return (verified_line(line, matrix, quote_check, &line_length));
 }
