@@ -39,7 +39,7 @@ static void	process_line(t_mini *mini, char *line)
 {
 	t_token	*token;
 	int		heredoc;
-	
+
 	line = ft_strtrim(line, " ");
 	if (!line || !line[0])
 		return ;
