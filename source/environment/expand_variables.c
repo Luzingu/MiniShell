@@ -105,14 +105,20 @@ static int	ft_get_len_aloc(t_mini *mini, char *input)
 			if (input[n] == 34 && mini->values.val1 != 39)
 			{
 				if (mini->values.val1 != 34)
-					mini->values.val1 = 34;
+				{
+					if (ft_is_closed(input, n, 34))
+						mini->values.val1 = 34;
+				}
 				else
 					mini->values.val1 = 0;
 			}
 			else if (input[n] == 39 && mini->values.val1 != 34)
 			{
 				if (mini->values.val1 != 39)
-					mini->values.val1 = 39;
+				{
+					if (ft_is_closed(input, n, 39))
+						mini->values.val1 = 39;
+				}
 				else
 					mini->values.val1 = 0;
 			}
