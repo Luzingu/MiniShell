@@ -146,4 +146,5 @@ size_t	count_substrings(const char *s, const char *delimiter);
 char	**allocate_result(size_t count);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
+void	free_tokens(t_token *head);
 #endif

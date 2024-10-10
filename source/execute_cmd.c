@@ -88,7 +88,10 @@ void	execute_cmd(t_mini *mini, char **cmd)
 			ft_free(cmd_path, 1);
 		}
 		else
+		{
 			error_message(cmd[0], mini);
+			mini->parent = 0;
+		}
 	}
 	else
 		waitpid(pid, &status, 0);

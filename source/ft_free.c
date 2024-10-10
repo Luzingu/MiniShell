@@ -94,11 +94,9 @@ void	free_env(t_env *head)
 			ft_free(tmp->key, 1);
 		if (tmp->value)
 			ft_free(tmp->value, 1);
-		//ft_free(tmp, 1);
+		ft_free(tmp, 1);
 	}
-	head = NULL;
 }
-
 
 void	ft_free_all(t_mini *mini)
 {

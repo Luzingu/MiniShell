@@ -65,11 +65,12 @@ static void	init_mini(t_mini *mini)
 	status = 0;
 	while (mini->exit_status == 0)
 	{
+		mini->parent = 1;
 		mini->start = NULL;
 		mini->in = dup(STDIN_FILENO);
 		mini->out = dup(STDOUT_FILENO);
 		line = readline("minishell> ");
-		if (!line || !ft_strcmp(line, "exit"))
+		if (!line)
 		{
 			mini->exit_status = 1;
 			ft_putstr_fd("exit\n", 2);
@@ -83,7 +84,8 @@ static void	init_mini(t_mini *mini)
 		reset_fds(mini);
 		waitpid(-1, &status, 0);
 		mini->no_exec = 0;
-		ft_free(line, 1);
+		if (mini->parent == 0)
+			exit(0);
 	}
 }
 

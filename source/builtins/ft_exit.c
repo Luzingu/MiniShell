@@ -12,14 +12,6 @@
 
 #include "../../header/minishell.h"
 
-static void	ft_closing_shell(int exit_status, t_mini *mini)
-{
-	ft_putendl_fd("exit", 1);
-	mini->last_return = exit_status;
-	mini->exit_status = 1;
-	exit(exit_status);
-}
-
 void	ft_exit(char **matrix, t_mini *mini)
 {
 	int	total_of_arguments;
@@ -32,6 +24,9 @@ void	ft_exit(char **matrix, t_mini *mini)
 		return ;
 	}
 	else
-		ft_closing_shell(0, mini);
+	{
+		ft_putendl_fd("exit", 1);
+		mini->exit_status = 1;
+	}
 	return ;
 }

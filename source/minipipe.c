@@ -25,6 +25,7 @@ int	minipipe(t_mini *mini)
 		dup2(pipefd[0], STDIN);
 		mini->pipin = pipefd[0];
 		mini->no_exec = 0;
+		mini->parent = 0;
 		return (2);
 	}
 	else
@@ -32,7 +33,6 @@ int	minipipe(t_mini *mini)
 		ft_close(pipefd[0]);
 		dup2(pipefd[1], STDOUT);
 		mini->pipout = pipefd[1];
-		mini->pid = pid;
 		return (1);
 	}
 }
