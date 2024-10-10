@@ -50,6 +50,14 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_values
+{
+	int		val1;
+	int		val2;
+	char	*str1;
+	char	*str2;
+}	t_values;
+
 typedef struct s_mini
 {
 	t_token	*start;
@@ -67,6 +75,7 @@ typedef struct s_mini
 	int		last_return;
 	int		no_exec;
 	int		exit_status;
+	t_values	values;
 }	t_mini;
 
 typedef struct s_state
@@ -104,7 +113,8 @@ void	reset_fds(t_mini *mini);
 void	handle_signals(void);
 void	type_arg(t_token *start, t_token *token);
 void	ft_unset(char *args, t_env **env);
-
+void	ft_free_all(t_mini *mini);
+void	ft_free(void *ptr, int free_ptr);
 char	*ft_pwd(t_mini *mini);
 char	*expand_variables(t_mini *mini, char *input);
 char	*ft_getenv(t_env *env, char *var);
@@ -135,5 +145,6 @@ size_t	count_loop(const char *s, const char *delimiter,
 			t_state *state, size_t delimiter_len);
 size_t	count_substrings(const char *s, const char *delimiter);
 char	**allocate_result(size_t count);
-int	ft_strcmp(const char *s1, const char *s2);
+int		ft_strcmp(const char *s1, const char *s2);
+char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
 #endif

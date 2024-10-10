@@ -17,7 +17,6 @@ static void	go_pwd(char *path, t_mini *mini)
 	char	*current_pwd;
 	char	*past_pwd;
 
-	
 	past_pwd = ft_pwd(mini);
 	if (chdir(path))
 	{
@@ -27,10 +26,12 @@ static void	go_pwd(char *path, t_mini *mini)
 	else
 	{
 		current_pwd = ft_pwd(mini);
-		past_pwd = ft_strjoin("OLDPWD=", past_pwd);
+		past_pwd = ft_strjoin2("OLDPWD=", past_pwd, 0, 1);
 		ft_export(past_pwd, &mini->env);
-		current_pwd = ft_strjoin("PWD=", current_pwd);
+		ft_free(past_pwd, 1);
+		current_pwd = ft_strjoin2("PWD=", current_pwd, 0, 1);
 		ft_export(current_pwd, &mini->env);
+		ft_free(current_pwd, 1);
 		mini->last_return = 0;
 	}
 }

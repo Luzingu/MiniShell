@@ -30,7 +30,7 @@ char	*ft_pwd(t_mini *mini)
 	}
 	else
 	{
-		free(cwd);
+		ft_free(cwd, 1);
 		mini->last_return = 1;
 		return (NULL);
 	}

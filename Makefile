@@ -55,7 +55,7 @@ SRC				=	source/main.c							\
 					source/environment/ft_getenv.c			\
 					source/environment/handle_unset.c		\
 					source/environment/handle_export.c		\
-					source/environment/sort_env.c			\
+					source/ft_strjoin2.c					\
 					source/ft_strcmp.c
 OBJ		= $(SRC:.c=.o)
 

@@ -1,11 +1,10 @@
-as
+aa
+-f
 file
-file.txt
+file2
 header
-l
 libft
+log
 Makefile
 minishell
-pt
-pt2
 source

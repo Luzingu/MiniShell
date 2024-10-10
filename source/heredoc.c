@@ -31,7 +31,7 @@ static char	**heredoc(const char *delimiter, int count)
 		line = ft_strtrim(line, " ");
 		if (ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
 		{
-			free(line);
+			ft_free(line, 1);
 			break ;
 		}
 		lines[count++] = line;

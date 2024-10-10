@@ -34,19 +34,22 @@ static int	get_variable_length(t_mini *mini, char *input, int *n)
 	len_aloc = 0;
 	if (input[*n] == '?')
 	{
-		len_aloc += ft_strlen(ft_itoa(mini->last_return));
+		mini->values.str1 = ft_itoa(mini->last_return);
+		len_aloc += ft_strlen(mini->values.str1);
+		ft_free(mini->values.str1, 1);
 		(*n)++;
 	}
 	else
 	{
-		env_name = malloc(100);
+		env_name = malloc(1000);
 		if (!env_name)
 			return (0);
 		while (input[*n] && (ft_isalnum(input[*n]) || input[*n] == '_'))
 			env_name[i++] = input[(*n)++];
 		env_name[i] = '\0';
-		len_aloc += ft_strlen(ft_getenv(mini->env, env_name));
-		free(env_name);
+		mini->values.str1 = ft_getenv(mini->env, env_name);
+		len_aloc += ft_strlen(mini->values.str1);
+		ft_free(env_name, 1);
 	}
 	return (len_aloc);
 }

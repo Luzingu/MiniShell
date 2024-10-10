@@ -72,7 +72,7 @@ char	**ft_split_advanced(const char *s, const char *delimiter)
 		return (NULL);
 	if (!process_substrings(result, s, delimiter))
 	{
-		free(result);
+		ft_free(result, 1);
 		return (NULL);
 	}
 	return (result);

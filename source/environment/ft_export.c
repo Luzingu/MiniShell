@@ -23,9 +23,9 @@ static char	*get_env_values(char **args_split)
 		if (i == 1)
 			env_value = ft_strdup(args_split[i]);
 		else
-			env_value = ft_strjoin(env_value, args_split[i]);
+			env_value = ft_strjoin2(env_value, args_split[i], 1, 0);
 		if (args_split[i + 1])
-			env_value = ft_strjoin(env_value, "=");
+			env_value = ft_strjoin2(env_value, "=", 1, 0);
 		i++;
 	}
 	return (env_value);
@@ -35,6 +35,7 @@ static int	ft_modify_env(t_env *env, char *env_name, char *env_value)
 {
 	if (ft_strncmp(env->key, env_name, ft_strlen(env_name)) == 0)
 	{
+		ft_free(env->value, 1);
 		env->value = ft_strdup(env_value);
 		return (0);
 	}
@@ -50,7 +51,7 @@ void	ft_export(char *args, t_env **env)
 	int		new_env;
 
 	env_tmp = *env;
-	args_split = ft_split(args, '=');
+	args_split = ft_split_advanced(args, "=");
 	env_name = args_split[0];
 	env_value = get_env_values(args_split);
 	new_env = 1;
@@ -66,4 +67,5 @@ void	ft_export(char *args, t_env **env)
 	if (new_env == 1)
 		env_tmp->next = add_envirenoment(env_name, env_value);
 	ft_free_matrix(args_split);
+	ft_free(env_value, 1);
 }

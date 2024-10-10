@@ -25,5 +25,7 @@ void	increment_shell_level(t_mini *mini)
 		shell_level = ft_atoi(str_shell_level);
 		shell_level++;
 	}
-	ft_export(ft_strjoin("SHLVL=", ft_itoa(shell_level)), &mini->env);
+	str_shell_level = ft_strjoin2("SHLVL=", ft_itoa(shell_level), 0, 1);
+	ft_export(str_shell_level, &mini->env);
+	ft_free(str_shell_level, 1);
 }

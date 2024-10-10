@@ -22,7 +22,7 @@ static t_token	*next_run(t_token *token)
 	return (token);
 }
 
-static void	verifying_heredoc(t_mini *mini, char *line)
+static int	verifying_heredoc(t_mini *mini, char *line)
 {
 	int	heredoc;
 
@@ -30,22 +30,25 @@ static void	verifying_heredoc(t_mini *mini, char *line)
 	if (heredoc == 2)
 	{
 		mini->last_return = 258;
-		printf("minishell: syntax error near unexpected token\n");
-		return ;
+		ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
 	}
-	else if (heredoc == 1)
-		return ;
+	return (heredoc);
 }
 
 static void	process_line(t_mini *mini, char *line)
 {
 	t_token	*token;
+	int	heredoc;
 
-	verifying_heredoc(mini, line);
+	if (!line || !line[0])
+		return ;
+	heredoc = verifying_heredoc(mini, line);
+	if (heredoc == 2)
+		return ;
 	if (!ft_verifying_line(line))
 	{
 		mini->last_return = 258;
-		printf("minishell: error quotes\n");
+		ft_putstr_fd("minishell: error quotes\n", 2);
 		return ;
 	}
 	mini->start = get_tokens(mini, line);
@@ -56,7 +59,8 @@ static void	process_line(t_mini *mini, char *line)
 		return ;
 	}
 	mini->charge = 1;
-	redir_and_exec(mini, token, 0);
+	if (heredoc == 0)
+		redir_and_exec(mini, token, 0);
 }
 
 static void	init_mini(t_mini *mini)
@@ -67,13 +71,14 @@ static void	init_mini(t_mini *mini)
 	status = 0;
 	while (mini->exit_status == 0)
 	{
+		mini->start = NULL;
 		mini->in = dup(STDIN_FILENO);
 		mini->out = dup(STDOUT_FILENO);
 		line = readline("minishell> ");
-		if (!line)
+		if (!line || !ft_strcmp(line, "exit"))
 		{
 			mini->exit_status = 1;
-			printf("exit\n");
+			ft_putstr_fd("exit\n", 2);
 			break ;
 		}
 		if (*line)
@@ -84,7 +89,7 @@ static void	init_mini(t_mini *mini)
 		reset_fds(mini);
 		waitpid(-1, &status, 0);
 		mini->no_exec = 0;
-		free(line);
+		ft_free(line, 1);
 	}
 }
 
@@ -102,5 +107,6 @@ int	main(int ac, char **argv, char **env)
 	mini.no_exec = 0;
 	handle_signals();
 	init_mini(&mini);
+	ft_free_all(&mini);
 	return (0);
 }

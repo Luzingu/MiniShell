@@ -48,7 +48,7 @@ static void	calling_pwd_function(t_mini *mini, char **args, int *result)
 		{
 			ft_putstr_fd(pwd, 1);
 			ft_putchar_fd('\n', 1);
-			free(pwd);
+			ft_free(pwd, 1);
 			(*result) = 0;
 		}
 	}

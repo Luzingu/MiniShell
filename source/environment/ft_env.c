@@ -52,5 +52,9 @@ void	ft_env(t_env *env)
 	bubble_sort(matrix, nb_split);
 	i = -1;
 	while (++i < nb_split)
+	{
+		ft_putstr_fd("declare -x ", 1);
 		ft_putendl_fd(matrix[i], 1);
+	}
+	ft_free_matrix(matrix);
 }

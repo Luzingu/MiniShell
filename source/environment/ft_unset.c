@@ -27,9 +27,9 @@ void	ft_unset(char *args, t_env **env)
 				*env = env_tmp->next;
 			else
 				prev->next = env_tmp->next;
-			free(env_tmp->key);
-			free(env_tmp->value);
-			free(env_tmp);
+			ft_free(env_tmp->key, 1);
+			ft_free(env_tmp->value, 1);
+			ft_free(env_tmp, 1);
 			break ;
 		}
 		prev = env_tmp;

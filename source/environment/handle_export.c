@@ -19,5 +19,5 @@ void	handle_export(char **tmp, t_env **env, t_mini *mini)
 	n = 0;
 	while (tmp[++n])
 		ft_export(tmp[n], env);
-	mini->env = sort_env_list(*env);
+	(void)mini;
 }

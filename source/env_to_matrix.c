@@ -30,12 +30,13 @@ char	**env_to_matrix(t_env *env, int i)
 	while (env_tmp)
 	{
 		tmp = ft_strdup(env_tmp->key);
-		tmp = ft_strjoin(tmp, "=");
-		tmp = ft_strjoin(tmp, env_tmp->value);
+		tmp = ft_strjoin2(tmp, "=", 1, 0);
+		if (env_tmp->value)
+			tmp = ft_strjoin2(tmp, env_tmp->value, 1, 0);
 		if (tmp)
 			matrix[i++] = tmp;
 		env_tmp = env_tmp->next;
 	}
 	matrix[i] = NULL;
 	return (matrix);
-}
+} 

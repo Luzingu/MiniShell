@@ -55,13 +55,13 @@ static char	*find_executable(char *cmd, t_mini *mini, int i)
 	path_dirs = ft_split(path_env, ':');
 	while (path_dirs[++i])
 	{
-		full_path = ft_strjoin(ft_strjoin(path_dirs[i], "/"), cmd);
+		full_path = ft_strjoin2(ft_strjoin(path_dirs[i], "/"), cmd, 1, 0);
 		if (full_path && stat(full_path, &buffer) == 0)
 		{
 			ft_free_matrix(path_dirs);
 			return (full_path);
 		}
-		free(full_path);
+		ft_free(full_path, 1);
 	}
 	ft_free_matrix(path_dirs);
 	return (NULL);
@@ -85,6 +85,7 @@ void	execute_cmd(t_mini *mini, char **cmd)
 			env_matrix = env_to_matrix(mini->env, 0);
 			execve(cmd_path, cmd, env_matrix);
 			ft_free_matrix(env_matrix);
+			ft_free(cmd_path, 1);
 		}
 		else
 			error_message(cmd[0], mini);

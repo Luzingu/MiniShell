@@ -79,7 +79,6 @@ t_token	*get_tokens(t_mini *mini, char *line)
 {
 	t_token	*tokens;
 
-	line = ft_strtrim(line, " ");
 	tokens = process_line(mini, line);
 	return (tokens);
 }

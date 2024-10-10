@@ -1,8 +1,9 @@
-as
+-f
+file
+file2
 header
 libft
+log
 Makefile
 minishell
-pt
-pt2
 source
