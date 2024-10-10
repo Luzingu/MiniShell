@@ -18,7 +18,6 @@ SRC				=	source/main.c							\
 					source/redir_and_exec.c					\
 					source/redir.c							\
 					source/execute_builtin.c				\
-					source/ft_verifying_line.c				\
 					source/ft_verifying_argument.c			\
 					source/execute_cmd.c					\
 					source/increment_shell_level.c			\

@@ -126,7 +126,6 @@ char	*my_strndup(const char *s, size_t n);
 char	**cmd_tab(t_token *start, int i);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 int		handle_unset(char **tmp, t_env **env);
-int		ft_verifying_line(char *line);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
 int		ft_is_type(t_token *token, char *type);

@@ -14,5 +14,5 @@
 
 int	ft_is_type(t_token *token, char *type)
 {
-	return ((token && ft_strncmp(token->type, type, ft_strlen(type)) == 0));
+	return ((token && token->str && token->str[0] && ft_strcmp(token->type, type) == 0));
 }

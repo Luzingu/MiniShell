@@ -18,6 +18,17 @@ void	handle_export(char **tmp, t_env **env, t_mini *mini)
 
 	n = 0;
 	while (tmp[++n])
+	{
+		if (ft_strncmp(tmp[n], "-", 1) == 0)
+		{
+			ft_putstr_fd("minishell: export: ", 2);
+			ft_putstr_fd(": no options required\n", 2);
+			mini->last_return = 1;
+			return ;
+		}
+	}
+	n = 0;
+	while (tmp[++n])
 		ft_export(tmp[n], env);
 	(void)mini;
 }

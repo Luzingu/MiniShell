@@ -23,7 +23,7 @@ static int	verifying_next_type(t_mini *mini, t_token *token)
 				|| ft_is_type(token->next, "pipe")))
 		{
 			ft_putstr_fd("minishell: "
-				"syntax error near unexpected token", 2);
+				"syntax error near unexpected token1", 2);
 			if (token->next)
 				ft_putstr_fd(token->next->str, 2);
 			else

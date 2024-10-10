@@ -45,12 +45,6 @@ static void	process_line(t_mini *mini, char *line)
 	heredoc = verifying_heredoc(mini, line);
 	if (heredoc == 2)
 		return ;
-	if (!ft_verifying_line(line))
-	{
-		mini->last_return = 258;
-		ft_putstr_fd("minishell: error quotes\n", 2);
-		return ;
-	}
 	mini->start = get_tokens(mini, line);
 	token = next_run(mini->start);
 	if (!verifying_argument(mini, token))

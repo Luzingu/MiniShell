@@ -12,13 +12,44 @@
 
 #include "../../header/minishell.h"
 
-static int ft_can_be_add(char *str, int i, int double_quote, int single_quote)
+static int	ft_is_unclosed_quote(char *str, int i, char quote, t_mini *mini)
+{
+	if (mini->values.val1 == quote)
+		return (0);
+	else if (!mini->values.val1)
+	{
+		while (str[++i])
+		{
+			if (str[i] == quote)
+				return (0);
+		}
+	}
+	return (1);	
+}
+
+static int	ft_is_closed(char *str, int i, char quote)
+{
+	while (str[++i])
+	{
+		if (str[i] == quote)
+			return (1);
+	}
+	return (0);
+}
+
+static int ft_can_be_add(char *str, int i, t_mini *mini)
 {
 	if ((str[i] == 34 || str[i] == 39))
 	{
-		if ((str[i] == 34 && double_quote == 1) || (!double_quote && !single_quote))
+		if (str[i] == 34 && ft_is_unclosed_quote(str, i, str[i], mini))
+			return (1);
+		if (str[i] == 39 && ft_is_unclosed_quote(str, i, str[i], mini))
+			return (1);
+		if(!mini->values.val1)
 			return (0);
-		if ((str[i] == 39 && single_quote == 1) || (!double_quote && !single_quote))
+		if ((str[i] == 34 && mini->values.val1 == 34))
+			return (0);
+		if ((str[i] == 39 && mini->values.val1 == 39))
 			return (0);
 	}
 	return (1);
@@ -32,6 +63,7 @@ static int	get_variable_length(t_mini *mini, char *input, int *n)
 
 	i = 0;
 	len_aloc = 0;
+	(*n)++;
 	if (input[*n] == '?')
 	{
 		mini->values.str1 = ft_itoa(mini->last_return);
@@ -58,29 +90,32 @@ static int	ft_get_len_aloc(t_mini *mini, char *input)
 {
 	int		n;
 	int		len_aloc;
-	bool	double_quote;
-	bool	single_quote;
 
 	n = 0;
 	len_aloc = 0;
-	double_quote = false;
-	single_quote = false;
-
+	mini->values.val1 = 0;
 	while (input[n])
 	{
-		if (input[n++] == '$' && !single_quote)
+		if (input[n] == '$' && mini->values.val1 != 39)
 			len_aloc += get_variable_length(mini, input, &n);
-		else if (ft_can_be_add(input, n, double_quote, single_quote))
-			len_aloc++;
-
-		if (input[n] == '\"' && !single_quote)
+		else
 		{
-			double_quote = !double_quote;
-			n++;
-		}
-		else if (input[n] == '\'' && !double_quote)
-		{
-			single_quote = !single_quote;
+			if (ft_can_be_add(input, n, mini))
+				len_aloc++;
+			if (input[n] == 34 && mini->values.val1 != 39)
+			{
+				if (mini->values.val1 != 34)
+					mini->values.val1 = 34;
+				else
+					mini->values.val1 = 0;
+			}
+			else if (input[n] == 39 && mini->values.val1 != 34)
+			{
+				if (mini->values.val1 != 39)
+					mini->values.val1 = 39;
+				else
+					mini->values.val1 = 0;
+			}
 			n++;
 		}
 	}
@@ -93,20 +128,15 @@ static void	expand_variables_loop(t_mini *mini, char *input, char *expanded)
 	int		i;
 	char	*env_value;
 	int		j;
-	bool	double_quote;
-	bool	single_quote;
 
 	n = 0;
 	j = 0;
-	double_quote = false;
-	single_quote = false;
-
+	mini->values.val1 = 0;
 	if (!expanded)
 		return ;
-
 	while (input[n])
 	{
-		if (input[n] == '$' && !single_quote)
+		if (input[n] == '$' && mini->values.val1 != 39)
 		{
 			n++;
 			env_value = get_env_value(mini, input, &n);
@@ -116,19 +146,31 @@ static void	expand_variables_loop(t_mini *mini, char *input, char *expanded)
 				while (env_value[i])
 					expanded[j++] = env_value[i++];
 			}
-			continue;
 		}
-		else if (ft_can_be_add(input, n, double_quote, single_quote))
-			expanded[j++] = input[n++];
-
-		if (input[n] == '\"' && !single_quote)
+		else
 		{
-			double_quote = !double_quote;
-			n++;
-		}
-		else if (input[n] == '\'' && !double_quote)
-		{
-			single_quote = !single_quote;
+			if (ft_can_be_add(input, n, mini))
+				expanded[j++] = input[n];
+			if (input[n] == 34 && mini->values.val1 != 39)
+			{
+				if (mini->values.val1 != 34)
+				{
+					if (ft_is_closed(input, n, 34))
+						mini->values.val1 = 34;
+				}
+				else
+					mini->values.val1 = 0;
+			}
+			else if (input[n] == 39 && mini->values.val1 != 34)
+			{
+				if (mini->values.val1 != 39)
+				{
+					if (ft_is_closed(input, n, 39))
+						mini->values.val1 = 39;
+				}
+				else
+					mini->values.val1 = 0;
+			}
 			n++;
 		}
 	}
