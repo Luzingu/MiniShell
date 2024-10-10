@@ -33,7 +33,7 @@ static void	calling_env_function(t_mini *mini, char **args)
 			mini->last_return = 1;
 		}
 		else
-			ft_env(mini->env);
+			ft_env(mini->env, 0);
 	}
 }
 
@@ -75,7 +75,7 @@ static void	calling_export_function(t_mini *mini, char **args, int *result)
 			handle_export(args, &mini->env, mini);
 		}
 		else
-			ft_env(mini->env);
+			ft_env(mini->env, 1);
 	}
 }
 

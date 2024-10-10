@@ -39,4 +39,4 @@ char	**env_to_matrix(t_env *env, int i)
 	}
 	matrix[i] = NULL;
 	return (matrix);
-} 
+}

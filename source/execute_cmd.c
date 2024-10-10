@@ -67,32 +67,37 @@ static char	*find_executable(char *cmd, t_mini *mini, int i)
 	return (NULL);
 }
 
+void	handle_child(t_mini *mini, char **cmd)
+{
+	char	*cmd_path;
+	char	**env_matrix;
+
+	cmd_path = find_executable(cmd[0], mini, -1);
+	if (cmd_path)
+	{
+		env_matrix = env_to_matrix(mini->env, 0);
+		execve(cmd_path, cmd, env_matrix);
+		ft_free_matrix(env_matrix);
+		ft_free(cmd_path, 1);
+	}
+	else
+	{
+		error_message(cmd[0], mini);
+		mini->parent = 0;
+	}
+}
+
 void	execute_cmd(t_mini *mini, char **cmd)
 {
-	pid_t	pid;
 	int		status;
-	char	**env_matrix;
-	char	*cmd_path;
+	pid_t	pid;
 
+	status = 0;
 	if (mini->charge == 0)
 		return ;
 	pid = fork();
 	if (pid == 0)
-	{
-		cmd_path = find_executable(cmd[0], mini, -1);
-		if (cmd_path)
-		{
-			env_matrix = env_to_matrix(mini->env, 0);
-			execve(cmd_path, cmd, env_matrix);
-			ft_free_matrix(env_matrix);
-			ft_free(cmd_path, 1);
-		}
-		else
-		{
-			error_message(cmd[0], mini);
-			mini->parent = 0;
-		}
-	}
+		handle_child(mini, cmd);
 	else
 		waitpid(pid, &status, 0);
 	mini->charge = 0;

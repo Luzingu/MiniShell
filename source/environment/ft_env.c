@@ -41,7 +41,7 @@ static void	bubble_sort(char **matrix, int n)
 	}
 }
 
-void	ft_env(t_env *env)
+void	ft_env(t_env *env, int type)
 {
 	char	**matrix;
 	int		nb_split;
@@ -53,7 +53,8 @@ void	ft_env(t_env *env)
 	i = -1;
 	while (++i < nb_split)
 	{
-		ft_putstr_fd("declare -x ", 1);
+		if (type == 1)
+			ft_putstr_fd("declare -x ", 1);
 		ft_putendl_fd(matrix[i], 1);
 	}
 	ft_free_matrix(matrix);

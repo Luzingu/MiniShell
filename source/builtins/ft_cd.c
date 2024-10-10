@@ -51,7 +51,7 @@ static int	verifying_arguments(t_mini *mini, char **argument)
 	{
 		ft_putendl_fd("minishell: cd: <relative or absolute path>", 1);
 		mini->last_return = 1;
-		return (0)	;
+		return (0);
 	}
 	return (1);
 }

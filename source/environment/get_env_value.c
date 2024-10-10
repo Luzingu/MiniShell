@@ -25,7 +25,6 @@ char	*get_env_value(t_mini *mini, char *input, int *n)
 	}
 	else
 	{
-		
 		env_name = malloc(1000);
 		if (!env_name)
 			return (NULL);

@@ -31,11 +31,11 @@ char	*return_str(char *ptr, int *i)
 			double_quote = !double_quote;
 		else if (ptr[*i] == '\'' && !double_quote)
 			single_quote = !single_quote;
-		if (!double_quote && !single_quote && (is_separator(ptr[*i]) || ptr[*i] == ' '))
-			break;
+		if (!double_quote && !single_quote
+			&& (is_separator(ptr[*i]) || ptr[*i] == ' '))
+			break ;
 		str[n++] = ptr[(*i)++];
 	}
 	str[n] = '\0';
 	return (str);
 }
-

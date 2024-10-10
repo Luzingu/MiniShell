@@ -15,13 +15,15 @@ CC				= 	cc
 CFLAGS			= 	-Wall -Wextra -Werror
 LIBFT			= 	./libft
 SRC				=	source/main.c							\
+					source/main_loop.c							\
 					source/redir_and_exec.c					\
 					source/redir.c							\
 					source/execute_builtin.c				\
 					source/ft_verifying_argument.c			\
 					source/execute_cmd.c					\
 					source/increment_shell_level.c			\
-					source/ft_free.c						\
+					source/ft_free.c	\
+					source/ft_free2.c						\
 					source/heredoc.c						\
 					source/signal.c							\
 					source/cmd_tab.c						\
@@ -48,6 +50,7 @@ SRC				=	source/main.c							\
 					source/builtins/ft_exit.c				\
 					source/environment/get_env_value.c		\
 					source/environment/expand_variables.c	\
+					source/environment/expand_variables2.c	\
 					source/environment/ft_export.c			\
 					source/environment/ft_unset.c			\
 					source/environment/ft_env.c				\

@@ -60,21 +60,21 @@ typedef struct s_values
 
 typedef struct s_mini
 {
-	t_token	*start;
-	t_env	*env;
-	t_env	*env_copy;
-	int		in;
-	int		out;
-	int		fdin;
-	int		fdout;
-	int		pipin;
-	int		pipout;
-	int		pid;
-	int		charge;
-	int		parent;
-	int		last_return;
-	int		no_exec;
-	int		exit_status;
+	t_token		*start;
+	t_env		*env;
+	t_env		*env_copy;
+	int			in;
+	int			out;
+	int			fdin;
+	int			fdout;
+	int			pipin;
+	int			pipout;
+	int			pid;
+	int			charge;
+	int			parent;
+	int			last_return;
+	int			no_exec;
+	int			exit_status;
 	t_values	values;
 }	t_mini;
 
@@ -100,7 +100,7 @@ void	handle_export(char **tmp, t_env **env, t_mini *mini);
 void	str_dup_env(char **env, t_mini *mini);
 void	ft_close(int fd);
 void	ft_free_matrix(char **matrix);
-void	ft_env(t_env *env);
+void	ft_env(t_env *env, int type);
 void	ft_export(char *args, t_env **env);
 void	ft_echo(char **args, t_mini *mini);
 void	ft_cd(t_mini *mini, char **argument);
@@ -147,4 +147,10 @@ char	**allocate_result(size_t count);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
 void	free_tokens(t_token *head);
+void	main_loop(t_mini *mini);
+int		get_variable_length(t_mini *mini, char *input, int *n);
+int		handle_return_value(t_mini *mini, int *n, int *len_aloc);
+int		ft_can_be_add(char *str, int i, t_mini *mini);
+int		ft_is_closed(char *str, int i, char quote);
+int		ft_is_unclosed_quote(char *str, int i, char quote, t_mini *mini);
 #endif

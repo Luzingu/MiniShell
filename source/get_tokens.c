@@ -25,7 +25,8 @@ static t_token	*create_token(t_mini *mini, char *str)
 	return (token);
 }
 
-static t_token	*process_token(t_mini *mini, char *str, t_token **next, t_token **first_token)
+static t_token	*process_token(t_mini *mini, char *str
+	, t_token **next, t_token **first_token)
 {
 	t_token	*new;
 

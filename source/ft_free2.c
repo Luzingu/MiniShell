@@ -12,44 +12,53 @@
 
 #include "../header/minishell.h"
 
-void	ft_free_matrix(char **matrix)
+void	reset_fds(t_mini *mini)
 {
-	int	i;
+	mini->fdin = -1;
+	mini->fdout = -1;
+	mini->pipin = -1;
+	mini->pipout = -1;
+	mini->pid = -1;
+}
 
-	i = 0;
-	if (!matrix)
+void	free_tokens(t_token *head)
+{
+	t_token	*tmp;
+
+	if (head == NULL)
 		return ;
-	while (matrix[i])
-		free(matrix[i++]);
-	free(matrix);
-	matrix = NULL;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		if (tmp->str)
+			ft_free(tmp->str, 1);
+		if (tmp->type)
+			ft_free(tmp->type, 1);
+		ft_free(tmp, 1);
+	}
 }
 
-void	ft_free(void *ptr, int free_ptr)
+void	free_env(t_env *head)
 {
-	if (!free_ptr)
+	t_env	*tmp;
+
+	if (!head)
 		return ;
-	if (ptr)
-		free(ptr);
-	ptr = NULL;
+	while (head)
+	{
+		tmp = head;
+		head = head->next;
+		if (tmp->key)
+			ft_free(tmp->key, 1);
+		if (tmp->value)
+			ft_free(tmp->value, 1);
+		ft_free(tmp, 1);
+	}
 }
 
-void	ft_close(int fd)
+void	ft_free_all(t_mini *mini)
 {
-	if (fd > 0)
-		close(fd);
-}
-
-void	reset_std(t_mini *mini)
-{
-	dup2(mini->in, STDIN);
-	dup2(mini->out, STDOUT);
-}
-
-void	close_fds(t_mini *mini)
-{
-	ft_close(mini->fdin);
-	ft_close(mini->fdout);
-	ft_close(mini->pipin);
-	ft_close(mini->pipout);
+	free_tokens(mini->start);
+	free_env(mini->env);
 }
