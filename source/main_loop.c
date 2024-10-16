@@ -66,7 +66,6 @@ void	main_loop(t_mini *mini)
 
 	while (mini->exit_status == 0)
 	{
-		mini->tokens = NULL;
 		reset_minishell(mini);
 		line = readline("minishell> ");
 		if (!line)

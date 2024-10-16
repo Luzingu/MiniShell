@@ -97,8 +97,12 @@ void	execute_cmd(t_mini *mini, char **cmd)
 		return ;
 	pid = fork();
 	if (pid == 0)
+	{
 		handle_child(mini, cmd);
+		exit(mini->last_return);
+	}
 	else
 		waitpid(pid, &status, 0);
 	mini->charge = 0;
+	mini->last_return = WEXITSTATUS(status);
 }

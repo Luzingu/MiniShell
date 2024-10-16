@@ -1,11 +1,13 @@
-total 76
+total 84
 -rw-rw-r-- 1 kali kali     0 Oct 10 16:09 a.out
 -rwx------ 1 kali kali    25 Oct 16 08:46 arquivo
 -rwx------ 1 kali kali    56 Oct 16 08:44 as
--rwx------ 1 kali kali     0 Oct 16 08:46 file
+-rwx------ 1 kali kali     0 Oct 16 12:33 file
 drwxrwxr-x 2 kali kali  4096 Oct 11 13:09 header
+drwxrwxr-x 2 kali kali  4096 Oct 16 11:07 l
 drwxrwxr-x 2 kali kali  4096 Oct 15 13:24 libft
 -rwx------ 1 kali kali     4 Oct 11 13:17 ls
 -rw-rw-r-- 1 kali kali  2791 Oct 11 13:09 Makefile
--rwxrwxr-x 1 kali kali 48392 Oct 16 08:44 minishell
-drwxrwxr-x 4 kali kali  4096 Oct 16 08:44 source
+drwxrwxr-x 2 kali kali  4096 Oct 16 11:07 minha_pasta
+-rwxrwxr-x 1 kali kali 48392 Oct 16 12:25 minishell
+drwxrwxr-x 4 kali kali  4096 Oct 16 12:25 source
