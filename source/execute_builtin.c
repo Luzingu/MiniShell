@@ -13,19 +13,19 @@
 
 static void	calling_tiny_functions(t_mini *mini, char **args)
 {
-	if (ft_strncmp(args[0], "echo", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "echo") == 0)
 		ft_echo(args, mini);
-	if (ft_strncmp(args[0], "cd", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "cd") == 0)
 		ft_cd(mini, args);
-	if (ft_strncmp(args[0], "exit", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "exit") == 0)
 		ft_exit(args, mini);
-	if (ft_strncmp(args[0], "unset", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "unset") == 0)
 		handle_unset(args, &mini->env);
 }
 
 static void	calling_env_function(t_mini *mini, char **args)
 {
-	if (ft_strncmp(args[0], "env", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "env") == 0)
 	{
 		if (args[1])
 		{
@@ -41,7 +41,7 @@ static void	calling_pwd_function(t_mini *mini, char **args, int *result)
 {
 	char	*pwd;
 
-	if (ft_strncmp(args[0], "pwd", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "pwd") == 0)
 	{
 		pwd = ft_pwd(mini);
 		if (pwd)
@@ -56,7 +56,7 @@ static void	calling_pwd_function(t_mini *mini, char **args, int *result)
 
 static void	calling_export_function(t_mini *mini, char **args, int *result)
 {
-	if (ft_strncmp(args[0], "export", ft_strlen(args[0])) == 0)
+	if (ft_strcmp(args[0], "export") == 0)
 	{
 		if (args[1])
 		{

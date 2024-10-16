@@ -22,7 +22,7 @@ int	minipipe(t_mini *mini)
 	if (pid == 0)
 	{
 		ft_close(pipefd[1]);
-		dup2(pipefd[0], STDIN);
+		dup2(pipefd[0], STDIN_FILENO);
 		mini->pipin = pipefd[0];
 		mini->no_exec = 0;
 		mini->parent = 0;
@@ -31,7 +31,7 @@ int	minipipe(t_mini *mini)
 	else
 	{
 		ft_close(pipefd[0]);
-		dup2(pipefd[1], STDOUT);
+		dup2(pipefd[1], STDOUT_FILENO);
 		mini->pipout = pipefd[1];
 		return (1);
 	}

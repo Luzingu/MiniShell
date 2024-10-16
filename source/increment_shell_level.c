@@ -15,6 +15,7 @@
 void	increment_shell_level(t_mini *mini)
 {
 	char	*str_shell_level;
+	char	*tmp;
 	int		shell_level;
 
 	str_shell_level = ft_getenv(mini->env, "SHLVL");
@@ -25,7 +26,8 @@ void	increment_shell_level(t_mini *mini)
 		shell_level = ft_atoi(str_shell_level);
 		shell_level++;
 	}
-	str_shell_level = ft_strjoin2("SHLVL=", ft_itoa(shell_level), 0, 1);
-	ft_export(str_shell_level, &mini->env);
+	tmp = ft_strjoin2("SHLVL=", ft_itoa(shell_level), 0, 1);
+	ft_export(tmp, &mini->env);
+	ft_free(tmp, 1);
 	ft_free(str_shell_level, 1);
 }

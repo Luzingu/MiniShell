@@ -20,7 +20,7 @@ char	*ft_getenv(t_env *env, char *var)
 	while (env_tmp)
 	{
 		if (ft_strcmp(env_tmp->key, var) == 0)
-			return (env_tmp->value);
+			return (ft_strdup(env_tmp->value));
 		env_tmp = env_tmp->next;
 	}
 	return (NULL);

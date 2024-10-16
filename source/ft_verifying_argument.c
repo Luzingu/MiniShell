@@ -12,23 +12,23 @@
 
 #include "../header/minishell.h"
 
-static int	verifying_next_type(t_mini *mini, t_token *token)
+static int	verifying_next_type(t_mini *mini, char **matrix, int i)
 {
-	if (ft_is_type(token, "trunc") || ft_is_type(token, "append")
-		|| ft_is_type(token, "input"))
+	if (ft_strcmp(matrix[i], ">") == 0 || ft_strcmp(matrix[i], ">>") == 0
+		|| ft_strcmp(matrix[i], "<") == 0)
 	{
-		if (!token->next || (ft_is_type(token->next, "trunc")
-				|| ft_is_type(token->next, "append")
-				|| ft_is_type(token->next, "input")
-				|| ft_is_type(token->next, "pipe")))
+		if (!matrix[i + 1] || (ft_strcmp(matrix[i + 1], ">") == 0
+				|| ft_strcmp(matrix[i + 1], ">>") == 0
+				|| ft_strcmp(matrix[i + 1], "<") == 0
+				|| ft_strcmp(matrix[i + 1], "|") == 0))
 		{
 			ft_putstr_fd("minishell: "
 				"syntax error near unexpected token1", 2);
-			if (token->next)
-				ft_putstr_fd(token->next->str, 2);
+			if (matrix[i + 1])
+				ft_putstr_fd(matrix[i + 1], 2);
 			else
 				ft_putstr_fd("newline", 2);
-			ft_putendl_fd("'", 2);
+			ft_putstr_fd("'\n", 2);
 			mini->last_return = 258;
 			return (0);
 		}
@@ -36,21 +36,19 @@ static int	verifying_next_type(t_mini *mini, t_token *token)
 	return (1);
 }
 
-static int	verifying_previous_type(t_mini *mini, t_token *token)
+static int	verifying_previous_type(t_mini *mini, char **matrix, int i)
 {
-	t_token	*prev;
 
-	if (ft_is_type(token, "pipe"))
+	if (ft_strcmp(matrix[i], "|") == 0)
 	{
-		prev = prev_sep(mini->start, token);
-		if (!token->next || !prev || ft_is_type(prev, "trunc")
-			|| ft_is_type(prev, "append") || ft_is_type(prev, "input")
-			|| ft_is_type(prev, "pipe"))
+		if (!matrix[i + 1] || !matrix[i - 1] || ft_strcmp(matrix[i - 1], ">") == 0
+			|| ft_strcmp(matrix[i - 1], ">>") == 0 || ft_strcmp(matrix[i - 1], "<") == 0
+			|| ft_strcmp(matrix[i - 1], "|") == 0)
 		{
 			ft_putstr_fd("minishell: "
-				"syntax error near unexpected token", 2);
-			ft_putstr_fd(token->str, 2);
-			ft_putstr_fd("'", 2);
+				"syntax error near unexpected token ", 2);
+			ft_putstr_fd(matrix[i], 2);
+			ft_putstr_fd("'\n", 2);
 			mini->last_return = 258;
 			return (0);
 		}
@@ -58,14 +56,16 @@ static int	verifying_previous_type(t_mini *mini, t_token *token)
 	return (1);
 }
 
-int	verifying_argument(t_mini *mini, t_token *token)
+int	verifying_argument(t_mini *mini, char **matrix)
 {
-	while (token)
+	int i;
+	i = 0;
+	while (matrix[i])
 	{
-		if (!verifying_next_type(mini, token)
-			|| !verifying_previous_type(mini, token))
+		if (!verifying_next_type(mini, matrix, i)
+			|| !verifying_previous_type(mini, matrix, i))
 			return (0);
-		token = token->next;
+		i++;
 	}
 	return (1);
 }

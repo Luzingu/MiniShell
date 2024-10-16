@@ -39,7 +39,6 @@ typedef struct s_token
 {
 	char			*str;
 	char			*type;
-	struct s_token	*prev;
 	struct s_token	*next;
 }	t_token;
 
@@ -60,7 +59,7 @@ typedef struct s_values
 
 typedef struct s_mini
 {
-	t_token		*start;
+	char		**tokens;
 	t_env		*env;
 	t_env		*env_copy;
 	int			in;
@@ -88,14 +87,14 @@ typedef struct s_state
 	size_t	len;
 }	t_state;
 
-t_token	*get_tokens(t_mini *mini, char *line);
+char	**get_tokens(t_mini *mini, char *line);
 t_token	*prev_sep(t_token *start, t_token *current);
 t_env	*add_envirenoment(char *env_name, char *env_value);
 t_env	*sort_env_list(t_env *head);
 
-void	redir_and_exec(t_mini *mini, t_token *token, int pipe);
-void	redir(t_mini *mini, t_token *token, char *type);
-void	input(t_mini *mini, t_token *token);
+void	redir_and_exec(t_mini *mini, int pos_token, int pipe);
+void	redir(t_mini *mini, char *file, char *type);
+void	input(t_mini *mini, char *file);
 void	handle_export(char **tmp, t_env **env, t_mini *mini);
 void	str_dup_env(char **env, t_mini *mini);
 void	ft_close(int fd);
@@ -123,7 +122,7 @@ char	*return_str(char *ptr, int *i);
 char	**env_to_matrix(t_env *env, int i);
 char	**ft_split_advanced(const char *s, const char *delimiter);
 char	*my_strndup(const char *s, size_t n);
-char	**cmd_tab(t_token *start, int i);
+char	**cmd_tab(char **tokens, int *pos_token);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 int		handle_unset(char **tmp, t_env **env);
 int		minipipe(t_mini *mini);
@@ -134,7 +133,7 @@ int		exec_builtin(char **args, t_mini *mini);
 int		nb_args(char **args);
 int		whereis(const char *str, const char *needle);
 int		numb_split(char **matrix);
-int		verifying_argument(t_mini *mini, t_token *token);
+int	verifying_argument(t_mini *mini, char **matrix);
 int		handle_heredoc(char *line);
 int		is_separator(char c);
 void	toggle_quotes(char c, t_state *state);
@@ -153,4 +152,6 @@ int		handle_return_value(t_mini *mini, int *n, int *len_aloc);
 int		ft_can_be_add(char *str, int i, t_mini *mini);
 int		ft_is_closed(char *str, int i, char quote);
 int		ft_is_unclosed_quote(char *str, int i, char quote, t_mini *mini);
+int		is_separator_str(char *str);
+void	free_env(t_env *head);
 #endif

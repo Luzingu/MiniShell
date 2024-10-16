@@ -12,49 +12,54 @@
 
 #include "../header/minishell.h"
 
-static t_token	*next_sep(t_token *token)
-{
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
-		token = token->next;
-	return (token);
-}
 
 static int	is_builtin(char *command)
 {
-	return (!ft_strncmp(command, "echo", ft_strlen(command))
-		|| !ft_strncmp(command, "cd", ft_strlen(command))
-		|| !ft_strncmp(command, "pwd", ft_strlen(command))
-		|| !ft_strncmp(command, "env", ft_strlen(command))
-		|| !ft_strncmp(command, "export", ft_strlen(command))
-		|| !ft_strncmp(command, "unset", ft_strlen(command))
-		|| !ft_strncmp(command, "exit", ft_strlen(command)));
+	return (!ft_strcmp(command, "echo")
+		|| !ft_strcmp(command, "cd")
+		|| !ft_strcmp(command, "pwd")
+		|| !ft_strcmp(command, "env")
+		|| !ft_strcmp(command, "export")
+		|| !ft_strcmp(command, "unset")
+		|| !ft_strcmp(command, "exit"));
 }
 
-void	redir_and_exec(t_mini *mini, t_token *token, int pipe)
+void ft_execute(t_mini *mini, int *pos_token)
 {
-	t_token	*prev;
-	t_token	*next;
 	char	**cmd;
+	
+	if (mini->charge == 0)
+		return ;
+	cmd = cmd_tab(mini->tokens, pos_token);
+	if (is_builtin(cmd[0]))
+		exec_builtin(cmd, mini);
+	else
+		execute_cmd(mini, cmd);
+	ft_free_matrix(cmd);
+	ft_close(mini->pipin);
+	ft_close(mini->pipout);
+	mini->pipin = -1;
+	mini->pipout = -1;
+	mini->charge = 0;
+}
 
-	prev = prev_sep(mini->start, token);
-	next = next_sep(token);
-	if (prev && ft_is_type(prev, "trunc"))
-		redir(mini, token, "trunc");
-	else if (prev && ft_is_type(prev, "append"))
-		redir(mini, token, "append");
-	else if (ft_is_type(prev, "input"))
-		input(mini, token);
-	else if (ft_is_type(prev, "pipe"))
+void	redir_and_exec(t_mini *mini, int pos_token, int pipe)
+{
+	char	*prev;
+
+	prev = NULL;
+	if(pos_token > 0)
+		prev = mini->tokens[pos_token - 1];
+	if (ft_strcmp(prev, ">") == 0)
+		redir(mini, mini->tokens[pos_token], "trunc");
+	else if (ft_strcmp(prev, ">>") == 0)
+		redir(mini, mini->tokens[pos_token], "append");
+	else if (ft_strcmp(prev, "<") == 0)
+		input(mini, mini->tokens[pos_token]);
+	else if (ft_strcmp(prev, "|") == 0)
 		pipe = minipipe(mini);
-	if (next && pipe != 1)
-		redir_and_exec(mini, next->next, 0);
-	if ((!prev || ft_is_type(prev, "pipe")) && pipe != 1 && mini->no_exec == 0)
-	{
-		cmd = cmd_tab(token, 2);
-		if (is_builtin(cmd[0]))
-			exec_builtin(cmd, mini);
-		else
-			execute_cmd(mini, cmd);
-		ft_free_matrix(cmd);
-	}
+	if (mini->tokens[(pos_token + 1)] && pipe != 1)
+		redir_and_exec(mini, (pos_token + 1), 0);
+	if ((!prev || ft_strcmp(prev, "|") == 0) && pipe != 1 && mini->no_exec == 0)
+		ft_execute(mini, &pos_token);
 }

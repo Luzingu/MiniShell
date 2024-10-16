@@ -34,5 +34,6 @@ void	str_dup_env(char **env, t_mini *mini)
 			new->next = add_envirenoment(my_env[0], my_env[1]);
 			new = new->next;
 		}
+		ft_free_matrix(my_env);
 	}
 }

@@ -16,3 +16,10 @@ int	is_separator(char c)
 {
 	return ((c == '|' || c == '>' || c == '<'));
 }
+
+int	is_separator_str(char *str)
+{
+	if (ft_strcmp(str, ">") == 0 || ft_strcmp(str, ">>") == 0 || ft_strcmp(str, "<") == 0 || ft_strcmp(str, "<<") == 0 || ft_strcmp(str, "|") == 0)
+		return (1);
+	return (0);
+}

@@ -1,9 +1,9 @@
 a.out
-asas
-assa
+as
+file
 header
 libft
-log
+ls
 Makefile
 minishell
 source

@@ -15,11 +15,15 @@
 static char	**heredoc(const char *delimiter, int count)
 {
 	char		**lines;
+	char		**new_lines;
 	char		*line;
+	char		*tmp;
+	int		size = 10;
 
-	lines = malloc(BUFFER_SIZE * sizeof(char *));
+	lines = (char **)malloc(size * sizeof(char *));
 	if (!lines)
 		exit(EXIT_FAILURE);
+	
 	while (1)
 	{
 		line = readline("> ");
@@ -28,14 +32,43 @@ static char	**heredoc(const char *delimiter, int count)
 			ft_free_matrix(lines);
 			return (NULL);
 		}
-		line = ft_strtrim(line, " ");
-		if (ft_strncmp(line, delimiter, ft_strlen(line)) == 0)
+		tmp = ft_strtrim(line, " ");
+		if (!tmp)
 		{
 			ft_free(line, 1);
-			break ;
+			ft_free_matrix(lines);
+			return (NULL);
 		}
-		lines[count++] = line;
+
+		if (ft_strcmp(tmp, delimiter) == 0)
+		{
+			ft_free(tmp, 1);
+			ft_free(line, 1);
+			break;
+		}
+
+		if (count >= size - 1)
+		{
+			size *= 2;
+			new_lines = (char **)malloc(size * sizeof(char *));
+			if (!new_lines)
+			{
+				ft_free(tmp, 1);
+				ft_free(line, 1);
+				ft_free_matrix(lines);
+				exit(EXIT_FAILURE);
+			}
+			for (int i = 0; i < count; i++)
+				new_lines[i] = lines[i];
+
+			ft_free(lines, 1);
+			lines = new_lines;
+		}
+
+		lines[count++] = tmp;
+		ft_free(line, 1);
 	}
+	
 	lines[count] = NULL;
 	return (lines);
 }
@@ -69,15 +102,22 @@ int	handle_heredoc(char *line)
 	{
 		tokens2 = ft_split(tokens[1], ' ');
 		delimiter = tokens2[0];
-		if (!ft_strncmp(delimiter, ">", 1) || !ft_strncmp(delimiter, "<", 1)
-			|| ft_strncmp(delimiter, ">>", 2) == 0
-			|| ft_strncmp(delimiter, "<<", 2) == 0
-			|| ft_strncmp(delimiter, "|", 1) == 0)
+		if (!ft_strcmp(delimiter, ">") || !ft_strcmp(delimiter, "<")
+			|| !ft_strcmp(delimiter, ">>")
+			|| !ft_strcmp(delimiter, "<<")
+			|| !ft_strcmp(delimiter, "|"))
+		{
+			ft_free_matrix(tokens);
+			ft_free_matrix(tokens2);
 			return (2);
+		}
 		process_heredoc(delimiter);
 		ft_free_matrix(tokens);
+		ft_free_matrix(tokens2);
 		return (1);
 	}
 	ft_free_matrix(tokens);
 	return (0);
 }
+
+

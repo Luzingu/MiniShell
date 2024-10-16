@@ -21,7 +21,7 @@ void	ft_unset(char *args, t_env **env)
 	prev = NULL;
 	while (env_tmp)
 	{
-		if (ft_strncmp(env_tmp->key, args, ft_strlen(args)) == 0)
+		if (ft_strcmp(env_tmp->key, args) == 0)
 		{
 			if (!prev)
 				*env = env_tmp->next;

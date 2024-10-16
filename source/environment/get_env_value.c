@@ -15,12 +15,13 @@
 char	*get_env_value(t_mini *mini, char *input, int *n)
 {
 	char	*env_name;
+	char	*env_value;
 	int		i;
 
 	i = 0;
 	if (input[*n] == '?')
 	{
-		env_name = ft_itoa(mini->last_return);
+		env_value = ft_itoa(mini->last_return);
 		(*n)++;
 	}
 	else
@@ -33,7 +34,8 @@ char	*get_env_value(t_mini *mini, char *input, int *n)
 			env_name[i++] = input[(*n)++];
 		}
 		env_name[i] = '\0';
-		env_name = ft_getenv(mini->env, env_name);
+		env_value = ft_getenv(mini->env, env_name);
+		ft_free(env_name, 1);
 	}
-	return (env_name);
+	return (env_value);
 }

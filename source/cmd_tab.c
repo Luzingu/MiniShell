@@ -12,29 +12,29 @@
 
 #include "../header/minishell.h"
 
-char	**cmd_tab(t_token *start, int i)
+char	**cmd_tab(char **tokens, int *pos_token)
 {
-	t_token	*token;
 	char	**tab;
+	int	i;
+	int	j;
 
-	if (!start)
+	if (!tokens)
 		return (NULL);
-	token = start->next;
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+	i = *pos_token;
+	j = 0;
+	while (tokens[i] && !(ft_strcmp(tokens[i], "|") == 0 || ft_strcmp(tokens[i], "<") == 0 || ft_strcmp(tokens[i], ">") == 0 || ft_strcmp(tokens[i], ">>") == 0))
 	{
-		token = token->next;
 		i++;
+		j++;
 	}
-	tab = malloc(sizeof(char *) * i);
+	tab = malloc(sizeof(char *) * (j + 1));
 	if (!tab)
 		return (NULL);
-	token = start->next;
-	tab[0] = start->str;
-	i = 1;
-	while (token && (ft_is_type(token, "arg") || ft_is_type(token, "cmd")))
+	i = 0;
+	while (tokens[*pos_token] && !(ft_strcmp(tokens[*pos_token], "|") == 0 || ft_strcmp(tokens[*pos_token], "<") == 0 || ft_strcmp(tokens[*pos_token], ">") == 0 || ft_strcmp(tokens[*pos_token], ">>") == 0))
 	{
-		tab[i++] = token->str;
-		token = token->next;
+		tab[i++] = ft_strdup(tokens[*pos_token]);
+		*pos_token += 1;
 	}
 	tab[i] = NULL;
 	return (tab);

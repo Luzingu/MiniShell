@@ -33,7 +33,7 @@ static char	*get_env_values(char **args_split)
 
 static int	ft_modify_env(t_env *env, char *env_name, char *env_value)
 {
-	if (ft_strncmp(env->key, env_name, ft_strlen(env_name)) == 0)
+	if (ft_strcmp(env->key, env_name) == 0)
 	{
 		ft_free(env->value, 1);
 		env->value = ft_strdup(env_value);

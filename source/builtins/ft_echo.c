@@ -19,7 +19,7 @@ void	ft_echo(char **argument, t_mini *mini)
 	int	n;
 
 	i = 1;
-	if (argument[1] && !ft_strncmp("-n", argument[1], ft_strlen(argument[1])))
+	if (argument[1] && !ft_strcmp("-n", argument[1]))
 		i = 2;
 	put_break = i;
 	while (i < numb_split(argument))
@@ -28,10 +28,11 @@ void	ft_echo(char **argument, t_mini *mini)
 		while (argument[i][++n])
 			ft_putchar_fd(argument[i][n], STDOUT_FILENO);
 		if (argument[i + 1])
-			ft_putchar_fd(' ', 1);
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (put_break == 1)
-		ft_putchar_fd('\n', 1);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	mini->last_return = 0;
+	mini->parent = 1;
 }

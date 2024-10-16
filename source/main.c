@@ -23,6 +23,7 @@ int	main(int ac, char **argv, char **env)
 	mini.last_return = 0;
 	mini.exit_status = 0;
 	mini.no_exec = 0;
+	mini.tokens = NULL;
 	handle_signals();
 	main_loop(&mini);
 	return (0);

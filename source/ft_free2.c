@@ -59,6 +59,7 @@ void	free_env(t_env *head)
 
 void	ft_free_all(t_mini *mini)
 {
-	free_tokens(mini->start);
-	free_env(mini->env);
+	//free_tokens(mini->start);
+	//free_env(mini->env);
+	(void)mini;
 }

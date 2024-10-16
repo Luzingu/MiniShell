@@ -36,7 +36,7 @@ static void	handle_quotes(t_mini *mini, char *input, int *n)
 	}
 }
 
-static int	ft_get_len_aloc(t_mini *mini, char *input)
+int	ft_get_len_aloc(t_mini *mini, char *input)
 {
 	int		n;
 	int		len_aloc;
@@ -59,7 +59,7 @@ static int	ft_get_len_aloc(t_mini *mini, char *input)
 	return (len_aloc);
 }
 
-static void	handle_variable_expansion(t_mini *mini
+void	handle_variable_expansion(t_mini *mini
 		, char *expanded, int *n, int *j)
 {
 	char	*env_value;
@@ -73,9 +73,10 @@ static void	handle_variable_expansion(t_mini *mini
 		while (env_value[i])
 			expanded[(*j)++] = env_value[i++];
 	}
+	ft_free(env_value, 1);
 }
 
-static void	expand_variables_loop(t_mini *mini, char *input, char *expanded)
+void	expand_variables_loop(t_mini *mini, char *input, char *expanded)
 {
 	int		n;
 	int		j;
@@ -109,7 +110,8 @@ char	*expand_variables(t_mini *mini, char *input)
 	int		len_aloc;
 
 	len_aloc = ft_get_len_aloc(mini, input);
-	expanded = malloc(len_aloc + 1);
+	expanded = (char *)malloc(len_aloc + 100);
 	expand_variables_loop(mini, input, expanded);
+	ft_free(input, 1);
 	return (expanded);
 }

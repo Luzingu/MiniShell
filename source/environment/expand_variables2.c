@@ -84,5 +84,6 @@ int	get_variable_length(t_mini *mini, char *input, int *n)
 	mini->values.str1 = ft_getenv(mini->env, env_name);
 	len_aloc += ft_strlen(mini->values.str1);
 	ft_free(env_name, 1);
+	ft_free(mini->values.str1, 1);
 	return (len_aloc);
 }

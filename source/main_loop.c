@@ -11,16 +11,6 @@
 /* ************************************************************************** */
 #include "../header/minishell.h"
 
-static t_token	*next_run(t_token *token)
-{
-	while (token && !ft_is_type(token, "cmd"))
-	{
-		token = token->next;
-		if (token && ft_is_type(token, "pipe"))
-			token = token->next;
-	}
-	return (token);
-}
 
 static int	verifying_heredoc(t_mini *mini, char *line)
 {
@@ -37,31 +27,34 @@ static int	verifying_heredoc(t_mini *mini, char *line)
 
 static void	process_line(t_mini *mini, char *line)
 {
-	t_token	*token;
 	int		heredoc;
 
 	line = ft_strtrim(line, " ");
 	if (!line || !line[0])
-		return ;
-	heredoc = verifying_heredoc(mini, line);
-	if (heredoc == 2)
-		return ;
-	mini->start = get_tokens(mini, line);
-	token = next_run(mini->start);
-	if (!verifying_argument(mini, token))
 	{
-		mini->last_return = 258;
+		ft_free(line, 1);
 		return ;
 	}
-	mini->charge = 1;
+	heredoc = verifying_heredoc(mini, line);
+	if (heredoc == 2)
+		return ;	
 	if (heredoc == 0)
-		redir_and_exec(mini, token, 0);
+	{
+		mini->tokens = get_tokens(mini, line);
+		if (!verifying_argument(mini, mini->tokens))
+		{
+			mini->last_return = 258;
+			return ;
+		}
+		mini->charge = 1;
+		redir_and_exec(mini, 0, 0);
+	}
+	ft_free(line, 1);
 }
 
 static void	reset_minishell(t_mini *mini)
 {
 	mini->parent = 1;
-	mini->start = NULL;
 	mini->in = dup(STDIN_FILENO);
 	mini->out = dup(STDOUT_FILENO);
 }
@@ -73,6 +66,7 @@ void	main_loop(t_mini *mini)
 
 	while (mini->exit_status == 0)
 	{
+		mini->tokens = NULL;
 		reset_minishell(mini);
 		line = readline("minishell> ");
 		if (!line)
@@ -84,6 +78,7 @@ void	main_loop(t_mini *mini)
 		if (*line)
 			add_history(line);
 		process_line(mini, line);
+		ft_free(line, 1);
 		reset_std(mini);
 		close_fds(mini);
 		reset_fds(mini);
@@ -91,5 +86,7 @@ void	main_loop(t_mini *mini)
 		mini->no_exec = 0;
 		if (mini->parent == 0)
 			exit(0);
+		ft_free_matrix(mini->tokens);
 	}
+	free_env(mini->env);
 }

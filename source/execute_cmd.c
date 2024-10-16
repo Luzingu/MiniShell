@@ -43,16 +43,16 @@ static char	*find_executable(char *cmd, t_mini *mini, int i)
 {
 	struct stat	buffer;
 	char		**path_dirs;
-	char		*path_env;
 	char		*full_path;
 
 	if (cmd[0] == '/' || cmd[0] == '.')
 		if (stat(cmd, &buffer) == 0)
 			return (ft_strdup(cmd));
-	path_env = ft_getenv(mini->env, "PATH");
-	if (!path_env)
+	mini->values.str1 = ft_getenv(mini->env, "PATH");
+	if (!mini->values.str1)
 		return (NULL);
-	path_dirs = ft_split(path_env, ':');
+	path_dirs = ft_split(mini->values.str1, ':');
+	ft_free(mini->values.str1, 1);
 	while (path_dirs[++i])
 	{
 		full_path = ft_strjoin2(ft_strjoin(path_dirs[i], "/"), cmd, 1, 0);
@@ -78,13 +78,13 @@ void	handle_child(t_mini *mini, char **cmd)
 		env_matrix = env_to_matrix(mini->env, 0);
 		execve(cmd_path, cmd, env_matrix);
 		ft_free_matrix(env_matrix);
-		ft_free(cmd_path, 1);
 	}
 	else
 	{
 		error_message(cmd[0], mini);
 		mini->parent = 0;
 	}
+	ft_free(cmd_path, 1);
 }
 
 void	execute_cmd(t_mini *mini, char **cmd)
