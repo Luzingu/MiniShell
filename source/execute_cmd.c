@@ -102,7 +102,11 @@ void	execute_cmd(t_mini *mini, char **cmd)
 		exit(mini->last_return);
 	}
 	else
+	{
+		g_redisplay = 0;
 		waitpid(pid, &status, 0);
+		g_redisplay = 1;
+	}
 	mini->charge = 0;
 	mini->last_return = WEXITSTATUS(status);
 }

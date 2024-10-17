@@ -35,6 +35,7 @@
 # include <stdbool.h>
 # include "../libft/libft.h"
 
+extern int g_redisplay;
 typedef struct s_token
 {
 	char			*str;

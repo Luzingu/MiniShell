@@ -15,6 +15,7 @@ int	main(int ac, char **argv, char **env)
 {
 	t_mini	mini;
 
+	g_redisplay = 1;
 	(void)ac;
 	(void)argv;
 	reset_fds(&mini);
