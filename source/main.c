@@ -15,7 +15,6 @@ int	main(int ac, char **argv, char **env)
 {
 	t_mini	mini;
 
-	g_redisplay = 1;
 	(void)ac;
 	(void)argv;
 	reset_fds(&mini);
@@ -27,5 +26,5 @@ int	main(int ac, char **argv, char **env)
 	mini.tokens = NULL;
 	handle_signals();
 	main_loop(&mini);
-	return (0);
+	return (mini.last_return);
 }

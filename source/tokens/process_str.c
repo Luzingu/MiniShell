@@ -60,12 +60,12 @@ char	**process_str(t_mini *mini, char *line)
 	{
 		skip_whitespace(line, &i);
 		str = return_str(line, &i);
-		str = expand_variables(mini, str); 
+		str = expand_variables(mini, str);
 		if (str && str[0])
 			matrix[j++] = str;
 		skip_whitespace(line, &i);
 		process_separator(line, &i, matrix, &j);
-	} 
+	}
 	matrix[j] = NULL;
 	return (matrix);
 }

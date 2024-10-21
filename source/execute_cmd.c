@@ -12,6 +12,18 @@
 
 #include "../header/minishell.h"
 
+static int	g_redisplay = 1;
+
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	if (g_redisplay == 1)
+		rl_redisplay();
+}
+
 static char	*error_message(char *path, t_mini *mini)
 {
 	DIR	*folder;
