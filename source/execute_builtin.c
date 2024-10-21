@@ -69,7 +69,7 @@ static void	calling_export_function(t_mini *mini, char **args, int *result)
 				{
 					ft_putstr_fd("not a valid identifier\n", 2);
 					mini->last_return = 1;
-					break ;
+					return ;
 				}
 			}
 			handle_export(args, &mini->env, mini);

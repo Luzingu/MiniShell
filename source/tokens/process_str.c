@@ -28,18 +28,6 @@ static char	**allocate_matrix(void)
 	return (matrix);
 }
 
-static void	process_word(t_mini *mini,
-	int *i, char **matrix, int *j)
-{
-	char	*str;
-
-	skip_whitespace(mini->values.str1, i);
-	str = return_str(mini->values.str1, i);
-	str = expand_variables(mini, str);
-	if (str && str[0])
-		matrix[(*j)++] = str;
-}
-
 static void	process_separator(char *line, int *i, char **matrix, int *j)
 {
 	char	*str;
@@ -56,23 +44,28 @@ static void	process_separator(char *line, int *i, char **matrix, int *j)
 	}
 }
 
-char	**process_str(t_mini *mini)
+char	**process_str(t_mini *mini, char *line)
 {
 	int		i;
 	int		j;
 	char	**matrix;
+	char	*str;
 
 	matrix = allocate_matrix();
 	if (!matrix)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (mini->values.str1[i])
+	while (line[i])
 	{
-		process_word(mini, &i, matrix, &j);
-		skip_whitespace(mini->values.str1, &i);
-		process_separator(mini->values.str1, &i, matrix, &j);
-	}
+		skip_whitespace(line, &i);
+		str = return_str(line, &i);
+		str = expand_variables(mini, str); 
+		if (str && str[0])
+			matrix[j++] = str;
+		skip_whitespace(line, &i);
+		process_separator(line, &i, matrix, &j);
+	} 
 	matrix[j] = NULL;
 	return (matrix);
 }

@@ -42,8 +42,7 @@ char	**get_tokens(t_mini *mini, char *line)
 {
 	char	**matrix;
 
-	mini->values.str1 = line;
-	matrix = process_str(mini);
+	matrix = process_str(mini, line);
 	matrix = organize_tokens(matrix);
 	return (matrix);
 }

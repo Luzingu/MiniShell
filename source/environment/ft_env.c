@@ -20,10 +20,10 @@ static void	bubble_sort(char **matrix, int n)
 	char	*temp;
 
 	i = 0;
-	j = 0;
 	while (i < n - 1)
 	{
 		swapped = 0;
+		j = 0;
 		while (j < n - i - 1)
 		{
 			if (strncmp(matrix[j], matrix[j + 1], 100) > 0)

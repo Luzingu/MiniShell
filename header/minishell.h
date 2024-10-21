@@ -130,7 +130,7 @@ char	*my_strndup(const char *s, size_t n);
 char	**cmd_tab(char **tokens, int *pos_token);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 char	**allocate_result(size_t count);
-char	**process_str(t_mini *mini);
+char	**process_str(t_mini *mini, char *line);
 char	**heredoc(const char *delimiter, int count);
 char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
 int		handle_unset(char **tmp, t_env **env);
