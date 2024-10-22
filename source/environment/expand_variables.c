@@ -46,7 +46,7 @@ int	ft_get_len_aloc(t_mini *mini, char *input)
 	mini->values.val1 = 0;
 	while (input[n])
 	{
-		if (input[n] == '$' && mini->values.val1 != 39)
+		if (input[n] == '$' && input[n + 1] && mini->values.val1 != 39)
 			len_aloc += get_variable_length(mini, input, &n);
 		else
 		{
@@ -88,7 +88,7 @@ void	expand_variables_loop(t_mini *mini, char *input, char *expanded)
 		return ;
 	while (input[n])
 	{
-		if (input[n] == '$' && mini->values.val1 != 39)
+		if (input[n] == '$' && input[n + 1] && mini->values.val1 != 39)
 		{
 			mini->values.str1 = input;
 			handle_variable_expansion(mini, expanded, &n, &j);
