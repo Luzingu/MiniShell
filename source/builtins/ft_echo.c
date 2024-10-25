@@ -12,6 +12,26 @@
 
 #include "../../header/minishell.h"
 
+static void	verifying_option(char **argument, int *i)
+{
+	int	j;
+
+	j = 0;
+	if (argument[1] && (argument[1][j] == '-'))
+	{
+		while (argument[1][++j])
+		{
+			if (argument[1][j] != 'n')
+			{
+				*i = 1;
+				break ;
+			}
+			else
+				*i = 2;
+		}
+	}
+}
+
 void	ft_echo(char **argument, t_mini *mini)
 {
 	int	i;
@@ -19,8 +39,7 @@ void	ft_echo(char **argument, t_mini *mini)
 	int	n;
 
 	i = 1;
-	if (argument[1] && !ft_strcmp("-n", argument[1]))
-		i = 2;
+	verifying_option(argument, &i);
 	put_break = i;
 	while (i < numb_split(argument))
 	{

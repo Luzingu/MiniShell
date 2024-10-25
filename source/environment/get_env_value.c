@@ -30,9 +30,7 @@ char	*get_env_value(t_mini *mini, char *input, int *n)
 		if (!env_name)
 			return (NULL);
 		while (input[*n] && (ft_isalnum(input[*n]) || input[*n] == '_'))
-		{
 			env_name[i++] = input[(*n)++];
-		}
 		env_name[i] = '\0';
 		env_value = ft_getenv(mini->env, env_name);
 		ft_free(env_name, 1);

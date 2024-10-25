@@ -42,12 +42,12 @@ static void	bubble_sort(char **matrix, int n)
 }
 
 void	ft_env(t_env *env, int type)
-{ 
+{
 	char	**matrix;
 	int		nb_split;
 	int		i;
 
-	matrix = env_to_matrix(env, 0, type); 
+	matrix = env_to_matrix(env, 0, type);
 	nb_split = numb_split(matrix);
 	bubble_sort(matrix, nb_split);
 	i = -1;

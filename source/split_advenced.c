@@ -12,9 +12,6 @@
 
 #include "../header/minishell.h"
 
-#include <stdlib.h>
-#include <string.h>
-
 static int	add_substring(char **result, size_t index
 		, const char *start, size_t length)
 {

@@ -87,7 +87,7 @@ void	handle_child(t_mini *mini, char **cmd)
 	cmd_path = find_executable(cmd[0], mini, -1);
 	if (cmd_path)
 	{
-		env_matrix = env_to_matrix(mini->env, 0);
+		env_matrix = env_to_matrix(mini->env, 0, 0);
 		execve(cmd_path, cmd, env_matrix);
 		ft_free_matrix(env_matrix);
 	}

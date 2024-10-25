@@ -29,7 +29,8 @@ static void	calling_env_function(t_mini *mini, char **args)
 	{
 		if (args[1])
 		{
-			ft_putstr_fd("too many arguments\n", 2);
+			ft_putstr_fd("minishell: env: ", 2);
+			ft_putendl_fd("no option or argument requireds.", 2);
 			mini->last_return = 1;
 		}
 		else
@@ -43,6 +44,12 @@ static void	calling_pwd_function(t_mini *mini, char **args, int *result)
 
 	if (ft_strcmp(args[0], "pwd") == 0)
 	{
+		if (args[1] && args[1][0] == '-')
+		{
+			ft_putendl_fd("minishell: pwd: no option requireds.", 2);
+			mini->last_return = 2;
+			return ;
+		}
 		pwd = ft_pwd(mini);
 		if (pwd)
 		{
