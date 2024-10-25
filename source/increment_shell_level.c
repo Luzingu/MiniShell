@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   increment_shell_level.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:48:44 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/07 15:48:45 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:34:06 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	increment_shell_level(t_mini *mini)
 		shell_level++;
 	}
 	tmp = ft_strjoin2("SHLVL=", ft_itoa(shell_level), 0, 1);
-	ft_export(tmp, &mini->env);
+	ft_export(tmp, &mini->env, 0, 1);
 	ft_free(tmp, 1);
 	ft_free(str_shell_level, 1);
 }

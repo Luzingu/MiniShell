@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   str_dup_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:17:53 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/07 15:17:55 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:31:46 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header/minishell.h"
 
-void	str_dup_env(char **env, t_mini *mini)
+void	str_dup_env(char **env, t_mini *mini, int equal)
 {
 	t_env	*new;
 	char	**my_env;
 	int		i;
-	int		equal;
 
 	i = -1;
 	new = NULL;

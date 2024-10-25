@@ -45,7 +45,7 @@ typedef struct s_token
 typedef struct s_env
 {
 	char			*key;
-	int			equal;
+	int				equal;
 	char			*value;
 	struct s_env	*next;
 }	t_env;
@@ -98,11 +98,11 @@ void	redir_and_exec(t_mini *mini, int pos_token, int pipe);
 void	redir(t_mini *mini, char *file, char *type);
 void	input(t_mini *mini, char *file);
 void	handle_export(char **tmp, t_env **env, t_mini *mini);
-void	str_dup_env(char **env, t_mini *mini);
+void	str_dup_env(char **env, t_mini *mini, int equal);
 void	ft_close(int fd);
 void	ft_free_matrix(char **matrix);
 void	ft_env(t_env *env, int type);
-void	ft_export(char *args, t_env **env);
+void	ft_export(char *args, t_env **env, int equal, int new_env);
 void	ft_echo(char **args, t_mini *mini);
 void	ft_cd(t_mini *mini, char **argument);
 void	ft_exit(char **matrix, t_mini *mini);
@@ -120,6 +120,7 @@ void	free_tokens(t_token *head);
 void	main_loop(t_mini *mini);
 void	free_env(t_env *head);
 void	toggle_quotes(char c, t_state *state);
+
 char	*ft_pwd(t_mini *mini);
 char	*expand_variables(t_mini *mini, char *input, int in_heredoc);
 char	*ft_getenv(t_env *env, char *var);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_export.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 14:37:37 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/07 14:37:39 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:33:48 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void	handle_export(char **tmp, t_env **env, t_mini *mini)
 	}
 	n = 0;
 	while (tmp[++n])
-		ft_export(tmp[n], env);
+		ft_export(tmp[n], env, 0, 1);
 	(void)mini;
 }

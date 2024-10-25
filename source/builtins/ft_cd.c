@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/20 17:46:37 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/05 08:19:55 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:33:07 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static void	go_pwd(char *path, t_mini *mini)
 	{
 		current_pwd = ft_pwd(mini);
 		past_pwd = ft_strjoin2("OLDPWD=", past_pwd, 0, 1);
-		ft_export(past_pwd, &mini->env);
+		ft_export(past_pwd, &mini->env, 0, 1);
 		ft_free(past_pwd, 1);
 		current_pwd = ft_strjoin2("PWD=", current_pwd, 0, 1);
-		ft_export(current_pwd, &mini->env);
+		ft_export(current_pwd, &mini->env, 0, 1);
 		ft_free(current_pwd, 1);
 		mini->last_return = 0;
 	}

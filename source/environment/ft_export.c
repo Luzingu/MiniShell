@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 12:07:10 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/07 14:03:56 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:34:23 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../../header/minishell.h"
@@ -31,7 +31,8 @@ static char	*get_env_values(char **args_split)
 	return (env_value);
 }
 
-static int	ft_modify_env(t_env *env, char *env_name, char *env_value, int equal)
+static int	ft_modify_env(t_env *env, char *env_name, char *env_value,
+	int equal)
 {
 	if (ft_strcmp(env->key, env_name) == 0)
 	{
@@ -46,20 +47,17 @@ static int	ft_modify_env(t_env *env, char *env_name, char *env_value, int equal)
 	return (1);
 }
 
-void	ft_export(char *args, t_env **env)
+void	ft_export(char *args, t_env **env, int equal, int new_env)
 {
 	t_env	*env_tmp;
 	char	*env_name;
 	char	*env_value;
 	char	**args_split;
-	int		new_env;
-	int		equal;
 
 	env_tmp = *env;
 	args_split = ft_split_advanced(args, "=");
 	env_name = args_split[0];
 	env_value = get_env_values(args_split);
-	equal = 0;
 	if (ft_strchr(args, '='))
 		equal = 1;
 	new_env = 1;
@@ -71,9 +69,7 @@ void	ft_export(char *args, t_env **env)
 		env_tmp = env_tmp->next;
 	}
 	if (new_env == 1)
-	{
 		new_env = ft_modify_env(env_tmp, env_name, env_value, equal);
-	}
 	if (new_env == 1)
 		env_tmp->next = add_envirenoment(env_name, env_value, equal);
 	ft_free_matrix(args_split);

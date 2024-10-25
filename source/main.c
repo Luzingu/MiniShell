@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 23:31:31 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/09 06:40:47 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:35:26 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "../header/minishell.h"
@@ -18,8 +18,7 @@ int	main(int ac, char **argv, char **env)
 	(void)ac;
 	(void)argv;
 	reset_fds(&mini);
-	str_dup_env(env, &mini);
-	
+	str_dup_env(env, &mini, 0);
 	mini.last_return = 0;
 	mini.exit_status = 0;
 	mini.no_exec = 0;

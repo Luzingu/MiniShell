@@ -6,7 +6,7 @@
 /*   By: mcaquart <mcaquart@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:14:58 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/10/25 17:03:19 by mcaquart         ###   ########.fr       */
+/*   Updated: 2024/10/25 18:34:51 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ char	**env_to_matrix(t_env *env, int i, int type)
 			env_tmp = env_tmp->next;
 			continue ;
 		}
-		matrix[i] = format_env_value(env_tmp->key, env_tmp->value, env_tmp->equal, type);
+		matrix[i] = format_env_value(env_tmp->key, env_tmp->value,
+				env_tmp->equal, type);
 		if (matrix[i])
 			i++;
 		env_tmp = env_tmp->next;
