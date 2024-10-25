@@ -19,7 +19,7 @@ int	main(int ac, char **argv, char **env)
 	(void)argv;
 	reset_fds(&mini);
 	str_dup_env(env, &mini);
-	increment_shell_level(&mini);
+	
 	mini.last_return = 0;
 	mini.exit_status = 0;
 	mini.no_exec = 0;

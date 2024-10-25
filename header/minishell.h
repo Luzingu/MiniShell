@@ -45,6 +45,7 @@ typedef struct s_token
 typedef struct s_env
 {
 	char			*key;
+	int			equal;
 	char			*value;
 	struct s_env	*next;
 }	t_env;
@@ -89,7 +90,7 @@ typedef struct s_state
 
 char	**get_tokens(t_mini *mini, char *line);
 t_token	*prev_sep(t_token *start, t_token *current);
-t_env	*add_envirenoment(char *env_name, char *env_value);
+t_env	*add_envirenoment(char *env_name, char *env_value, int equal);
 t_env	*sort_env_list(t_env *head);
 
 void	sigint_handler(int sig);

@@ -17,21 +17,25 @@ void	str_dup_env(char **env, t_mini *mini)
 	t_env	*new;
 	char	**my_env;
 	int		i;
+	int		equal;
 
 	i = -1;
 	new = NULL;
 	while (env[++i])
 	{
 		my_env = ft_split(env[i], '=');
+		equal = 0;
+		if (ft_strchr(env[i], '='))
+			equal = 1;
 		if (!new)
 		{
-			new = add_envirenoment(my_env[0], my_env[1]);
+			new = add_envirenoment(my_env[0], my_env[1], equal);
 			mini->env = new;
 			mini->env_copy = new;
 		}
 		else
 		{
-			new->next = add_envirenoment(my_env[0], my_env[1]);
+			new->next = add_envirenoment(my_env[0], my_env[1], equal);
 			new = new->next;
 		}
 		ft_free_matrix(my_env);

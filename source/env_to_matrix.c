@@ -12,13 +12,14 @@
 
 #include "../header/minishell.h"
 
-static char	*format_env_value(char *key, char *value, int type)
+static char	*format_env_value(char *key, char *value, int equal, int type)
 {
 	char	*tmp;
 
-	tmp = ft_strjoin2(ft_strdup(key), "=", 1, 0);
-	if (value)
+	tmp = ft_strdup(key);
+	if (value && equal == 1)
 	{
+		tmp = ft_strjoin2(tmp, "=", 1, 0);
 		if (type == 1)
 		{
 			tmp = ft_strjoin2(tmp, "\"", 0, 0);
@@ -62,7 +63,7 @@ char	**env_to_matrix(t_env *env, int i, int type)
 			env_tmp = env_tmp->next;
 			continue ;
 		}
-		matrix[i] = format_env_value(env_tmp->key, env_tmp->value, type);
+		matrix[i] = format_env_value(env_tmp->key, env_tmp->value, env_tmp->equal, type);
 		if (matrix[i])
 			i++;
 		env_tmp = env_tmp->next;
