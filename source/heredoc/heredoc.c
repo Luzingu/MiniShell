@@ -22,7 +22,7 @@ static char	**allocate_lines(int size)
 	return (lines);
 }
 
-static char	*get_trimmed_line(void)
+static char	*get_trimmed_line(t_mini *mini)
 {
 	char	*line;
 	char	*tmp;
@@ -31,6 +31,7 @@ static char	*get_trimmed_line(void)
 	if (!line)
 		return (NULL);
 	tmp = ft_strtrim(line, " ");
+	tmp = expand_variables(mini, tmp, 1);
 	ft_free(line, 1);
 	return (tmp);
 }
@@ -52,22 +53,25 @@ static char	**resize_lines(char **lines, int *size, int count)
 	i = -1;
 	new_lines = allocate_lines(*size);
 	while (++i < count)
+	{	
 		new_lines[i] = lines[i];
+
+		
+	}
 	ft_free(lines, 1);
 	return (new_lines);
 }
 
-char	**heredoc(const char *delimiter, int count)
+char	**heredoc(t_mini *mini, const char *delimiter, int count)
 {
 	int		size;
 	char	**lines;
 	char	*tmp;
-
 	size = 10;
 	lines = allocate_lines(size);
 	while (1)
 	{
-		tmp = get_trimmed_line();
+		tmp = get_trimmed_line(mini);
 		if (!tmp)
 			handle_memory_error(NULL, NULL, lines);
 		if (ft_strcmp(tmp, delimiter) == 0)

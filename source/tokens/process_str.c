@@ -60,7 +60,7 @@ char	**process_str(t_mini *mini, char *line)
 	{
 		skip_whitespace(line, &i);
 		str = return_str(line, &i);
-		str = expand_variables(mini, str);
+		str = expand_variables(mini, str, 0);
 		if (str && str[0])
 			matrix[j++] = str;
 		skip_whitespace(line, &i);

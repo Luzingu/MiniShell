@@ -12,6 +12,17 @@
 
 #include "../header/minishell.h"
 
+int	ft_quote_is_closed(char *str, int i, int quote)
+{
+	while (str[i])
+	{
+		if (str[i] == quote && str[i + 1] != quote)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 char	*return_str(char *ptr, int *i)
 {
 	char	*str;
@@ -27,10 +38,26 @@ char	*return_str(char *ptr, int *i)
 	single_quote = false;
 	while (ptr[*i])
 	{
-		if (ptr[*i] == '\"' && !single_quote)
-			double_quote = !double_quote;
-		else if (ptr[*i] == '\'' && !double_quote)
-			single_quote = !single_quote;
+		if (ptr[*i] == 34 && !single_quote)
+		{
+			if (!double_quote)
+			{
+				if (ft_quote_is_closed(ptr, *i, 34))
+					double_quote = !double_quote;
+			}
+			else
+				double_quote = !double_quote;
+		}
+		else if (ptr[*i] == 39 && !double_quote)
+		{
+			if (!single_quote)
+			{
+				if (ft_quote_is_closed(ptr, *i, 39))
+					single_quote = !single_quote;
+			}
+			else
+				single_quote = !single_quote;
+		}
 		if (!double_quote && !single_quote
 			&& (is_separator(ptr[*i]) || ptr[*i] == ' '))
 			break ;

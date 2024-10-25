@@ -61,4 +61,4 @@ void	redir_and_exec(t_mini *mini, int pos_token, int pipe)
 		redir_and_exec(mini, (pos_token + 1), 0);
 	if ((!prev || ft_strcmp(prev, "|") == 0) && pipe != 1 && mini->no_exec == 0)
 		ft_execute(mini, &pos_token);
-}
+} 

@@ -15,7 +15,7 @@ static int	verifying_heredoc(t_mini *mini, char *line)
 {
 	int	heredoc;
 
-	heredoc = handle_heredoc(line);
+	heredoc = handle_heredoc(mini, line);
 	if (heredoc == 2)
 	{
 		mini->last_return = 258;

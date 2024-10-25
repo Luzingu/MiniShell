@@ -12,13 +12,13 @@
 
 #include "../../header/minishell.h"
 
-static void	process_heredoc(const char *delimiter)
+static void	process_heredoc(t_mini *mini, const char *delimiter)
 {
 	char	**lines;
 	int		i;
 
 	i = -1;
-	lines = heredoc(delimiter, 0);
+	lines = heredoc(mini, delimiter, 0);
 	if (lines)
 	{
 		while (lines[++i])
@@ -30,7 +30,7 @@ static void	process_heredoc(const char *delimiter)
 	}
 }
 
-int	handle_heredoc(char *line)
+int	handle_heredoc(t_mini *mini, char *line)
 {
 	char	**tokens;
 	char	**tokens2;
@@ -50,7 +50,7 @@ int	handle_heredoc(char *line)
 			ft_free_matrix(tokens2);
 			return (2);
 		}
-		process_heredoc(delimiter);
+		process_heredoc(mini, delimiter);
 		ft_free_matrix(tokens);
 		ft_free_matrix(tokens2);
 		return (1);

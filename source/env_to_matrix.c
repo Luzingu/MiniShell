@@ -12,7 +12,7 @@
 
 #include "../header/minishell.h"
 
-char	**env_to_matrix(t_env *env, int i)
+char	**env_to_matrix(t_env *env, int i, int type)
 {
 	t_env	*env_tmp;
 	char	**matrix;
@@ -29,10 +29,24 @@ char	**env_to_matrix(t_env *env, int i)
 	i = 0;
 	while (env_tmp)
 	{
+		if (type == 1 && ft_strncmp(env_tmp->key, "_", 1) == 0)
+		{
+			env_tmp = env_tmp->next;
+			continue;
+		}
 		tmp = ft_strdup(env_tmp->key);
 		tmp = ft_strjoin2(tmp, "=", 1, 0);
 		if (env_tmp->value)
-			tmp = ft_strjoin2(tmp, env_tmp->value, 1, 0);
+		{
+			if (type == 1)
+			{
+				tmp = ft_strjoin2(tmp, "\"", 0, 0);
+				tmp = ft_strjoin2(tmp, env_tmp->value, 1, 0);
+				tmp = ft_strjoin2(tmp, "\"", 0, 0);
+			}
+			else
+				tmp = ft_strjoin2(tmp, env_tmp->value, 1, 0);
+		}
 		if (tmp)
 			matrix[i++] = tmp;
 		env_tmp = env_tmp->next;
