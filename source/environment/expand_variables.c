@@ -90,8 +90,8 @@ void	expand_variables_loop(t_mini *mini, char *input, char *expanded,
 		return ;
 	while (input[n])
 	{
-		if (input[n] == '$' && input[n + 1] && (mini->values.val1 != 39
-				|| in_heredoc))
+		if (input[n] == '$' && input[n + 1] && input[n + 1] != '$'
+			&& (mini->values.val1 != 39 || in_heredoc))
 		{
 			mini->values.str1 = input;
 			handle_variable_expansion(mini, expanded, &n, &j);
