@@ -44,21 +44,21 @@ void	ft_execute(t_mini *mini, int *pos_token)
 
 void	redir_and_exec(t_mini *mini, int pos_token, int pipe)
 {
-	char	*prev;
+	t_token	prev;
 
-	prev = NULL;
+	prev.str = NULL;
 	if (pos_token > 0)
 		prev = mini->tokens[pos_token - 1];
-	if (ft_strcmp(prev, ">") == 0)
-		redir(mini, mini->tokens[pos_token], "trunc");
-	else if (ft_strcmp(prev, ">>") == 0)
-		redir(mini, mini->tokens[pos_token], "append");
-	else if (ft_strcmp(prev, "<") == 0)
-		input(mini, mini->tokens[pos_token]);
-	else if (ft_strcmp(prev, "|") == 0)
+	if (is_type(prev, 'T'))
+		redir(mini, mini->tokens[pos_token].str, "trunc");
+	else if (is_type(prev, 'R'))
+		redir(mini, mini->tokens[pos_token].str, "append");
+	else if (is_type(prev, 'I'))
+		input(mini, mini->tokens[pos_token].str);
+	else if (is_type(prev, 'P'))
 		pipe = minipipe(mini);
-	if (mini->tokens[(pos_token + 1)] && pipe != 1)
+	if (mini->tokens[(pos_token + 1)].str && pipe != 1)
 		redir_and_exec(mini, (pos_token + 1), 0);
-	if ((!prev || ft_strcmp(prev, "|") == 0) && pipe != 1 && mini->no_exec == 0)
+	if ((!prev.str || is_type(prev, 'P')) && pipe != 1 && mini->no_exec == 0)
 		ft_execute(mini, &pos_token);
 }

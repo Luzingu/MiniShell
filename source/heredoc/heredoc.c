@@ -12,74 +12,46 @@
 
 #include "../../header/minishell.h"
 
-static char	**allocate_lines(int size)
-{
-	char	**lines;
-
-	lines = (char **)malloc(size * sizeof(char *));
-	if (!lines)
-		exit(EXIT_FAILURE);
-	return (lines);
-}
-
-static char	*get_trimmed_line(t_mini *mini)
+static char	*get_trimmed_line(t_mini *mini, char *delimiter)
 {
 	char	*line;
 	char	*tmp;
 
 	line = readline("> ");
-	if (!line)
-		return (NULL);
+	if (line == NULL)
+	{
+		ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd(delimiter, 2);
+		ft_putstr_fd("')\n", 2);
+		exit(1);
+	}
 	tmp = ft_strtrim(line, " ");
 	tmp = expand_variables(mini, tmp, 1);
 	ft_free(line, 1);
 	return (tmp);
 }
 
-static void	handle_memory_error(char *line, char *tmp, char **lines)
+char	*heredoc(t_mini *mini, char *delimiter)
 {
-	ft_free(tmp, 1);
-	ft_free(line, 1);
-	ft_free_matrix(lines);
-	exit(EXIT_FAILURE);
-}
-
-static char	**resize_lines(char **lines, int *size, int count)
-{
-	char	**new_lines;
-	int		i;
-
-	*size *= 2;
-	i = -1;
-	new_lines = allocate_lines(*size);
-	while (++i < count)
-		new_lines[i] = lines[i];
-	ft_free(lines, 1);
-	return (new_lines);
-}
-
-char	**heredoc(t_mini *mini, const char *delimiter, int count)
-{
-	int		size;
-	char	**lines;
 	char	*tmp;
+	char	*str;
 
-	size = 10;
-	lines = allocate_lines(size);
+	str = ft_strdup("");
 	while (1)
 	{
-		tmp = get_trimmed_line(mini);
-		if (!tmp)
-			handle_memory_error(NULL, NULL, lines);
+		tmp = get_trimmed_line(mini, delimiter);
+		if (tmp == NULL)
+			return (NULL);
 		if (ft_strcmp(tmp, delimiter) == 0)
 		{
 			ft_free(tmp, 1);
 			break ;
 		}
-		if (count >= size - 1)
-			lines = resize_lines(lines, &size, count);
-		lines[count++] = tmp;
+		else
+		{
+			str = ft_strjoin2(str, tmp, 1, 1);
+			str = ft_strjoin2(str, "\n", 1, 0);
+		}
 	}
-	lines[count] = NULL;
-	return (lines);
+	return (str);
 }

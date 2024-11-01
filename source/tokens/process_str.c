@@ -18,17 +18,7 @@ static void	skip_whitespace(char *line, int *i)
 		(*i)++;
 }
 
-static char	**allocate_matrix(void)
-{
-	char	**matrix;
-
-	matrix = (char **)malloc(sizeof(char *) * 10000);
-	if (!matrix)
-		return (NULL);
-	return (matrix);
-}
-
-static void	process_separator(char *line, int *i, char **matrix, int *j)
+static void	process_separator(char *line, int *i, t_token *matrix, int *j)
 {
 	char	*str;
 
@@ -37,35 +27,49 @@ static void	process_separator(char *line, int *i, char **matrix, int *j)
 		str = get_separator(line, i);
 		if (str && str[0])
 		{
-			if (matrix[*j - 1] && ft_strcmp(matrix[*j - 1], "|") == 0)
-				matrix[(*j)++] = ft_strdup("echo");
-			matrix[(*j)++] = str;
+			if (matrix[*j - 1].str && is_type(matrix[*j - 1], 'P'))
+			{
+				matrix[(*j)].str = ft_strdup("echo");
+				matrix[(*j)].type = 'A';
+				(*j)++;
+			}
+			matrix[(*j)].str = str;
+			matrix[(*j)].type = type_str(str, 0);
+			(*j)++;
 		}
 	}
 }
 
-char	**process_str(t_mini *mini, char *line)
+t_token	*process_str(t_mini *mini, char *line)
 {
 	int		i;
 	int		j;
-	char	**matrix;
+	int		in_quotes;
 	char	*str;
 
-	matrix = allocate_matrix();
-	if (!matrix)
+	t_token	*tokens;
+
+	tokens = (t_token *)malloc(sizeof(t_token) * 10000);
+	if (!tokens)
 		return (NULL);
 	i = 0;
 	j = 0;
+	ft_memset(tokens, 0, sizeof(t_token) * 10000);
 	while (line[i])
 	{
 		skip_whitespace(line, &i);
-		str = return_str(line, &i);
+		str = return_str(line, &i, &in_quotes);
 		str = expand_variables(mini, str, 0);
 		if (str && str[0])
-			matrix[j++] = str;
+		{
+			tokens[j].str = ft_strdup(str);
+			tokens[j].type = type_str(str, in_quotes);
+			j++;
+		}
 		skip_whitespace(line, &i);
-		process_separator(line, &i, matrix, &j);
+		process_separator(line, &i, tokens, &j);
+		ft_free(str, 1);
 	}
-	matrix[j] = NULL;
-	return (matrix);
+	tokens[j].str = NULL;
+	return (tokens);
 }

@@ -12,37 +12,37 @@
 
 #include "../../header/minishell.h"
 
-char	**organize_tokens(char **matrix)
+t_token	*organize_tokens(t_token *tokens)
 {
 	int		i;
-	char	*tmp[3];
+	t_token	tmp[3];
 
 	i = 0;
-	while (matrix[i])
+	while (tokens[i].str)
 	{
-		if ((ft_strcmp(matrix[i], ">") == 0 || ft_strcmp(matrix[i], ">>") == 0))
-		{
-			if (matrix[i + 2] && !is_separator_str(matrix[i + 2]))
+		if (is_type(tokens[i], 'R') || is_type(tokens[i], 'T') || is_type(tokens[i], 'H') || is_type(tokens[i], 'I'))
+		{ 
+			if (tokens[i + 2].str && is_type(tokens[i + 2], 'A'))
 			{
-				tmp[0] = matrix[i];
-				tmp[1] = matrix[i + 1];
-				tmp[2] = matrix[i + 2];
-				matrix[i] = tmp[2];
-				matrix[i + 1] = tmp[0];
-				matrix[i + 2] = tmp[1];
+				tmp[0] = tokens[i];
+				tmp[1] = tokens[i + 1];
+				tmp[2] = tokens[i + 2];
+				tokens[i] = tmp[2];
+				tokens[i + 1] = tmp[0];
+				tokens[i + 2] = tmp[1];
 				i = 0;
 			}
 		}
 		i++;
 	}
-	return (matrix);
+	return (tokens);
 }
 
-char	**get_tokens(t_mini *mini, char *line)
+t_token	*get_tokens(t_mini *mini, char *line)
 {
-	char	**matrix;
+	t_token	*tokens;
 
-	matrix = process_str(mini, line);
-	matrix = organize_tokens(matrix);
-	return (matrix);
+	tokens = process_str(mini, line);
+	tokens = organize_tokens(tokens);
+	return (tokens);
 }

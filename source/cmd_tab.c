@@ -12,7 +12,7 @@
 
 #include "../header/minishell.h"
 
-char	**cmd_tab(char **tokens, int *pos_token)
+char	**cmd_tab(t_token *tokens, int *pos_token)
 {
 	char	**tab;
 	int		i;
@@ -22,7 +22,7 @@ char	**cmd_tab(char **tokens, int *pos_token)
 		return (NULL);
 	i = *pos_token;
 	j = 0;
-	while (tokens[i] && !is_separator_str(tokens[i]))
+	while (tokens[i].str && is_type(tokens[i], 'A'))
 	{
 		i++;
 		j++;
@@ -30,10 +30,11 @@ char	**cmd_tab(char **tokens, int *pos_token)
 	tab = malloc(sizeof(char *) * (j + 1));
 	if (!tab)
 		return (NULL);
+	ft_memset(tab, 0, sizeof(char *) * (j + 1));
 	i = 0;
-	while (tokens[*pos_token] && !is_separator_str(tokens[i]))
+	while (tokens[*pos_token].str && is_type(tokens[*pos_token], 'A'))
 	{
-		tab[i++] = ft_strdup(tokens[*pos_token]);
+		tab[i++] = ft_strdup(tokens[*pos_token].str);
 		*pos_token += 1;
 	}
 	tab[i] = NULL;

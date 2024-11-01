@@ -25,15 +25,12 @@ SRC				=	source/main.c							\
 					source/ft_free.c	\
 					source/ft_free2.c						\
 					source/heredoc/heredoc.c					\
-					source/heredoc/handle_heredoc.c					\
 					source/signal.c							\
 					source/cmd_tab.c						\
-					source/prev_sep.c						\
-					source/ft_is_type.c						\
-					source/return_str.c						\
+					source/tokens/ft_type.c						\
+					source/tokens/return_str.c						\
 					source/split_advenced.c					\
 					source/split_advenced2.c				\
-					source/is_separator.c					\
 					source/tokens/get_separator.c					\
 					source/tokens/get_tokens.c						\
 					source/tokens/process_str.c						\

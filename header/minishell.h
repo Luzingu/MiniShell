@@ -37,9 +37,8 @@
 
 typedef struct s_token
 {
-	char			*str;
-	char			*type;
-	struct s_token	*next;
+	char	*str;
+	char	type;
 }	t_token;
 
 typedef struct s_env
@@ -60,7 +59,7 @@ typedef struct s_values
 
 typedef struct s_mini
 {
-	char		**tokens;
+	t_token		*tokens;
 	t_env		*env;
 	t_env		*env_copy;
 	int			in;
@@ -88,8 +87,7 @@ typedef struct s_state
 	size_t	len;
 }	t_state;
 
-char	**get_tokens(t_mini *mini, char *line);
-t_token	*prev_sep(t_token *start, t_token *current);
+t_token	*get_tokens(t_mini *mini, char *line);
 t_env	*add_envirenoment(char *env_name, char *env_value, int equal);
 t_env	*sort_env_list(t_env *head);
 
@@ -112,7 +110,6 @@ void	reset_std(t_mini *mini);
 void	close_fds(t_mini *mini);
 void	reset_fds(t_mini *mini);
 void	handle_signals(void);
-void	type_arg(t_token *start, t_token *token);
 void	ft_unset(char *args, t_env **env);
 void	ft_free_all(t_mini *mini);
 void	ft_free(void *ptr, int free_ptr);
@@ -125,27 +122,25 @@ char	*ft_pwd(t_mini *mini);
 char	*expand_variables(t_mini *mini, char *input, int in_heredoc);
 char	*ft_getenv(t_env *env, char *var);
 char	*get_separator(char *line, int *i);
-char	*return_str(char *ptr, int *i);
+char	*return_str(char *ptr, int *i, int *in_quotes);
 char	**env_to_matrix(t_env *env, int i, int type);
 char	**ft_split_advanced(const char *s, const char *delimiter);
 char	*my_strndup(const char *s, size_t n);
-char	**cmd_tab(char **tokens, int *pos_token);
+char	**cmd_tab(t_token *tokens, int *pos_token);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 char	**allocate_result(size_t count);
-char	**process_str(t_mini *mini, char *line);
-char	**heredoc(t_mini *mini, const char *delimiter, int count);
+t_token	*process_str(t_mini *mini, char *line);
+char	*heredoc(t_mini *mini, char *delimiter);
 char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
 int		handle_unset(char **tmp, t_env **env);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
-int		ft_is_type(t_token *token, char *type);
 int		ft_strisnum(const char *str);
 int		exec_builtin(char **args, t_mini *mini);
 int		nb_args(char **args);
 int		whereis(const char *str, const char *needle);
 int		numb_split(char **matrix);
-int		verifying_argument(t_mini *mini, char **matrix);
-int		handle_heredoc(t_mini *mini, char *line);
+int		verifying_argument(t_mini *mini);
 int		is_separator(char c);
 int		check_delimiter(const char *s, const char *delimiter,
 			t_state *state, size_t delimiter_len);
@@ -158,5 +153,7 @@ int		handle_return_value(t_mini *mini, int *n, int *len_aloc);
 int		ft_can_be_add(char *str, int i, t_mini *mini);
 int		ft_is_closed(char *str, int i, char quote);
 int		ft_is_unclosed_quote(char *str, int i, char quote, t_mini *mini);
-int		is_separator_str(char *str);
+int		is_type(t_token token, char type);
+char	type_str(char *str, int in_quotes);
+void	ft_free_tokens(t_token *tokens);
 #endif

@@ -99,14 +99,22 @@ void	handle_child(t_mini *mini, char **cmd)
 	ft_free(cmd_path, 1);
 }
 
+static void	sigquit(int sig)
+{
+	(void)sig;
+	ft_putstr_fd("\n", 1);
+}
+
 void	execute_cmd(t_mini *mini, char **cmd)
 {
 	int		status;
+	sig_t	old_sigquit;
 	pid_t	pid;
 
 	status = 0;
 	if (mini->charge == 0)
 		return ;
+	old_sigquit = signal(SIGQUIT, sigquit);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -118,6 +126,7 @@ void	execute_cmd(t_mini *mini, char **cmd)
 		g_redisplay = 0;
 		waitpid(pid, &status, 0);
 		g_redisplay = 1;
+		signal(SIGQUIT, old_sigquit);
 	}
 	mini->charge = 0;
 	mini->last_return = WEXITSTATUS(status);

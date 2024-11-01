@@ -9,7 +9,7 @@
 /*   Updated: 2024/10/25 16:23:01 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "../header/minishell.h"
+#include "../../header/minishell.h"
 
 int	ft_quote_is_closed(char *str, int i, int quote)
 {
@@ -56,7 +56,7 @@ static void	return_str_auxilary(int *single_quote, int *double_quote,
 	}
 }
 
-char	*return_str(char *ptr, int *i)
+char	*return_str(char *ptr, int *i, int *in_quotes)
 {
 	char	*str;
 	int		n;
@@ -69,9 +69,12 @@ char	*return_str(char *ptr, int *i)
 	n = 0;
 	single_quote = 0;
 	double_quote = 0;
+	*in_quotes = 0;
 	while (ptr[*i])
 	{
 		return_str_auxilary(&single_quote, &double_quote, ptr, i);
+		if (double_quote == 1 || single_quote == 1)
+			*in_quotes = 1;
 		if (double_quote == 0 && single_quote == 0
 			&& (is_separator(ptr[*i]) || ptr[*i] == ' '))
 			break ;

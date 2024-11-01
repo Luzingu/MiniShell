@@ -12,6 +12,21 @@
 
 #include "../header/minishell.h"
 
+void	ft_free_tokens(t_token *tokens)
+{
+	int	i;
+
+	if (tokens == NULL)
+		return ;
+	i = 0;
+	while (tokens[i].str)
+	{
+		ft_free(tokens[i].str, 1);
+		i++;
+	}
+	ft_free(tokens, 1);
+}
+
 void	ft_free_matrix(char **matrix)
 {
 	int	i;
