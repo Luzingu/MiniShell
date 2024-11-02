@@ -24,32 +24,22 @@ int	ft_quote_is_closed(char *str, int i, int quote)
 static void	return_str_auxilary(int *single_quote, int *double_quote,
 	char *ptr, int *i)
 {
-	if (ptr[*i] == 34 && *single_quote == 0)
+	if (ptr[*i] == 34)
 	{
 		if (*double_quote == 0)
 		{
 			if (ft_quote_is_closed(ptr, *i, 34))
-			{
-				if (*double_quote == 0)
-					*double_quote = 1;
-				else
-					*double_quote = 0;
-			}
+				*double_quote ^= 1;
 		}
 		else
 			*double_quote = 0;
 	}
-	else if (ptr[*i] == 39 && *double_quote == 0)
+	else if (ptr[*i] == 39)
 	{
 		if (*single_quote == 0)
 		{
 			if (ft_quote_is_closed(ptr, *i, 39))
-			{
-				if (*single_quote == 0)
-					*single_quote = 1;
-				else
-					*single_quote = 0;
-			}
+				*single_quote ^= 1;
 		}
 		else
 			*single_quote = 0;

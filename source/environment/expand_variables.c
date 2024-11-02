@@ -67,7 +67,10 @@ void	handle_variable_expansion(t_mini *mini
 	int		i;
 
 	(*n)++;
-	env_value = get_env_value(mini, mini->values.str1, n);
+	if (ft_strcmp(mini->values.str1, "\"$\"") == 0)
+		env_value = ft_strdup("$");
+	else
+		env_value = get_env_value(mini, mini->values.str1, n);
 	if (env_value)
 	{
 		i = 0;
@@ -90,7 +93,7 @@ void	expand_variables_loop(t_mini *mini, char *input, char *expanded,
 		return ;
 	while (input[n])
 	{
-		if (input[n] == '$' && input[n + 1] && input[n + 1] != '$'
+		if (input[n] == '$' && input[n + 1]
 			&& (mini->values.val1 != 39 || in_heredoc))
 		{
 			mini->values.str1 = input;

@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_str.c                                      :+:      :+:    :+:   */
+/*   ft_free_matrix.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/01 22:40:04 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/11/01 22:40:06 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/11/01 22:09:40 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/11/01 22:09:43 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../header/minishell.h"
+#include "../header/minishell.h"
 
-t_token	*process_str(t_mini *mini, char *line)
+void	ft_free_matrix(char **matrix)
 {
-	t_token	*tokens;
+	int	i;
 
-	tokens = initialize_tokens();
-	if (!tokens)
-		return (NULL);
-	process_tokens(mini, line, tokens);
-	return (tokens);
+	i = 0;
+	if (!matrix)
+		return ;
+	while (matrix[i])
+		free(matrix[i++]);
+	free(matrix);
+	matrix = NULL;
 }

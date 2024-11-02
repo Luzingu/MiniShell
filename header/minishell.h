@@ -88,6 +88,8 @@ typedef struct s_state
 }	t_state;
 
 t_token	*get_tokens(t_mini *mini, char *line);
+t_token	*process_str(t_mini *mini, char *line);
+t_token	*initialize_tokens(void);
 t_env	*add_envirenoment(char *env_name, char *env_value, int equal);
 t_env	*sort_env_list(t_env *head);
 
@@ -117,6 +119,10 @@ void	free_tokens(t_token *head);
 void	main_loop(t_mini *mini);
 void	free_env(t_env *head);
 void	toggle_quotes(char c, t_state *state);
+void	sigquit(int sig);
+void	ft_free_tokens(t_token *tokens);
+void	dup_tokens(t_mini *mini, t_token *tokens, char *str_heredoc);
+void	process_tokens(t_mini *mini, char *line, t_token *tokens);
 
 char	*ft_pwd(t_mini *mini);
 char	*expand_variables(t_mini *mini, char *input, int in_heredoc);
@@ -129,9 +135,14 @@ char	*my_strndup(const char *s, size_t n);
 char	**cmd_tab(t_token *tokens, int *pos_token);
 char	*get_env_value(t_mini *mini, char *input, int *n);
 char	**allocate_result(size_t count);
-t_token	*process_str(t_mini *mini, char *line);
 char	*heredoc(t_mini *mini, char *delimiter);
 char	*ft_strjoin2(char *s1, char *s2, int free_s1, int free_s2);
+char	type_str(char *str, int in_quotes);
+
+size_t	count_loop(const char *s, const char *delimiter,
+			t_state *state, size_t delimiter_len);
+size_t	count_substrings(const char *s, const char *delimiter);
+
 int		handle_unset(char **tmp, t_env **env);
 int		minipipe(t_mini *mini);
 int		ignore_sep(char *line, int i);
@@ -144,9 +155,6 @@ int		verifying_argument(t_mini *mini);
 int		is_separator(char c);
 int		check_delimiter(const char *s, const char *delimiter,
 			t_state *state, size_t delimiter_len);
-size_t	count_loop(const char *s, const char *delimiter,
-			t_state *state, size_t delimiter_len);
-size_t	count_substrings(const char *s, const char *delimiter);
 int		ft_strcmp(const char *s1, const char *s2);
 int		get_variable_length(t_mini *mini, char *input, int *n);
 int		handle_return_value(t_mini *mini, int *n, int *len_aloc);
@@ -154,6 +162,5 @@ int		ft_can_be_add(char *str, int i, t_mini *mini);
 int		ft_is_closed(char *str, int i, char quote);
 int		ft_is_unclosed_quote(char *str, int i, char quote, t_mini *mini);
 int		is_type(t_token token, char type);
-char	type_str(char *str, int in_quotes);
-void	ft_free_tokens(t_token *tokens);
+int		verifying_heredoc(t_mini *mini, t_token *tokens, char **str_heredoc);
 #endif

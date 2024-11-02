@@ -17,11 +17,12 @@ t_token	*organize_tokens(t_token *tokens)
 	int		i;
 	t_token	tmp[3];
 
-	i = 0;
-	while (tokens[i].str)
+	i = -1;
+	while (tokens[++i].str)
 	{
-		if (is_type(tokens[i], 'R') || is_type(tokens[i], 'T') || is_type(tokens[i], 'H') || is_type(tokens[i], 'I'))
-		{ 
+		if (is_type(tokens[i], 'R') || is_type(tokens[i], 'T')
+			|| is_type(tokens[i], 'H') || is_type(tokens[i], 'I'))
+		{
 			if (tokens[i + 2].str && is_type(tokens[i + 2], 'A'))
 			{
 				tmp[0] = tokens[i];
@@ -33,7 +34,6 @@ t_token	*organize_tokens(t_token *tokens)
 				i = 0;
 			}
 		}
-		i++;
 	}
 	return (tokens);
 }

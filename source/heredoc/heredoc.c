@@ -20,7 +20,8 @@ static char	*get_trimmed_line(t_mini *mini, char *delimiter)
 	line = readline("> ");
 	if (line == NULL)
 	{
-		ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted `", 2);
+		ft_putstr_fd("minishell: warning: here-document"
+			"delimited by end-of-file (wanted `", 2);
 		ft_putstr_fd(delimiter, 2);
 		ft_putstr_fd("')\n", 2);
 		exit(1);

@@ -30,6 +30,8 @@ void	ft_execute(t_mini *mini, int *pos_token)
 	if (mini->charge == 0)
 		return ;
 	cmd = cmd_tab(mini->tokens, pos_token);
+	if (!cmd[0])
+		return ;
 	if (is_builtin(cmd[0]))
 		exec_builtin(cmd, mini);
 	else
@@ -49,9 +51,9 @@ void	redir_and_exec(t_mini *mini, int pos_token, int pipe)
 	prev.str = NULL;
 	if (pos_token > 0)
 		prev = mini->tokens[pos_token - 1];
-	if (is_type(prev, 'T'))
+	if (is_type(prev, 'R'))
 		redir(mini, mini->tokens[pos_token].str, "trunc");
-	else if (is_type(prev, 'R'))
+	else if (is_type(prev, 'T'))
 		redir(mini, mini->tokens[pos_token].str, "append");
 	else if (is_type(prev, 'I'))
 		input(mini, mini->tokens[pos_token].str);

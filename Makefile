@@ -15,25 +15,26 @@ CC				= 	cc
 CFLAGS			= 	-Wall -Wextra -Werror
 LIBFT			= 	./libft
 SRC				=	source/main.c							\
-					source/main_loop.c							\
+					source/main_loop.c						\
 					source/redir_and_exec.c					\
 					source/redir.c							\
 					source/execute_builtin.c				\
 					source/ft_verifying_argument.c			\
 					source/execute_cmd.c					\
 					source/increment_shell_level.c			\
-					source/ft_free.c	\
+					source/ft_free.c						\
 					source/ft_free2.c						\
-					source/heredoc/heredoc.c					\
+					source/heredoc/heredoc.c				\
 					source/signal.c							\
 					source/cmd_tab.c						\
-					source/tokens/ft_type.c						\
-					source/tokens/return_str.c						\
+					source/tokens/ft_type.c					\
+					source/tokens/return_str.c				\
 					source/split_advenced.c					\
 					source/split_advenced2.c				\
-					source/tokens/get_separator.c					\
-					source/tokens/get_tokens.c						\
-					source/tokens/process_str.c						\
+					source/tokens/get_separator.c			\
+					source/tokens/get_tokens.c				\
+					source/tokens/process_str_utils.c		\
+					source/tokens/process_str.c				\
 					source/minipipe.c						\
 					source/input.c							\
 					source/str_dup_env.c					\
@@ -56,6 +57,10 @@ SRC				=	source/main.c							\
 					source/environment/handle_unset.c		\
 					source/environment/handle_export.c		\
 					source/ft_strjoin2.c					\
+					source/sigquit.c						\
+					source/ft_free_matrix.c					\
+					source/verifying_heredoc.c				\
+					source/dup_tokens.c						\
 					source/ft_strcmp.c
 OBJ		= $(SRC:.c=.o)
 

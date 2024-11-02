@@ -11,87 +11,6 @@
 /* ************************************************************************** */
 #include "../header/minishell.h"
 
-
-int	verifying_heredoc(t_mini *mini, t_token *tokens, char **str_heredoc)
-{
-	t_token	delimiter;
-	int		i;
-
-	i = 0;
-	*str_heredoc = NULL;
-	while (tokens[i].str)
-	{
-		if (is_type(tokens[i], 'H'))
-		{
-			if (tokens[i + 1].str)
-			{
-				delimiter = tokens[i + 1];
-				if (is_type(delimiter, 'I') || is_type(delimiter, 'R') || is_type(delimiter, 'T') || is_type(delimiter, 'H') || is_type(delimiter, 'P'))
-				{
-					ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
-					return (258);
-				}
-				else
-					*str_heredoc = heredoc(mini, delimiter.str);
-				ft_free(tokens[i + 1].str, 1);
-				tokens[i + 1].str = NULL;
-			}
-			else
-			{
-				ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
-				return (258);
-			}
-			ft_free(tokens[i].str, 1);
-			tokens[i].str = NULL;
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-void	dup_tokens(t_mini *mini, t_token *tokens, char *str_heredoc)
-{
-	int	i;
-	int	j;
-
-	mini->tokens = (t_token *)malloc(sizeof(t_token) * 10000);
-	i = 0;
-	if(str_heredoc && str_heredoc[0])
-	{
-		mini->tokens[i].str = ft_strdup("/bin/echo");
-		mini->tokens[i++].type = 'A';
-		mini->tokens[i].str = ft_strdup("-e");
-		mini->tokens[i++].type = 'A';
-		mini->tokens[i].str = str_heredoc;
-		mini->tokens[i++].type = 'A';
-		if(tokens[0].str)
-		{
-			mini->tokens[i].str = ft_strdup("|");
-			mini->tokens[i++].type = 'P';
-		}
-		j = 0;
-		while (tokens[j].str)
-		{
-			mini->tokens[i + j].str = ft_strdup(tokens[j].str);
-			mini->tokens[i + j].type = tokens[j].type;
-			j++;
-		}
-		mini->tokens[i + j].str = NULL;
-	}
-	else
-	{
-		i = 0;
-		while (tokens[i].str)
-		{
-			mini->tokens[i].str = ft_strdup(tokens[i].str);
-			mini->tokens[i].type = tokens[i].type;
-			i++;
-		}
-		mini->tokens[i].str = NULL;
-	}
-}
-
 static void	process_line(t_mini *mini, char *line)
 {
 	char	*str_heredoc;
@@ -132,7 +51,7 @@ static int	read_line(t_mini *mini, char **line)
 	if (!*line)
 	{
 		mini->exit_status = 1;
-		ft_putstr_fd("exit\n", 2);
+		ft_putendl_fd("exit", 2);
 		return (0);
 	}
 	if (**line)
@@ -162,6 +81,5 @@ void	main_loop(t_mini *mini)
 			exit(0);
 		ft_free_tokens(mini->tokens);
 	}
-	ft_free_tokens(mini->tokens);
 	free_env(mini->env);
 }

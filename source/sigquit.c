@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_str.c                                      :+:      :+:    :+:   */
+/*   sigquit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcaquart <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/01 22:40:04 by mcaquart          #+#    #+#             */
-/*   Updated: 2024/11/01 22:40:06 by mcaquart         ###   ########.fr       */
+/*   Created: 2024/11/01 21:36:16 by mcaquart          #+#    #+#             */
+/*   Updated: 2024/11/01 21:36:41 by mcaquart         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../header/minishell.h"
+#include "../header/minishell.h"
 
-t_token	*process_str(t_mini *mini, char *line)
+void	sigquit(int sig)
 {
-	t_token	*tokens;
-
-	tokens = initialize_tokens();
-	if (!tokens)
-		return (NULL);
-	process_tokens(mini, line, tokens);
-	return (tokens);
+	(void)sig;
+	ft_putstr_fd("\n", 1);
 }

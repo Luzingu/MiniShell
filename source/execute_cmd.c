@@ -99,12 +99,6 @@ void	handle_child(t_mini *mini, char **cmd)
 	ft_free(cmd_path, 1);
 }
 
-static void	sigquit(int sig)
-{
-	(void)sig;
-	ft_putstr_fd("\n", 1);
-}
-
 void	execute_cmd(t_mini *mini, char **cmd)
 {
 	int		status;
